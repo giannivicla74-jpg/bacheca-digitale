@@ -563,20 +563,9 @@ window.saveAndApproveRequest = async function(newStatus) {
 };
 
 // 4. PATCH BUSTE PAGA (Firma Digitale & Upload)
-const originalSignAndDownloadPayslip = window.signAndDownloadPayslip;
-window.signAndDownloadPayslip = async function() {
-    const activeId = window.activeModalPayslipId;
-    if (typeof originalSignAndDownloadPayslip === 'function') {
-        originalSignAndDownloadPayslip();
-    }
-    if (activeId) {
-        const signedP = window.payslips ? window.payslips.find(p => p.id === activeId) : null;
-        if (signedP) {
-            await updatePayslip(signedP.id, signedP).catch(err => console.error("Errore sync payslip firmata:", err));
-            console.log("☁️ [Firebase] Busta paga firmata sincronizzata in Firestore:", signedP.id);
-        }
-    }
-};
+// La sincronizzazione (add, delete, update firmata) è ora gestita esplicitamente in index.html
+// chiamando window.viclaCloudDB.addPayslip, deletePayslip, updatePayslip nei punti esatti in cui il dato è pronto.
+
 
 // 5. PATCH NOTIFICHE PUSH & DRAWER (v2.4.0)
 const originalAddNotification = window.addNotification;
