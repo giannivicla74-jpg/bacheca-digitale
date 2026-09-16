@@ -1,0 +1,43 @@
+{
+  "id": "/?source=pwa",
+  "name": "Vi.Cla. Future S.r.l. - Portale Aziendale",
+  "short_name": "Vi.Cla. Portale",
+  "gcm_sender_id": "103953800507",
+  "description": "Portale per comunicazioni aziendali, gestione cedolini, ferie e permessi di cantiere",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
+  "background_color": "#0f2b5c",
+  "theme_color": "#0f2b5c",
+  "orientation": "any",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Bacheca Operai",
+      "short_name": "Operai",
+      "url": "./index.html#operaio",
+      "description": "Accedi direttamente all'area operai"
+    },
+    {
+      "name": "Area Responsabile",
+      "short_name": "Admin",
+      "url": "./index.html#admin",
+      "description": "Accedi al pannello di amministrazione"
+    }
+  ]
+}

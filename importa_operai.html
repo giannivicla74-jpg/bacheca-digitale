@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importazione Automatica Operai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-lg w-full text-center">
+        <h1 class="text-2xl font-bold text-slate-800 mb-4">Importazione Dati Operai</h1>
+        <p class="text-slate-600 mb-6 text-sm">
+            Ho letto l'immagine e trovato 36 collaboratori unici. Clicca il pulsante qui sotto per aggiungerli automaticamente al tuo database in Firebase e al Portale.
+        </p>
+        
+        <button id="btn-import" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl w-full transition-colors mb-4">
+            Inizia Importazione nel Database
+        </button>
+        
+        <div id="status" class="text-sm font-mono text-left bg-slate-100 p-4 rounded-xl h-48 overflow-y-auto hidden">
+        </div>
+        
+        <a href="index.html" class="inline-block mt-4 text-blue-600 hover:underline text-sm font-semibold">
+            &larr; Torna al Portale
+        </a>
+    </div>
+
+    <!-- Firebase Integration -->
+    <script type="module">
+        import './js/firebase-integration.js'; // Ensure app initializes
+        import { addWorker } from './js/database.js';
+
+        const rawNames = [
+            "AMORE V.", "ANATRIELLO G.", "ARENA", "ASTUCCIA", "BRUNO M.", 
+            "CAUSA S.", "CAVALLO DN", "CAVALLO G.", "DAMIANI", "D'ARIENZO", 
+            "DE LUCA C.", "DE MARIA A.", "ESPOSITO C.", "ESPOSITO M.", 
+            "FRASCOGNA", "GIALANTONIO", "GIOBBE G.", "GIOBBE M.", "GIUGLIANO S.", 
+            "LANZARO", "LEPRE F.", "MANCO", "MORRONE", "PADUANO A.", 
+            "PETRONE A.", "PETRONE C.", "PETRONE R.", "PETRONE V.", "PINTO", 
+            "RUSSO G.", "SARNATARO", "SARRACINO", "SCAFORA", "SURRENTINO", 
+            "VERGARA", "VIVARD"
+        ];
+
+        document.getElementById('btn-import').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-import');
+            const statusDiv = document.getElementById('status');
+            
+            btn.disabled = true;
+            btn.innerText = "Importazione in corso...";
+            statusDiv.classList.remove('hidden');
+            statusDiv.innerHTML = "Avvio importazione...<br>";
+
+            for (let i = 0; i < rawNames.length; i++) {
+                const name = rawNames[i];
+                const matricola = "MAT-" + String(1000 + i); // Genera matricole MAT-1000, MAT-1001, ecc.
+                const workerId = "W_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+                
+                // Creiamo un'email fittizia sicura per l'accesso
+                const email = `mat${1000+i}@vicla.it`;
+
+                const newWorker = {
+                    id: workerId,
+                    name: name,
+                    matricola: matricola,
+                    role: "Operaio",
+                    email: email,
+                    status: "Attivo",
+                    createdAt: new Date().toISOString()
+                };
+
+                try {
+                    await addWorker(newWorker);
+                    statusDiv.innerHTML += `<span style="color: green">✓ Aggiunto: ${name} (${matricola})</span><br>`;
+                } catch (error) {
+                    console.error(error);
+                    statusDiv.innerHTML += `<span style="color: red">✗ Errore su: ${name}</span><br>`;
+                }
+                
+                // Scorri in basso
+                statusDiv.scrollTop = statusDiv.scrollHeight;
+                
+                // Piccola pausa per non intasare Firebase
+                await new Promise(r => setTimeout(r, 200));
+            }
+
+            statusDiv.innerHTML += "<br><strong>Importazione completata con successo!</strong>";
+            btn.innerText = "Fatto!";
+        });
+    </script>
+</body>
+</html>
