@@ -1,8 +1,8 @@
 // Service Worker per Vi.Cla. Portale PWA
 // Versione: 2.5.2 (Supporto Push a Schermo Spento FCM)
 
-const CACHE_NAME_STATIC = 'vicla-static-v2.5.2';
-const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.5.2';
+const CACHE_NAME_STATIC = 'vicla-static-v2.5.3';
+const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.5.3';
 
 const STATIC_ASSETS = [
   './',

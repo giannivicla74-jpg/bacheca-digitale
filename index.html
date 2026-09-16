@@ -2337,7 +2337,7 @@
                         <h2 class="text-xl font-extrabold text-slate-800 dark:text-white font-heading flex items-center gap-2.5">
                             <span class="p-2.5 bg-gradient-to-tr from-blue-900 to-indigo-800 text-white rounded-xl shadow-sm shadow-blue-900/20"><i
                                     class="fa-solid fa-users-gear"></i></span>
-                            Anagrafica Personale Vi.Cla. Future S.r.l.
+                            Anagrafica Personale Aziendale
                         </h2>
                         <div class="flex flex-wrap gap-2 w-full sm:w-auto">
                             <!-- PULSANTE BLOCCA INTESTAZIONE / SCORRIMENTO TABELLA -->
@@ -4074,6 +4074,16 @@
                 read: true
             }
         ];
+
+        // FORZATURA RESET DATI PER DEMO CLEANUP (Versione 2.5.3)
+        if (localStorage.getItem('vicla_db_version') !== 'v2.5.3') {
+            localStorage.removeItem('vicla_workers');
+            localStorage.removeItem('vicla_notices');
+            localStorage.removeItem('vicla_payslips');
+            localStorage.removeItem('vicla_leave_requests');
+            localStorage.removeItem('vicla_notifications');
+            localStorage.setItem('vicla_db_version', 'v2.5.3');
+        }
 
         if (!localStorage.getItem('vicla_workers')) localStorage.setItem('vicla_workers', JSON.stringify(DEFAULT_WORKERS));
         if (!localStorage.getItem('vicla_notices')) localStorage.setItem('vicla_notices', JSON.stringify(DEFAULT_NOTICES));
