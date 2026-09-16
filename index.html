@@ -3968,7 +3968,6 @@
         const DEFAULT_WORKERS = [
             { id: "W01", name: "Mario", surname: "Rossi", matricola: "MAT-2026-01", department: "Produzione", cantiere: "Cantiere Carinaro A", pin: "1234", category: "Operaio", livello: "3° Livello", ferieResidue: 80, permessiResidui: 32, altreResidue: 16 },
             { id: "W02", name: "Giuseppe", surname: "Bianchi", matricola: "MAT-2026-02", department: "Logistica", cantiere: "Cantiere Sede Operativa", pin: "1234", category: "Operaio", livello: "4° Livello", ferieResidue: 64, permessiResidui: 24, altreResidue: 8 },
-            { id: "W03", name: "Vincenzo", surname: "Arena", matricola: "MAT-2026-03", department: "Manutenzione", cantiere: "Cantiere Marcianise B", pin: "1234", category: "Operaio", livello: "3° Livello", ferieResidue: 120, permessiResidui: 40, altreResidue: 24 },
             { id: "W04", name: "Francesco", surname: "Russo", matricola: "MAT-2026-04", department: "Produzione", cantiere: "Cantiere Carinaro A", pin: "1234", category: "Operaio", livello: "2° Livello", ferieResidue: 48, permessiResidui: 16, altreResidue: 12 },
             { id: "W05", name: "Luisa", surname: "Neri", matricola: "MAT-2026-05", department: "Amministrazione", cantiere: "Sede Amministrativa", pin: "1234", category: "Dipendente", livello: "Quadro", ferieResidue: 160, permessiResidui: 48, altreResidue: 32 },
             { id: "W06", name: "Elena", surname: "Rizzo", matricola: "MAT-2026-06", department: "Ufficio Tecnico", cantiere: "Sede Amministrativa", pin: "1234", category: "Dipendente", livello: "1° Livello", ferieResidue: 104, permessiResidui: 36, altreResidue: 16 }
@@ -3995,7 +3994,7 @@
                 priority: "Urgente",
                 department: "Tutti",
                 date: "2026-07-15T08:30:00.000Z",
-                reads: { "W01": "2026-07-15T09:00:00.000Z", "W02": "2026-07-15T09:45:00.000Z", "W03": "2026-07-15T11:30:00.000Z" },
+                reads: { "W01": "2026-07-15T09:00:00.000Z", "W02": "2026-07-15T09:45:00.000Z" },
                 hasAttachment: false,
                 attachmentName: ""
             }
@@ -4022,7 +4021,7 @@
         const DEFAULT_LEAVE_REQUESTS = [
             {
                 id: "REQ01",
-                workerId: "W03",
+                workerId: "W01",
                 dateRequested: "2026-03-20",
                 datePermesso: "2026-03-20",
                 dateEnd: "2026-03-20",
@@ -4032,7 +4031,7 @@
                 leaveType: "Permesso",
                 reason: "PERSONAL",
                 status: "In attesa",
-                workerSignature: "Vincenzo Arena (Firma Digitale)",
+                workerSignature: "Mario Rossi (Firma Digitale)",
                 techEsigenza: "",
                 techFirma: "",
                 techDate: "",
@@ -4062,27 +4061,17 @@
                 targetTab: "notices",
                 date: "2026-03-02T09:30:00.000Z",
                 read: false
-            },
-            {
-                id: "NOTIF_03",
-                workerId: "W03",
-                title: "Richiesta Permesso Approvata",
-                message: "La tua richiesta di permesso per il 20/03/2026 è stata approvata dalla Direzione.",
-                type: "leave",
-                targetTab: "leave",
-                date: "2026-03-03T11:15:00.000Z",
-                read: true
             }
         ];
 
-        // FORZATURA RESET DATI PER DEMO CLEANUP (Versione 2.5.3)
-        if (localStorage.getItem('vicla_db_version') !== 'v2.5.3') {
+        // FORZATURA RESET DATI PER DEMO CLEANUP (Versione 2.5.4)
+        if (localStorage.getItem('vicla_db_version') !== 'v2.5.4') {
             localStorage.removeItem('vicla_workers');
             localStorage.removeItem('vicla_notices');
             localStorage.removeItem('vicla_payslips');
             localStorage.removeItem('vicla_leave_requests');
             localStorage.removeItem('vicla_notifications');
-            localStorage.setItem('vicla_db_version', 'v2.5.3');
+            localStorage.setItem('vicla_db_version', 'v2.5.4');
         }
 
         if (!localStorage.getItem('vicla_workers')) localStorage.setItem('vicla_workers', JSON.stringify(DEFAULT_WORKERS));
