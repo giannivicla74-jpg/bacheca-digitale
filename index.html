@@ -1254,6 +1254,130 @@
 
     <body class="min-h-screen flex flex-col text-slate-800 relative">
 
+        <!-- Modulo Setup Iniziale Aziendale GC CodeLab -->
+        <div id="setup-wizard-overlay" class="fixed inset-0 z-[100] hidden flex flex-col bg-slate-900 overflow-y-auto text-slate-100 font-sans">
+            <div class="max-w-3xl w-full mx-auto my-8 p-6 md:p-10 bg-slate-800/90 rounded-3xl border border-slate-700 shadow-2xl backdrop-blur-sm">
+                
+                <!-- Intestazione -->
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/20 text-blue-400 mb-4 shadow-inner border border-blue-500/30">
+                        <i class="fa-solid fa-building-flag text-3xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-black mb-2 tracking-tight text-white">Configurazione Aziendale</h1>
+                    <p class="text-slate-400 text-sm">Completa il profilo della tua azienda per personalizzare il portale.</p>
+                </div>
+
+                <!-- Form Aziendale -->
+                <div class="space-y-6">
+                    
+                    <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-700/50">
+                        <div class="flex items-start gap-4">
+                            <div class="w-32 h-24 border-2 border-dashed border-blue-500/40 rounded-xl flex flex-col items-center justify-center text-blue-400 bg-blue-500/5 cursor-pointer hover:bg-blue-500/10 transition-colors" id="setup-logo-btn" onclick="document.getElementById('setup-logo-input').click()">
+                                <i class="fa-solid fa-image-polaroid text-2xl mb-1"></i>
+                                <span class="text-xs font-semibold">Carica Logo</span>
+                                <input type="file" id="setup-logo-input" accept="image/*" class="hidden" onchange="previewSetupLogo(event)">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-white mb-1">Logo Azienda (Opzionale)</h3>
+                                <p class="text-sm text-slate-400 mb-3">Apparirà nell'intestazione e su tutti i documenti PDF.</p>
+                                <img id="setup-logo-preview" class="hidden h-12 object-contain" alt="Logo Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Ragione Sociale Azienda <span class="text-red-500">*</span></label>
+                            <input type="text" id="setup-ragione-sociale" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Es. Autonoleggi Rossi S.r.l.">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Nome Breve / Marchio</label>
+                            <input type="text" id="setup-nome-breve" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Es. Rossi Rent">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Partita IVA / C.F. <span class="text-red-500">*</span></label>
+                            <input type="text" id="setup-piva" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Es. 12345678901">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Sede Legale</label>
+                            <input type="text" id="setup-sede" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Via Roma 1, 00100 Roma (RM)">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Email Aziendale</label>
+                            <input type="email" id="setup-email" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="info@azienda.it">
+                        </div>
+                    </div>
+
+                    <!-- Consensi Legali GC CodeLab -->
+                    <div class="mt-8 bg-slate-900/80 p-6 rounded-2xl border border-slate-700">
+                        <h3 class="font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-scale-balanced text-blue-400"></i> Consensi Legali e Responsabilità (Obbligatori)
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <div class="relative flex items-center justify-center mt-0.5">
+                                    <input type="checkbox" id="setup-tos" class="peer sr-only">
+                                    <div class="w-5 h-5 border-2 border-slate-600 rounded bg-slate-800 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-colors flex items-center justify-center">
+                                        <i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-slate-300 group-hover:text-white transition-colors leading-relaxed">
+                                    Dichiaro di aver letto e accetto integralmente i <a href="#" class="text-blue-400 font-semibold hover:underline">Termini di Servizio</a> e le Condizioni Generali d'Uso del software GC CodeLab. <span class="text-red-500 font-bold">*</span>
+                                </span>
+                            </label>
+
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <div class="relative flex items-center justify-center mt-0.5">
+                                    <input type="checkbox" id="setup-privacy" class="peer sr-only">
+                                    <div class="w-5 h-5 border-2 border-slate-600 rounded bg-slate-800 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-colors flex items-center justify-center">
+                                        <i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-slate-300 group-hover:text-white transition-colors leading-relaxed">
+                                    Dichiaro di aver preso visione dell'<a href="#" class="text-blue-400 font-semibold hover:underline">Informativa sulla Privacy</a> (Reg. UE 2016/679 - GDPR) e acconsento al trattamento dei dati anagrafici, operativi e dei dipendenti per le finalità del gestionale. <span class="text-red-500 font-bold">*</span>
+                                </span>
+                            </label>
+
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <div class="relative flex items-center justify-center mt-0.5">
+                                    <input type="checkbox" id="setup-liability" class="peer sr-only">
+                                    <div class="w-5 h-5 border-2 border-slate-600 rounded bg-slate-800 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-colors flex items-center justify-center">
+                                        <i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-slate-300 group-hover:text-white transition-colors leading-relaxed">
+                                    Prendo atto che il software è uno strumento gratuito di ausilio organizzativo e che la verifica e il rispetto delle scadenze di legge (buste paga, presenze, ferie, permessi) rimangono sotto l'<strong class="text-white">esclusiva responsabilità dell'Azienda Utilizzatrice</strong>. GC CodeLab è esonerata da ogni responsabilità civile o penale derivante dall'uso del software. <span class="text-red-500 font-bold">*</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Bottoni di Azione -->
+                    <div class="pt-6 flex flex-col gap-4">
+                        <button onclick="saveSetupProfile()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Salva Azienda & Entra nel Portale
+                        </button>
+
+                        <div class="text-center mt-2">
+                            <span class="text-slate-500 text-sm">I dati inseriti verranno salvati in modo sicuro e sincronizzati sul Cloud aziendale.</span>
+                        </div>
+
+                        <button onclick="startSetupDemo()" class="mt-4 flex items-center justify-center gap-2 text-emerald-400 hover:text-emerald-300 font-bold transition-colors">
+                            <i class="fa-solid fa-desktop"></i>
+                            Oppure avvia subito: Azienda Demo S.r.l. (Versione Dimostrativa)
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     <!-- Sfondo Animato Aurora Mesh (Sfere di luce fluide dinamiche con temi dedicati per ogni modulo) -->
     <div id="aurora-ambient-container" aria-hidden="true" class="aurora-theme-admin">
         <div class="aurora-orb aurora-orb-1"></div>
@@ -4064,14 +4188,14 @@
             }
         ];
 
-        // FORZATURA RESET DATI PER DEMO CLEANUP (Versione 2.5.4)
-        if (localStorage.getItem('vicla_db_version') !== 'v2.5.4') {
+        // FORZATURA RESET DATI PER DEMO CLEANUP E ONBOARDING (Versione 3.0.0)
+        if (localStorage.getItem('vicla_db_version') !== 'v3.0.0') {
             localStorage.removeItem('vicla_workers');
             localStorage.removeItem('vicla_notices');
             localStorage.removeItem('vicla_payslips');
             localStorage.removeItem('vicla_leave_requests');
             localStorage.removeItem('vicla_notifications');
-            localStorage.setItem('vicla_db_version', 'v2.5.4');
+            localStorage.setItem('vicla_db_version', 'v3.0.0');
         }
 
         if (!localStorage.getItem('vicla_workers')) localStorage.setItem('vicla_workers', JSON.stringify(DEFAULT_WORKERS));
@@ -4081,6 +4205,154 @@
         if (!localStorage.getItem('vicla_notifications')) localStorage.setItem('vicla_notifications', JSON.stringify(DEFAULT_NOTIFICATIONS));
 
         var workers = JSON.parse(localStorage.getItem('vicla_workers'));
+        
+        // --- INIZIO LOGICA ONBOARDING GC CODELAB ---
+        
+        // Applica il branding dinamico all'interfaccia (chiamato all'avvio e dopo il setup)
+        function applyCompanyBranding() {
+            const profileStr = localStorage.getItem('vicla_company_profile');
+            if (profileStr) {
+                try {
+                    const profile = JSON.parse(profileStr);
+                    const companyName = profile.ragioneSociale || "Azienda Demo S.r.l.";
+                    const shortName = profile.nomeBreve || companyName;
+                    
+                    // Applica al titolo della pagina
+                    document.title = "Bacheca " + shortName;
+                    
+                    // Applica all'header principale
+                    const headerTitles = document.querySelectorAll('header h1, header h2');
+                    headerTitles.forEach(h => {
+                        if (h.innerText.includes("Azienda Demo S.r.l.") || h.innerText.includes("Vi.Cla.")) {
+                            h.innerText = h.innerText.replace("Azienda Demo S.r.l.", shortName).replace("Vi.Cla.", shortName);
+                        }
+                    });
+
+                    // Applica al footer
+                    const footerText = document.getElementById('footer-company-info');
+                    if (footerText) {
+                        footerText.innerHTML = `&copy; ${new Date().getFullYear()} <strong>${companyName}</strong>. P.IVA/CF: ${profile.piva || 'ND'} - Sede: ${profile.sede || 'ND'} <br>
+                                                Tutti i diritti riservati. Uso esclusivo del personale autorizzato.`;
+                    }
+                    
+                    // Applica ai piè di pagina per la stampa (se presenti)
+                    const printFooters = document.querySelectorAll('.print-footer-company');
+                    printFooters.forEach(f => {
+                        f.innerText = `${companyName} - P.IVA: ${profile.piva || 'ND'} - ${profile.sede || ''}`;
+                    });
+                    
+                    // Applica il logo all'header, se presente
+                    if (profile.logoData) {
+                        const headerLogos = document.querySelectorAll('header img');
+                        headerLogos.forEach(img => {
+                            // Cambia il logo solo se non è quello fisso (magari ne abbiamo uno aziendale)
+                            // In questa app non ci sono immagini logo fisse, ma qualora le aggiungessimo:
+                            img.src = profile.logoData;
+                        });
+                    }
+                } catch(e) {
+                    console.error("Errore nell'applicazione del branding:", e);
+                }
+            }
+        }
+
+        function checkCompanyProfile() {
+            const profile = localStorage.getItem('vicla_company_profile');
+            const overlay = document.getElementById('setup-wizard-overlay');
+            if (!profile) {
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Blocca lo scroll
+            } else {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+                applyCompanyBranding();
+            }
+        }
+
+        function previewSetupLogo(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('setup-logo-preview');
+                const btn = document.getElementById('setup-logo-btn');
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                btn.classList.add('hidden');
+                
+                // Manteniamo la stringa base64 sull'immagine come attributo per salvarla dopo
+                preview.setAttribute('data-base64', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveSetupProfile() {
+            const rSoc = document.getElementById('setup-ragione-sociale').value.trim();
+            const nBre = document.getElementById('setup-nome-breve').value.trim();
+            const pIva = document.getElementById('setup-piva').value.trim();
+            const sede = document.getElementById('setup-sede').value.trim();
+            const email = document.getElementById('setup-email').value.trim();
+            
+            const tos = document.getElementById('setup-tos').checked;
+            const privacy = document.getElementById('setup-privacy').checked;
+            const liability = document.getElementById('setup-liability').checked;
+
+            if (!rSoc || !pIva) {
+                alert("Compila i campi obbligatori (Ragione Sociale e P.IVA/CF).");
+                return;
+            }
+            if (!tos || !privacy || !liability) {
+                alert("Devi accettare tutti i consensi legali per poter utilizzare il software.");
+                return;
+            }
+
+            const preview = document.getElementById('setup-logo-preview');
+            const logoData = preview.getAttribute('data-base64') || null;
+
+            const profile = {
+                ragioneSociale: rSoc,
+                nomeBreve: nBre,
+                piva: pIva,
+                sede: sede,
+                email: email,
+                logoData: logoData,
+                setupDate: new Date().toISOString()
+            };
+
+            localStorage.setItem('vicla_company_profile', JSON.stringify(profile));
+            
+            // Forza una chiusura del modal e applica il branding
+            document.getElementById('setup-wizard-overlay').classList.add('hidden');
+            document.body.style.overflow = '';
+            applyCompanyBranding();
+            
+            if (typeof showToast === 'function') showToast("Configurazione salvata con successo!", "success");
+        }
+
+        function startSetupDemo() {
+            const profile = {
+                ragioneSociale: "Azienda Demo S.r.l.",
+                nomeBreve: "Azienda Demo",
+                piva: "12345678901",
+                sede: "Via Demo 1, 00100 Roma",
+                email: "demo@azienda.it",
+                logoData: null,
+                setupDate: new Date().toISOString(),
+                isDemo: true
+            };
+            localStorage.setItem('vicla_company_profile', JSON.stringify(profile));
+            
+            document.getElementById('setup-wizard-overlay').classList.add('hidden');
+            document.body.style.overflow = '';
+            applyCompanyBranding();
+            
+            if (typeof showToast === 'function') showToast("Modalità Dimostrativa attivata!", "info");
+        }
+        
+        // Controlla all'avvio
+        setTimeout(checkCompanyProfile, 100);
+
+        // --- FINE LOGICA ONBOARDING GC CODELAB ---
 
         // Funzioni Universali di Normalizzazione Lavoratore e Visualizzazione Sicura (Anti-undefined)
         function normalizeWorker(w) {
