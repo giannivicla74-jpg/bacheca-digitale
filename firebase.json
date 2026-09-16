@@ -4,8 +4,11 @@
     "ignore": [
       "firebase.json",
       ".firebaserc",
-      "**/.*",
-      "**/node_modules/**",
+      ".git/**",
+      ".gitignore",
+      ".agents/**",
+      "firebase-debug.log",
+      "node_modules/**",
       "scratch/**",
       "*.zip",
       "*.backup",
