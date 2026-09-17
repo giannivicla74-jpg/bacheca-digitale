@@ -1,8 +1,8 @@
 // Service Worker per Vi.Cla. Portale PWA
-// Versione: 2.5.5 (Supporto Centro Sicurezza Backup & Restore + Regolamento)
+// Versione: 2.5.6 (Supporto Animazione 3D Card Flip & Dissolve Accesso Bacheca)
 
-const CACHE_NAME_STATIC = 'vicla-static-v2.5.5';
-const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.5.5';
+const CACHE_NAME_STATIC = 'vicla-static-v2.5.6';
+const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.5.6';
 
 const STATIC_ASSETS = [
   './',

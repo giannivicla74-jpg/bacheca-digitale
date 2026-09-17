@@ -1164,6 +1164,88 @@
             color: #2dd4bf !important;
         }
 
+        /* ========================================================================= */
+        /* 🃏 EFFETTO TRANSIZIONE 3D FLIP & DISSOLVENZA (ACCESSO BACHECA OPERAI / DIPENDENTI) */
+        /* ========================================================================= */
+
+        #panel-worker {
+            perspective: 1400px;
+            perspective-origin: 50% 30%;
+        }
+
+        #worker-login-card,
+        #worker-dashboard {
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            will-change: transform, opacity, filter;
+        }
+
+        @keyframes workerFlip3DOut {
+            0% {
+                transform: perspective(1400px) rotateY(0deg) scale(1) translateZ(0);
+                opacity: 1;
+                filter: blur(0px);
+            }
+            40% {
+                transform: perspective(1400px) rotateY(38deg) scale(0.96) translateZ(30px);
+                opacity: 0.85;
+                filter: blur(0.5px);
+            }
+            100% {
+                transform: perspective(1400px) rotateY(92deg) scale(0.85) translateZ(-50px);
+                opacity: 0;
+                filter: blur(4px);
+            }
+        }
+
+        @keyframes workerFlip3DIn {
+            0% {
+                transform: perspective(1400px) rotateY(-92deg) scale(0.85) translateZ(-50px);
+                opacity: 0;
+                filter: blur(4px);
+            }
+            60% {
+                transform: perspective(1400px) rotateY(-16deg) scale(0.98) translateZ(20px);
+                opacity: 0.92;
+                filter: blur(0.5px);
+            }
+            100% {
+                transform: perspective(1400px) rotateY(0deg) scale(1) translateZ(0);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        .worker-flip-3d-out {
+            animation: workerFlip3DOut 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+            pointer-events: none !important;
+        }
+
+        .worker-flip-3d-in {
+            animation: workerFlip3DIn 0.44s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+        }
+
+        @keyframes shakeHorizontal {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .animate-shake {
+            animation: shakeHorizontal 0.4s ease-in-out;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .worker-flip-3d-out {
+                animation: none !important;
+                opacity: 0 !important;
+            }
+            .worker-flip-3d-in {
+                animation: none !important;
+                opacity: 1 !important;
+            }
+        }
+
     </style>
 </head>
 
@@ -2896,6 +2978,7 @@
                         <label
                             class="block text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-1.5 text-left font-heading">PIN Personale di Sicurezza</label>
                         <input type="password" id="worker-login-pin" maxlength="4" placeholder="● ● ● ●"
+                            onkeyup="if(event.key==='Enter') loginToWorkerDashboard()"
                             class="w-full text-center tracking-[0.6em] px-4 py-3.5 bg-slate-50/80 dark:bg-slate-900/80 border-2 border-slate-200/80 dark:border-slate-700 rounded-2xl text-2xl font-black focus:outline-none focus:border-orange-500 transition-all shadow-inner">
                         <div class="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 mt-2">
                             <span><i class="fa-solid fa-lock text-orange-500 mr-1"></i>PIN Protetto</span>
@@ -8403,6 +8486,64 @@
             updateNotificationBadge();
         }
 
+        function animateWorkerLoginTransition(workerId, currentWorker) {
+            const loginCard = document.getElementById('worker-login-card');
+            const dashboard = document.getElementById('worker-dashboard');
+            const btnLogin = document.getElementById('btn-login-submit');
+
+            // Feedback immediato di sblocco sul pulsante
+            if (btnLogin) {
+                btnLogin.disabled = true;
+                btnLogin.innerHTML = `<i class="fa-solid fa-lock-open text-emerald-300 animate-bounce"></i> <span>Accesso Autorizzato...</span>`;
+                btnLogin.classList.add('ring-4', 'ring-emerald-400/40');
+            }
+
+            const prefersReduced = (typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+            const isHeadlessOrMock = (typeof window === 'undefined' || !loginCard || !dashboard || typeof setTimeout !== 'function' || prefersReduced);
+
+            if (isHeadlessOrMock) {
+                applyWorkerLoggedInUI(workerId);
+                const pinInput = document.getElementById('worker-login-pin');
+                if (pinInput) pinInput.value = '';
+                if (btnLogin) {
+                    btnLogin.disabled = false;
+                    btnLogin.innerHTML = `<i class="fa-solid fa-shield-check"></i> <span>Sblocca Bacheca & Accedi</span>`;
+                    btnLogin.classList.remove('ring-4', 'ring-emerald-400/40');
+                }
+                showToast(`Accesso sbloccato! Benvenuto ${currentWorker.name} ${currentWorker.surname}`, "success");
+                return;
+            }
+
+            // FASE 1: Rotazione 3D e Dissolvenza in Uscita della Card Login
+            loginCard.classList.remove('worker-flip-3d-in');
+            loginCard.classList.add('worker-flip-3d-out');
+
+            setTimeout(() => {
+                // FASE 2: Scambio nel DOM a metà rotazione (card a 90° invisibile di taglio)
+                applyWorkerLoggedInUI(workerId);
+                const pinInput = document.getElementById('worker-login-pin');
+                if (pinInput) pinInput.value = '';
+
+                if (btnLogin) {
+                    btnLogin.disabled = false;
+                    btnLogin.innerHTML = `<i class="fa-solid fa-shield-check"></i> <span>Sblocca Bacheca & Accedi</span>`;
+                    btnLogin.classList.remove('ring-4', 'ring-emerald-400/40');
+                }
+                loginCard.classList.remove('worker-flip-3d-out');
+
+                // FASE 3: Rotazione 3D e Dissolvenza in Ingresso della Dashboard Personale
+                dashboard.classList.remove('worker-flip-3d-out');
+                dashboard.classList.add('worker-flip-3d-in');
+
+                showToast(`Accesso sbloccato! Benvenuto ${currentWorker.name} ${currentWorker.surname}`, "success");
+
+                // FASE 4: Pulizia classi di animazione per tornare a stato statico pulito
+                setTimeout(() => {
+                    dashboard.classList.remove('worker-flip-3d-in');
+                }, 450);
+            }, 360);
+        }
+
         function loginToWorkerDashboard() {
             const workerId = document.getElementById('worker-select-login').value;
             if (!workerId) {
@@ -8438,15 +8579,23 @@
                     window.syncDevicePushSubscription(currentRole, workerId);
                 }
 
-                applyWorkerLoggedInUI(workerId);
-                showToast(`Accesso sbloccato! Benvenuto ${currentWorker.name} ${currentWorker.surname}`, "success");
+                animateWorkerLoginTransition(workerId, currentWorker);
             } else {
                 showToast("PIN di sicurezza non valido per questo profilo!", "error");
-                document.getElementById('worker-login-pin').value = '';
+                const pinInput = document.getElementById('worker-login-pin');
+                if (pinInput) pinInput.value = '';
+                const card = document.getElementById('worker-login-card');
+                if (card) {
+                    card.classList.add('animate-shake');
+                    setTimeout(() => card.classList.remove('animate-shake'), 450);
+                }
             }
         }
 
         function logoutWorker() {
+            const loginCard = document.getElementById('worker-login-card');
+            const dashboard = document.getElementById('worker-dashboard');
+
             // Rimuovi sessione persistente da localStorage per il ruolo corrente
             if (currentRole === 'operaio' || currentRole === 'dipendente') {
                 localStorage.removeItem('vicla_active_worker_id_' + currentRole);
@@ -8459,15 +8608,47 @@
             window.isWorkerAuthenticated = false;
             window.selectedWorkerId = null;
 
-            document.getElementById('worker-login-pin').value = '';
-            document.getElementById('worker-login-card').classList.remove('hidden');
-            document.getElementById('worker-dashboard').classList.add('hidden');
-            populateWorkerSelect();
-            resetLoginPinField();
-            updateAuroraVisibility();
-            renderNotificationsDrawer();
-            updateNotificationBadge();
-            showToast("Sei uscito dalla tua bacheca personale.", "info");
+            const prefersReduced = (typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+            const isHeadlessOrMock = (typeof window === 'undefined' || !loginCard || !dashboard || typeof setTimeout !== 'function' || prefersReduced);
+
+            if (isHeadlessOrMock) {
+                const pinInput = document.getElementById('worker-login-pin');
+                if (pinInput) pinInput.value = '';
+                if (loginCard) loginCard.classList.remove('hidden');
+                if (dashboard) dashboard.classList.add('hidden');
+                populateWorkerSelect();
+                resetLoginPinField();
+                updateAuroraVisibility();
+                renderNotificationsDrawer();
+                updateNotificationBadge();
+                showToast("Sei uscito dalla tua bacheca personale.", "info");
+                return;
+            }
+
+            // Animazione di uscita in rotazione fluida della Dashboard
+            dashboard.classList.add('worker-flip-3d-out');
+
+            setTimeout(() => {
+                const pinInput = document.getElementById('worker-login-pin');
+                if (pinInput) pinInput.value = '';
+                loginCard.classList.remove('hidden');
+                dashboard.classList.add('hidden');
+                dashboard.classList.remove('worker-flip-3d-out');
+
+                populateWorkerSelect();
+                resetLoginPinField();
+                updateAuroraVisibility();
+                renderNotificationsDrawer();
+                updateNotificationBadge();
+
+                // Ingresso morbido della Card di Login
+                loginCard.classList.add('worker-flip-3d-in');
+                showToast("Sei uscito dalla tua bacheca personale.", "info");
+
+                setTimeout(() => {
+                    loginCard.classList.remove('worker-flip-3d-in');
+                }, 450);
+            }, 300);
         }
 
         function setSignatureMethod(method) {
@@ -8581,6 +8762,10 @@
                 sigContext.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
             }
         }
+
+        window.loginToWorkerDashboard = loginToWorkerDashboard;
+        window.logoutWorker = logoutWorker;
+        window.animateWorkerLoginTransition = animateWorkerLoginTransition;
     </script>
 
     <script>
