@@ -14,6 +14,7 @@
       "*.backup",
       "*.bak",
       "*.safe_point",
+      "*backup*.html",
       "server.js",
       "test.js",
       "COMANDI_*"

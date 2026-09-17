@@ -783,158 +783,138 @@
         /* ========================================================================= */
         .gc-card-3d {
             position: relative;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.55) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.85);
             border-radius: 1.25rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
-                        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
-                        border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                        background 0.35s ease;
-            transform: perspective(1000px) translateY(0) translateZ(0);
-            will-change: transform, box-shadow;
+            box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+                        box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+                        border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
         }
 
-        /* Riflesso luce superiore dinamico (ambient glare) */
-        .gc-card-3d::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
-            opacity: 0.6;
-            transition: opacity 0.35s ease;
-            pointer-events: none;
-        }
-
-        /* Elevazione fluttuante 3D al passaggio del mouse (-translate-y-2) & ombra profonda HD */
         .gc-card-3d:hover {
-            transform: none;
-        }
-        .gc-card-3d:hover::before {
-            opacity: 1;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px -4px rgba(0, 0, 0, 0.09), 0 6px 12px -2px rgba(0, 0, 0, 0.04);
         }
 
-        /* Micro-animazione icona kpi 3D */
-        .gc-card-3d .gc-kpi-icon {
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-        }
-        .gc-card-3d:hover .gc-kpi-icon {
-            transform: scale(1.12) translateZ(20px);
-        }
-
-        /* 1. Card Blue (Avvisi Attivi): Bordo Neon & Alone d'Ambiente Blue/Indigo */
+        /* 1. Card Blue (Avvisi Attivi) */
         .gc-card-3d-blue:hover {
+            border-color: rgba(59, 130, 246, 0.5) !important;
+            box-shadow: 0 14px 28px -4px rgba(59, 130, 246, 0.16) !important;
+        }
+
+        /* 2. Card Orange (Totale Personale) */
+        .gc-card-3d-orange:hover {
+            border-color: rgba(249, 115, 22, 0.5) !important;
+            box-shadow: 0 14px 28px -4px rgba(249, 115, 22, 0.16) !important;
+        }
+
+        /* 3. Card Green (Media Firme) */
+        .gc-card-3d-green:hover {
+            border-color: rgba(16, 185, 129, 0.5) !important;
+            box-shadow: 0 14px 28px -4px rgba(16, 185, 129, 0.16) !important;
+        }
+
+        /* 4. Card Rose (Firme Mancanti) */
+        .gc-card-3d-rose:hover {
+            border-color: rgba(244, 63, 94, 0.5) !important;
+            box-shadow: 0 14px 28px -4px rgba(244, 63, 94, 0.16) !important;
+        }
+
+        /* Supporto Dark Mode per .gc-card-3d */
+        html.dark .gc-card-3d, html.dark-mode .gc-card-3d {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+        html.dark .gc-card-3d-blue:hover, html.dark-mode .gc-card-3d-blue:hover {
             border-color: rgba(99, 102, 241, 0.75) !important;
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 75, 0.7) 100%) !important;
-            box-shadow: 0 22px 40px -8px rgba(0, 0, 0, 0.65), 
-                        0 0 28px -2px rgba(79, 70, 229, 0.38),
-                        inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 22px 40px -8px rgba(0, 0, 0, 0.65), 0 0 28px -2px rgba(79, 70, 229, 0.38) !important;
         }
-        .gc-card-3d-blue:hover .gc-kpi-icon {
-            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.55);
-        }
-
-        /* 2. Card Orange (Totale Personale): Bordo Neon & Alone d'Ambiente Amber/Orange */
-        .gc-card-3d-orange:hover {
+        html.dark .gc-card-3d-orange:hover, html.dark-mode .gc-card-3d-orange:hover {
             border-color: rgba(249, 115, 22, 0.75) !important;
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(55, 30, 18, 0.7) 100%) !important;
-            box-shadow: 0 22px 40px -8px rgba(0, 0, 0, 0.65), 
-                        0 0 28px -2px rgba(249, 115, 22, 0.38),
-                        inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 22px 40px -8px rgba(0, 0, 0, 0.65), 0 0 28px -2px rgba(249, 115, 22, 0.38) !important;
         }
-        .gc-card-3d-orange:hover .gc-kpi-icon {
-            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.55);
-        }
-
-        /* 3. Card Green (Media Firme): Bordo Neon & Alone d'Ambiente Emerald/Teal */
-        .gc-card-3d-green:hover {
+        html.dark .gc-card-3d-green:hover, html.dark-mode .gc-card-3d-green:hover {
             border-color: rgba(20, 184, 166, 0.75) !important;
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(13, 45, 40, 0.7) 100%) !important;
-            box-shadow: 0 22px 40px -8px rgba(0, 0, 0, 0.65), 
-                        0 0 28px -2px rgba(20, 184, 166, 0.38),
-                        inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 22px 40px -8px rgba(0, 0, 0, 0.65), 0 0 28px -2px rgba(20, 184, 166, 0.38) !important;
         }
-        .gc-card-3d-green:hover .gc-kpi-icon {
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.55);
+        html.dark .gc-card-3d-rose:hover, html.dark-mode .gc-card-3d-rose:hover {
+            border-color: rgba(244, 63, 94, 0.75) !important;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(55, 20, 32, 0.7) 100%) !important;
+            box-shadow: 0 22px 40px -8px rgba(0, 0, 0, 0.65), 0 0 28px -2px rgba(244, 63, 94, 0.38) !important;
         }
-
         
         /* Stile Icona KPI Elegante Glassmorphic & Futuristica */
         .gc-kpi-icon-modern {
-            width: 50px;
-            height: 50px;
+            width: 52px;
+            height: 52px;
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* 1. Blue Icon: Avvisi Attivi */
         .gc-kpi-icon-blue {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.16) 0%, rgba(37, 99, 235, 0.08) 100%);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+        html.dark .gc-kpi-icon-blue, html.dark-mode .gc-kpi-icon-blue {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.1) 100%);
             border: 1px solid rgba(96, 165, 250, 0.3);
             color: #60a5fa;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-        }
-        .gc-card-3d-blue:hover .gc-kpi-icon-blue {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.2) 100%);
-            border-color: rgba(147, 197, 253, 0.6);
-            color: #93c5fd;
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-            transform: scale(1.08);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
         }
 
         /* 2. Amber Icon: Totale Personale */
         .gc-kpi-icon-orange {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(217, 119, 6, 0.08) 100%);
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #d97706;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.1);
+        }
+        html.dark .gc-kpi-icon-orange, html.dark-mode .gc-kpi-icon-orange {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.1) 100%);
             border: 1px solid rgba(251, 191, 36, 0.3);
             color: #fbbf24;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-        }
-        .gc-card-3d-orange:hover .gc-kpi-icon-orange {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.2) 100%);
-            border-color: rgba(253, 230, 138, 0.6);
-            color: #fde68a;
-            box-shadow: 0 0 25px rgba(245, 158, 11, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-            transform: scale(1.08);
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.15);
         }
 
         /* 3. Emerald Icon: Media Firme */
         .gc-kpi-icon-green {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(5, 150, 105, 0.08) 100%);
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+        }
+        html.dark .gc-kpi-icon-green, html.dark-mode .gc-kpi-icon-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.1) 100%);
             border: 1px solid rgba(52, 211, 153, 0.3);
             color: #34d399;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-        }
-        .gc-card-3d-green:hover .gc-kpi-icon-green {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.2) 100%);
-            border-color: rgba(167, 243, 208, 0.6);
-            color: #a7f3d0;
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-            transform: scale(1.08);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);
         }
 
         /* 4. Rose Icon: Firme Mancanti */
         .gc-kpi-icon-rose {
-            background: linear-gradient(135deg, rgba(244, 63, 94, 0.16) 0%, rgba(225, 29, 72, 0.08) 100%);
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #e11d48;
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.1);
+        }
+        html.dark .gc-kpi-icon-rose, html.dark-mode .gc-kpi-icon-rose {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(225, 29, 72, 0.1) 100%);
             border: 1px solid rgba(251, 113, 133, 0.3);
             color: #fb7185;
-            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-        }
-        .gc-card-3d-rose:hover .gc-kpi-icon-rose {
-            background: linear-gradient(135deg, rgba(244, 63, 94, 0.3) 0%, rgba(225, 29, 72, 0.2) 100%);
-            border-color: rgba(254, 205, 211, 0.6);
-            color: #fecdd3;
-            box-shadow: 0 0 25px rgba(244, 63, 94, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-            transform: scale(1.08);
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15);
         }
 
         /* Tipografia Numerica Moderna, Pulita & Elegante */
@@ -948,56 +928,36 @@
             display: inline-block;
         }
 
+        /* Numeri vivaci in Light Mode */
+        .gc-kpi-val-blue { color: #1d4ed8 !important; }
+        .gc-kpi-val-orange { color: #ea580c !important; }
+        .gc-kpi-val-green { color: #059669 !important; }
+        .gc-kpi-val-rose { color: #e11d48 !important; }
+
         /* Sfumature luminose metalliche sui numeri in Dark Mode */
         html.dark .gc-kpi-val-blue, html.dark-mode .gc-kpi-val-blue {
-            background: linear-gradient(180deg, #ffffff 40%, #93c5fd 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: linear-gradient(180deg, #ffffff 40%, #93c5fd 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
             filter: drop-shadow(0 2px 10px rgba(59, 130, 246, 0.3));
         }
         html.dark .gc-kpi-val-orange, html.dark-mode .gc-kpi-val-orange {
-            background: linear-gradient(180deg, #ffffff 40%, #fcd34d 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: linear-gradient(180deg, #ffffff 40%, #fcd34d 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
             filter: drop-shadow(0 2px 10px rgba(245, 158, 11, 0.3));
         }
         html.dark .gc-kpi-val-green, html.dark-mode .gc-kpi-val-green {
-            background: linear-gradient(180deg, #ffffff 40%, #6ee7b7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: linear-gradient(180deg, #ffffff 40%, #6ee7b7 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
             filter: drop-shadow(0 2px 10px rgba(16, 185, 129, 0.3));
         }
         html.dark .gc-kpi-val-rose, html.dark-mode .gc-kpi-val-rose {
-            background: linear-gradient(180deg, #ffffff 40%, #fda4af 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: linear-gradient(180deg, #ffffff 40%, #fda4af 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
             filter: drop-shadow(0 2px 10px rgba(244, 63, 94, 0.3));
-        }
-
-        /* Versione Light Mode con contrasto impeccabile */
-        html:not(.dark):not(.dark-mode) .gc-kpi-val-blue {
-            color: #1e3a8a;
-        }
-        html:not(.dark):not(.dark-mode) .gc-kpi-val-orange {
-            color: #9a3412;
-        }
-        html:not(.dark):not(.dark-mode) .gc-kpi-val-green {
-            color: #065f46;
-        }
-        html:not(.dark):not(.dark-mode) .gc-kpi-val-rose {
-            color: #9f1239;
-        }
-
-        /* 4. Card Rose (Firme Mancanti): Bordo Neon & Alone d'Ambiente Rose/Pink */
-        .gc-card-3d-rose:hover {
-            border-color: rgba(244, 63, 94, 0.75) !important;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(55, 20, 32, 0.7) 100%) !important;
-            box-shadow: 0 22px 40px -8px rgba(0, 0, 0, 0.65), 
-                        0 0 28px -2px rgba(244, 63, 94, 0.38),
-                        inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
-        }
-        .gc-card-3d-rose:hover .gc-kpi-icon {
-            box-shadow: 0 8px 24px rgba(244, 63, 94, 0.55);
         }
 
         /* Micro-zoom pulsante azione */
@@ -1005,11 +965,11 @@
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .gc-card-3d .gc-btn-microzoom:hover {
-            transform: scale(1.04);
-            box-shadow: 0 6px 18px rgba(244, 63, 94, 0.4);
+            transform: scale(1.03);
+            box-shadow: 0 4px 14px rgba(244, 63, 94, 0.25);
         }
         .gc-card-3d .gc-btn-microzoom:active {
-            transform: scale(0.96);
+            transform: scale(0.97);
         }
 
         /* ========================================================================= */
@@ -1065,6 +1025,15 @@
             border: 1px solid #14b8a6 !important;
             border-left: 4px solid #0d9488 !important;
             box-shadow: 0 6px 18px rgba(20, 184, 166, 0.18) !important;
+        }
+        html:not(.dark) .admin-notice-card-active h4 {
+            color: #0f172a !important;
+        }
+        html:not(.dark) .admin-notice-card-active p {
+            color: #0f766e !important;
+        }
+        html:not(.dark) .admin-notice-card-active .text-right span {
+            color: #0f766e !important;
         }
 
         /* ========================================================================= */
@@ -1525,12 +1494,20 @@
                                 class="px-2 py-0.5 bg-amber-500 text-white text-[10px] font-extrabold rounded-full hidden shadow-sm animate-pulse">0</span>
                         </button>
                     </div>
-                    <!-- Pulsante disconnessione rapida amministratore -->
-                    <button onclick="logoutAdmin()"
-                        class="px-4 py-2.5 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm mb-2 sm:mb-0 hover:scale-105 active:scale-95">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Esci da HR</span>
-                    </button>
+                    <!-- Pulsanti Azioni Rapide Amministratore (Backup & Logout) -->
+                    <div class="flex items-center gap-2 mb-2 sm:mb-0">
+                        <button onclick="openBackupModal()"
+                            class="px-3.5 py-2.5 bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 hover:from-blue-950 hover:to-indigo-950 text-white border border-blue-700/60 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
+                            title="Centro Sicurezza: Esporta o Ripristina il Backup Completo del Database">
+                            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                            <span>Backup & Ripristino</span>
+                        </button>
+                        <button onclick="logoutAdmin()"
+                            class="px-4 py-2.5 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Esci da HR</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- TAB 1: COMUNICAZIONI -->
@@ -1538,51 +1515,63 @@
                     <!-- Riepilogo Statistiche Veloci (🃏 GC-CARDS: Card Animate 3D con Icone Glassmorphic & Numeri Ultra-Moderni) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 select-none">
                         <!-- 1. Avvisi Attivi (3D Blue) -->
-                        <div class="gc-card-3d gc-card-3d-blue p-5 flex items-center gap-4 group cursor-pointer">
-                            <div class="gc-kpi-icon-modern gc-kpi-icon-blue shrink-0">
-                                <i class="fa-solid fa-newspaper text-xl"></i>
+                        <div onclick="handleKpiCardClick('notices')" class="gc-card-3d gc-card-3d-blue p-5 flex items-center justify-between gap-4 group cursor-pointer" title="Clicca per visualizzare l'elenco dei comunicati ed avvisi attivi">
+                            <div class="flex items-center gap-4 min-w-0">
+                                <div class="gc-kpi-icon-modern gc-kpi-icon-blue shrink-0">
+                                    <i class="fa-solid fa-newspaper text-xl"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Avvisi Attivi</span>
+                                    <h3 class="gc-kpi-val gc-kpi-val-blue" id="stat-total-notices">0</h3>
+                                </div>
                             </div>
-                            <div>
-                                <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-widest block">Avvisi Attivi</span>
-                                <h3 class="gc-kpi-val gc-kpi-val-blue" id="stat-total-notices">0</h3>
-                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-blue-300 dark:text-blue-500/50 group-hover:text-blue-600 dark:group-hover:text-blue-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"></i>
                         </div>
 
                         <!-- 2. Totale Personale (3D Orange) -->
-                        <div class="gc-card-3d gc-card-3d-orange p-5 flex items-center gap-4 group cursor-pointer">
-                            <div class="gc-kpi-icon-modern gc-kpi-icon-orange shrink-0">
-                                <i class="fa-solid fa-user-group text-xl"></i>
+                        <div onclick="handleKpiCardClick('workers')" class="gc-card-3d gc-card-3d-orange p-5 flex items-center justify-between gap-4 group cursor-pointer" title="Clicca per visualizzare l'anagrafica completa del personale">
+                            <div class="flex items-center gap-4 min-w-0">
+                                <div class="gc-kpi-icon-modern gc-kpi-icon-orange shrink-0">
+                                    <i class="fa-solid fa-user-group text-xl"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Totale Personale</span>
+                                    <h3 class="gc-kpi-val gc-kpi-val-orange" id="stat-total-workers">0</h3>
+                                </div>
                             </div>
-                            <div>
-                                <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-widest block">Totale Personale</span>
-                                <h3 class="gc-kpi-val gc-kpi-val-orange" id="stat-total-workers">0</h3>
-                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-orange-300 dark:text-orange-500/50 group-hover:text-orange-600 dark:group-hover:text-orange-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"></i>
                         </div>
 
                         <!-- 3. Media Firme (3D Green) -->
-                        <div class="gc-card-3d gc-card-3d-green p-5 flex items-center gap-4 group cursor-pointer">
-                            <div class="gc-kpi-icon-modern gc-kpi-icon-green shrink-0">
-                                <i class="fa-solid fa-pen-nib text-xl"></i>
+                        <div onclick="handleKpiCardClick('rate')" class="gc-card-3d gc-card-3d-green p-5 flex items-center justify-between gap-4 group cursor-pointer" title="Clicca per visualizzare l'avanzamento e le percentuali delle firme">
+                            <div class="flex items-center gap-4 min-w-0">
+                                <div class="gc-kpi-icon-modern gc-kpi-icon-green shrink-0">
+                                    <i class="fa-solid fa-pen-nib text-xl"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Media Firme</span>
+                                    <h3 class="gc-kpi-val gc-kpi-val-green" id="stat-read-rate">0%</h3>
+                                </div>
                             </div>
-                            <div>
-                                <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-widest block">Media Firme</span>
-                                <h3 class="gc-kpi-val gc-kpi-val-green" id="stat-read-rate">0%</h3>
-                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-emerald-300 dark:text-emerald-500/50 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"></i>
                         </div>
 
                         <!-- 4. Firme Mancanti (3D Rose) -->
-                        <div class="gc-card-3d gc-card-3d-rose p-5 flex flex-col justify-between gap-3 group cursor-pointer">
-                            <div class="flex items-center gap-4">
-                                <div class="gc-kpi-icon-modern gc-kpi-icon-rose shrink-0">
-                                    <i class="fa-solid fa-hourglass-half text-xl"></i>
+                        <div onclick="handleKpiCardClick('pending')" class="gc-card-3d gc-card-3d-rose p-5 flex flex-col justify-between gap-3 group cursor-pointer" title="Clicca per mostrare in evidenza chi deve ancora firmare">
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="gc-kpi-icon-modern gc-kpi-icon-rose shrink-0">
+                                        <i class="fa-solid fa-hourglass-half text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Firme Mancanti</span>
+                                        <h3 class="gc-kpi-val gc-kpi-val-rose" id="stat-pending-signatures">0</h3>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-widest block">Firme Mancanti</span>
-                                    <h3 class="gc-kpi-val gc-kpi-val-rose" id="stat-pending-signatures">0</h3>
-                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-rose-300 dark:text-rose-500/50 group-hover:text-rose-600 dark:group-hover:text-rose-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"></i>
                             </div>
-                            <button onclick="sendBulkSignatureReminders()" id="btn-bulk-remind"
-                                class="gc-btn-microzoom w-full py-2 px-3 bg-gradient-to-r from-rose-500/15 to-pink-500/15 hover:from-rose-500 hover:to-pink-600 text-rose-700 dark:text-rose-300 hover:text-white border border-rose-500/30 rounded-xl font-extrabold text-[11px] flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                            <button onclick="event.stopPropagation(); sendBulkSignatureReminders();" id="btn-bulk-remind"
+                                class="gc-btn-microzoom w-full py-2 px-3 bg-rose-50 hover:bg-rose-600 dark:bg-rose-500/15 dark:hover:bg-rose-500 text-rose-700 hover:text-white dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 rounded-xl font-extrabold text-[11px] flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition-all"
                                 title="Invia una notifica di sollecito immediata a tutti i dipendenti con comunicati o cedolini in sospeso">
                                 <i class="fa-solid fa-bell text-xs animate-bounce"></i>
                                 <span>Sollecita Firme con 1 Clic</span>
@@ -1681,8 +1670,8 @@
                         </div>
 
                         <!-- COLONNA DX: Elenco Comunicazioni con Monitoraggio Firme -->
-                        <div
-                            class="lg:col-span-7 glass-card card-interactive p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 flex flex-col shadow-lg">
+                        <div id="admin-notice-monitor-section"
+                            class="lg:col-span-7 glass-card card-interactive p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 flex flex-col shadow-lg scroll-mt-28">
                             <div
                                 class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
                                 <div>
@@ -1708,7 +1697,7 @@
 
                     <!-- Dettaglio Tracciamento Selezionato -->
                     <div id="tracking-detail-card"
-                        class="glass-card card-interactive p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xl hidden transition-all">
+                        class="glass-card card-interactive p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xl hidden transition-all scroll-mt-28">
                         <div
                             class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-200 dark:border-slate-800 pb-4 mb-4 gap-4">
                             <div>
@@ -1946,12 +1935,16 @@
                                             class="fa-solid fa-calendar-check"></i></span>
                                     Registro Richieste Permessi e Ferie (SGQ Conformità)
                                 </h2>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gestisci, compila e autorizza le richieste digitali con stampa conforme al modello ufficiale **MD6**.</p>
-
-                                <!-- FILTRI STATO RICHIESTE (NOVITÀ v2.2.1) -->
-                                </div>
-                            <!-- AZIONI TESTATA: ARCHIVIA CONCLUSE & ESPORTA CSV -->
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gestisci, compila e autorizza le richieste digitali con stampa conforme al modello ufficiale <strong class="font-bold text-slate-700 dark:text-slate-300">MD6</strong>.</p>
+                            </div>
+                            <!-- AZIONI TESTATA: REGOLAMENTO AZIENDALE, ARCHIVIA CONCLUSE & ESPORTA CSV -->
                             <div class="flex items-center gap-2 flex-wrap">
+                                <button onclick="openCompanyRegulationModal()"
+                                    class="px-3.5 py-2.5 bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 hover:from-blue-950 hover:to-indigo-950 text-white border border-blue-700/60 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
+                                    title="Consulta la Circolare Aziendale Ufficiale su Ferie, Permessi, Saldi Negativi e Maturazione Ratei CCNL">
+                                    <i class="fa-solid fa-scroll text-amber-400"></i>
+                                    <span>Regolamento Saldi MD6 & CCNL</span>
+                                </button>
                                 <button onclick="archiveAllConcludedLeaveRequests()"
                                     class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-xs cursor-pointer"
                                     title="Archivia con 1 clic tutte le richieste concluse (approvate o rifiutate) nel passato">
@@ -1965,12 +1958,12 @@
                             </div>
                         </div>
 
-                        <!-- BARRA FILTRI AVANZATA FERIE & PERMESSI (DESIGN GC CODELAB / SCADENZIARIO) -->
-                        <div class="bg-slate-900/90 dark:bg-slate-950/90 text-slate-200 border border-slate-700/60 dark:border-slate-800 rounded-2xl p-4 space-y-3.5 shadow-md backdrop-blur-md mb-4">
+                        <!-- BARRA FILTRI AVANZATA FERIE & PERMESSI (DESIGN LUMINOSO ED ELEGANTE) -->
+                        <div class="bg-slate-50/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 space-y-3.5 shadow-sm backdrop-blur-md mb-4">
                             <!-- Riga 1: Switch 3 Viste Principali (In Corso & Futuri / Archivio Storico / Tutti) + Ricerca Rapida -->
                             <div class="flex flex-col md:flex-row items-center justify-between gap-3">
                                 <!-- Switch 3 Viste con badge numerici live -->
-                                <div class="flex items-center p-1 bg-slate-950/80 dark:bg-slate-900/80 rounded-xl border border-slate-800 w-full md:w-auto">
+                                <div class="flex items-center p-1 bg-slate-200/70 dark:bg-slate-950/80 rounded-xl border border-slate-300/60 dark:border-slate-800 w-full md:w-auto shadow-2xs">
                                     <button type="button" id="btnLeaveViewActive" onclick="setLeaveView('active')"
                                         class="flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 bg-blue-600 text-white shadow-sm">
                                         <i class="fa-solid fa-bolt text-xs"></i>
@@ -1978,16 +1971,16 @@
                                         <span id="badgeCountLeaveActive" class="px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 font-black">0</span>
                                     </button>
                                     <button type="button" id="btnLeaveViewArchived" onclick="setLeaveView('archived')"
-                                        class="flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 text-slate-400 hover:text-white">
+                                        class="flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60">
                                         <i class="fa-solid fa-box-archive text-xs"></i>
                                         <span>Archivio Storico</span>
-                                        <span id="badgeCountLeaveArchived" class="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-800 text-slate-400 font-black">0</span>
+                                        <span id="badgeCountLeaveArchived" class="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black border border-slate-200/60 dark:border-slate-700">0</span>
                                     </button>
                                     <button type="button" id="btnLeaveViewAll" onclick="setLeaveView('all')"
-                                        class="flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 text-slate-400 hover:text-white">
+                                        class="flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60">
                                         <i class="fa-solid fa-users text-xs"></i>
                                         <span>Tutti</span>
-                                        <span id="badgeCountLeaveAll" class="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-800 text-slate-400 font-black">0</span>
+                                        <span id="badgeCountLeaveAll" class="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black border border-slate-200/60 dark:border-slate-700">0</span>
                                     </button>
                                 </div>
 
@@ -1995,28 +1988,28 @@
                                 <div class="relative w-full md:w-72">
                                     <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                                     <input type="text" id="leaveSearchInput" oninput="handleLeaveSearch(this.value)" placeholder="Cerca dipendente, cantiere..."
-                                        class="w-full pl-9 pr-8 py-1.5 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-white placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                    <button type="button" id="btnLeaveClearSearch" onclick="clearLeaveSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer" title="Cancella ricerca">
+                                        class="w-full pl-9 pr-8 py-1.5 bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none shadow-2xs">
+                                    <button type="button" id="btnLeaveClearSearch" onclick="clearLeaveSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-white transition cursor-pointer" title="Cancella ricerca">
                                         <i class="fa-solid fa-xmark text-xs"></i>
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Riga 2: Filtri Temporali Mese / Anno e Pillole 1-Click + Badge Riepilogo Giorni -->
-                            <div class="flex flex-wrap items-center justify-between gap-3 pt-2.5 border-t border-slate-800/80">
+                            <div class="flex flex-wrap items-center justify-between gap-3 pt-2.5 border-t border-slate-200/80 dark:border-slate-800/80">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <!-- Filtro Anno -->
-                                    <div class="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+                                    <div class="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-400">
                                         <span>Anno:</span>
-                                        <select id="leaveYearFilter" onchange="handleLeaveYearChange(this.value)" class="px-2.5 py-1 bg-slate-950/80 border border-slate-800 rounded-lg text-xs font-bold text-slate-200 focus:outline-none cursor-pointer">
+                                        <select id="leaveYearFilter" onchange="handleLeaveYearChange(this.value)" class="px-2.5 py-1 bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-bold text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer shadow-2xs">
                                             <option value="all">Tutti gli anni</option>
                                         </select>
                                     </div>
 
                                     <!-- Filtro Mese -->
-                                    <div class="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+                                    <div class="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-400">
                                         <span>Mese:</span>
-                                        <select id="leaveMonthFilter" onchange="handleLeaveMonthChange(this.value)" class="px-2.5 py-1 bg-slate-950/80 border border-slate-800 rounded-lg text-xs font-bold text-slate-200 focus:outline-none cursor-pointer">
+                                        <select id="leaveMonthFilter" onchange="handleLeaveMonthChange(this.value)" class="px-2.5 py-1 bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-bold text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer shadow-2xs">
                                             <option value="all">Tutti i mesi</option>
                                             <option value="0">01 - Gennaio</option>
                                             <option value="1">02 - Febbraio</option>
@@ -2035,53 +2028,53 @@
 
                                     <!-- Pillole Rapide 1-Click -->
                                     <div class="flex items-center gap-1 ml-1 flex-wrap">
-                                        <button type="button" id="btnLeaveQuickThisMonth" onclick="setLeaveQuickPeriod('thisMonth')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition cursor-pointer">Questo Mese</button>
-                                        <button type="button" id="btnLeaveQuickLastMonth" onclick="setLeaveQuickPeriod('lastMonth')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition cursor-pointer">Mese Scorso</button>
-                                        <button type="button" id="btnLeaveQuickThisYear" onclick="setLeaveQuickPeriod('thisYear')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition cursor-pointer">Quest'Anno</button>
-                                        <button type="button" id="btnLeaveQuickAll" onclick="setLeaveQuickPeriod('all')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition cursor-pointer">Tutto</button>
+                                        <button type="button" id="btnLeaveQuickThisMonth" onclick="setLeaveQuickPeriod('thisMonth')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white dark:bg-slate-800/90 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700 transition cursor-pointer shadow-2xs">Questo Mese</button>
+                                        <button type="button" id="btnLeaveQuickLastMonth" onclick="setLeaveQuickPeriod('lastMonth')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white dark:bg-slate-800/90 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700 transition cursor-pointer shadow-2xs">Mese Scorso</button>
+                                        <button type="button" id="btnLeaveQuickThisYear" onclick="setLeaveQuickPeriod('thisYear')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white dark:bg-slate-800/90 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700 transition cursor-pointer shadow-2xs">Quest'Anno</button>
+                                        <button type="button" id="btnLeaveQuickAll" onclick="setLeaveQuickPeriod('all')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white dark:bg-slate-800/90 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700 transition cursor-pointer shadow-2xs">Tutto</button>
                                     </div>
                                 </div>
 
                                 <!-- Mini KPI Riepilogo Periodo Selezionato -->
-                                <div id="leavePeriodSummary" class="flex items-center gap-2.5 text-xs font-bold text-slate-300">
+                                <div id="leavePeriodSummary" class="flex items-center gap-2.5 text-xs font-bold text-slate-700 dark:text-slate-300">
                                     <!-- Popolato dinamicamente -->
                                 </div>
                             </div>
 
                             <!-- Riga 3: Filtro Stato Richiesta (Tutte | In attesa | Approvate | Rifiutate) -->
-                            <div class="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-800/80 text-xs">
+                            <div class="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-200/80 dark:border-slate-800/80 text-xs">
                                 <div class="flex items-center gap-1.5 flex-wrap">
-                                    <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mr-1">Stato:</span>
+                                    <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-1">Stato:</span>
                                     <button onclick="filterAdminRequests('Tutte')" id="btn-req-filter-all"
-                                        class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all bg-blue-900 text-white shadow-xs cursor-pointer">Tutte</button>
+                                        class="px-2.5 py-1 rounded-lg text-xs font-extrabold transition-all bg-blue-600 text-white shadow-xs cursor-pointer">Tutte</button>
                                     <button onclick="filterAdminRequests('In attesa')" id="btn-req-filter-pending"
-                                        class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white bg-slate-950/80 hover:bg-slate-800 flex items-center gap-1.5 cursor-pointer">
+                                        class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-950/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 cursor-pointer shadow-2xs">
                                         <span class="w-2 h-2 rounded-full bg-amber-500"></span> In attesa
                                     </button>
                                     <button onclick="filterAdminRequests('Approvata')" id="btn-req-filter-approved"
-                                        class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white bg-slate-950/80 hover:bg-slate-800 flex items-center gap-1.5 cursor-pointer">
+                                        class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-950/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 cursor-pointer shadow-2xs">
                                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Approvate
                                     </button>
                                     <button onclick="filterAdminRequests('Rifiutata')" id="btn-req-filter-rejected"
-                                        class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white bg-slate-950/80 hover:bg-slate-800 flex items-center gap-1.5 cursor-pointer">
+                                        class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-950/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 cursor-pointer shadow-2xs">
                                         <span class="w-2 h-2 rounded-full bg-rose-500"></span> Rifiutate
                                     </button>
                                 </div>
-                                <span class="text-[11px] text-slate-400 italic">Clicca sull'icona archivio nella tabella per archiviare o ripristinare singole richieste.</span>
+                                <span class="text-[11px] text-slate-500 dark:text-slate-400 italic">Clicca sull'icona archivio nella tabella per archiviare o ripristinare singole richieste.</span>
                             </div>
                         </div>
 
-                        <div class="overflow-x-auto rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
                             <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-sm text-left">
-                                <thead class="bg-slate-200 dark:bg-slate-900 sticky top-0 z-20 text-slate-900 dark:text-white text-xs uppercase font-extrabold font-heading border-b-2 border-slate-300 dark:border-slate-700 shadow-xs">
+                                <thead class="bg-slate-50/90 dark:bg-slate-800/80 sticky top-0 z-20 text-slate-600 dark:text-slate-300 text-[11px] uppercase tracking-wider font-extrabold font-heading border-b border-slate-200 dark:border-slate-700">
                                     <tr>
-                                        <th class="sticky top-0 z-20 px-4 py-3.5 bg-slate-200 dark:bg-slate-900">Dipendente / Classe</th>
-                                        <th class="sticky top-0 z-20 px-4 py-3.5 bg-slate-200 dark:bg-slate-900">Giorno Richiesta</th>
-                                        <th class="sticky top-0 z-20 px-4 py-3.5 bg-slate-200 dark:bg-slate-900">Orario / Ore</th>
-                                        <th class="sticky top-0 z-20 px-4 py-3.5 bg-slate-200 dark:bg-slate-900">Cantiere/Ufficio</th>
-                                        <th class="sticky top-0 z-20 px-4 py-3.5 bg-slate-200 dark:bg-slate-900">Motivazione</th>
-                                        <th class="sticky top-0 z-20 px-4 py-3.5 bg-slate-200 dark:bg-slate-900">Stato</th>
-                                        <th class="sticky top-0 z-20 px-4 py-3.5 bg-slate-200 dark:bg-slate-900 text-right">Azioni</th>
+                                        <th class="px-4 py-3.5">Dipendente / Classe</th>
+                                        <th class="px-4 py-3.5">Giorno Richiesta</th>
+                                        <th class="px-4 py-3.5">Orario / Ore</th>
+                                        <th class="px-4 py-3.5">Cantiere/Ufficio</th>
+                                        <th class="px-4 py-3.5">Motivazione</th>
+                                        <th class="px-4 py-3.5">Stato</th>
+                                        <th class="px-4 py-3.5 text-right">Azioni</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-sm" id="admin-requests-table-body">
@@ -2332,7 +2325,7 @@
                     </div>
 
                 <!-- ANAGRAFICA PERSONALE CON SELEZIONE CLASSE E ORE RESIDUE -->
-                <div id="anagrafica-personale-card" class="glass-card card-interactive p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-lg space-y-5">
+                <div id="anagrafica-personale-card" class="glass-card card-interactive p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-lg space-y-5 scroll-mt-28">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <h2 class="text-xl font-extrabold text-slate-800 dark:text-white font-heading flex items-center gap-2.5">
                             <span class="p-2.5 bg-gradient-to-tr from-blue-900 to-indigo-800 text-white rounded-xl shadow-sm shadow-blue-900/20"><i
@@ -2351,6 +2344,12 @@
                             <button onclick="exportWorkersToCSV()"
                                 class="text-xs px-4 py-2.5 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40 rounded-xl font-bold flex items-center gap-2 transition-all shadow-sm hover:scale-105 active:scale-95">
                                 <i class="fa-solid fa-file-csv"></i> Esporta Saldi Ore (Excel/CSV)
+                            </button>
+                            <!-- PULSANTE GESTIONE RATEI MENSILI (SISTEMA IBRIDO) -->
+                            <button onclick="openAccrualManagementModal()"
+                                class="text-xs px-4 py-2.5 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/50 rounded-xl font-bold flex items-center gap-2 transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
+                                title="Gestione e conguaglio ratei mensili (Standard, Nuovo Assunto, Personalizzato/Part-time)">
+                                <i class="fa-solid fa-calendar-plus text-emerald-600 dark:text-emerald-400"></i> Ratei Mensili (Ibrido)
                             </button>
                             <button onclick="toggleAddWorkerForm()"
                                 class="text-xs px-4 py-2.5 bg-gradient-to-r from-blue-900 to-indigo-950 text-white rounded-xl font-bold flex items-center gap-2 transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95">
@@ -3100,14 +3099,14 @@
 
                         <!-- MESSAGGIO D'ERRORE CAPACITÀ / SFORAMENTO (NOVITÀ v2.2.1) -->
                         <div id="leave-capacity-warning"
-                            class="hidden p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl text-xs font-medium space-y-1">
-                            <div class="flex items-center gap-1.5 font-bold">
-                                <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-                                <span>Attenzione: Saldo Insufficiente</span>
+                            class="hidden py-2.5 px-3.5 mb-4 bg-amber-500/10 dark:bg-amber-500/15 border border-amber-300/80 dark:border-amber-500/30 text-amber-900 dark:text-amber-200 rounded-xl text-xs font-medium space-y-1 shadow-xs backdrop-blur-md transition-all">
+                            <div class="flex items-center gap-2 font-black text-amber-800 dark:text-amber-300">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-400 text-xs"></i>
+                                <span class="font-heading tracking-tight text-[11px] uppercase font-extrabold">Attenzione: Saldo Insufficiente</span>
                             </div>
-                            <p class="text-[10px] text-amber-700 leading-tight">Le ore richieste superano il tuo saldo
-                                residuo corrente. La richiesta può essere comunque inoltrata, ma richiederà una
-                                revisione straordinaria del DTC e del RAM.</p>
+                            <p class="text-[10.5px] text-amber-800/90 dark:text-amber-300/90 leading-snug font-semibold">
+                                Le ore richieste superano il tuo saldo residuo corrente. La richiesta può essere comunque inoltrata, ma richiederà una revisione straordinaria dell'Amministratore Unico.
+                            </p>
                         </div>
 
                         <form id="form-worker-leave" onsubmit="handleCreateLeaveRequest(event)" class="space-y-3">
@@ -3841,6 +3840,481 @@
         </div>
     </div>
 
+    <!-- MODALE GESTIONE RATEI MENSILI ORE (SISTEMA IBRIDO) -->
+    <div id="modal-accrual-management"
+        class="fixed inset-0 bg-slate-950/80 z-[80] backdrop-blur-md hidden flex items-center justify-center p-4 no-print overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 my-auto flex flex-col max-h-[90vh]">
+            <!-- Header Modal -->
+            <div class="bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 text-white p-5 flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-lg shadow-sm">
+                        <i class="fa-solid fa-calendar-check text-emerald-300"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-extrabold font-heading flex items-center gap-2">
+                            Maturazione Ratei Mensili (Sistema Ibrido)
+                        </h4>
+                        <p class="text-[11px] text-teal-200/80">Accredito automatico il 1° del mese e gestione profili / conguagli manuali HR</p>
+                    </div>
+                </div>
+                <button onclick="closeAccrualManagementModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Body Modal -->
+            <div class="p-5 overflow-y-auto space-y-5">
+                <!-- Box Stato e Azione Rapida Conguaglio -->
+                <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border border-emerald-500/20 dark:border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                    <div>
+                        <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stato Accrediti Mensili</div>
+                        <div id="accrual-status-badge" class="mt-1">
+                            <!-- Popolato da JS -->
+                        </div>
+                        <p class="text-[11px] text-slate-600 dark:text-slate-300 mt-1.5 leading-tight">
+                            I ratei maturano in automatico all'inizio del mese. I saldi negativi vengono gradualmente abbattuti da ogni nuovo rateo.
+                        </p>
+                    </div>
+                    <button onclick="triggerManualAccrualFromModal()"
+                        class="px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer">
+                        <i class="fa-solid fa-bolt-lightning text-amber-300"></i>
+                        <span>Accredita Ora Mese Corrente</span>
+                    </button>
+                </div>
+
+                <!-- Spiegazione dei 3 Profili -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                    <div class="p-3 bg-blue-50/80 dark:bg-slate-800/80 border border-blue-200/70 dark:border-slate-700 rounded-xl">
+                        <div class="font-extrabold text-blue-950 dark:text-blue-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-blue-600 dark:text-blue-400"></i> Profilo Standard
+                        </div>
+                        <p class="text-[10px] text-slate-600 dark:text-slate-400 mt-1">
+                            <strong>+13.33 h</strong> Ferie • <strong>+8.67 h</strong> Permessi (voce unica consolidata).
+                        </p>
+                    </div>
+                    <div class="p-3 bg-orange-50/80 dark:bg-slate-800/80 border border-orange-200/70 dark:border-slate-700 rounded-xl">
+                        <div class="font-extrabold text-orange-950 dark:text-orange-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-clock text-orange-600 dark:text-orange-400"></i> Nuovo Assunto
+                        </div>
+                        <p class="text-[10px] text-slate-600 dark:text-slate-400 mt-1">
+                            <strong>+13.33 h</strong> Ferie • <strong>+6.00 h</strong> Permessi • <strong>+2.67 h</strong> Altre.
+                        </p>
+                    </div>
+                    <div class="p-3 bg-purple-50/80 dark:bg-slate-800/80 border border-purple-200/70 dark:border-slate-700 rounded-xl">
+                        <div class="font-extrabold text-purple-950 dark:text-purple-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-sliders text-purple-600 dark:text-purple-400"></i> Personalizzato (Part-Time)
+                        </div>
+                        <p class="text-[10px] text-slate-600 dark:text-slate-400 mt-1">
+                            Valori ad hoc per part-time o accordi speciali impostabili con 1 clic.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Elenco Dipendenti con Selezione Profilo -->
+                <div>
+                    <h5 class="text-xs font-black uppercase text-slate-700 dark:text-slate-300 font-heading mb-2.5 flex items-center gap-2">
+                        <i class="fa-solid fa-users text-teal-600"></i>
+                        Collaboratori e Profilo Associato
+                    </h5>
+                    <div id="accrual-workers-list" class="space-y-2.5 max-h-[340px] overflow-y-auto pr-1">
+                        <!-- Popolato dinamicamente da JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="p-4 bg-slate-50 dark:bg-slate-950/80 border-t border-slate-200 dark:border-slate-800 flex justify-end shrink-0">
+                <button onclick="closeAccrualManagementModal()"
+                    class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer">
+                    Chiudi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALE CIRCOLARE & REGOLAMENTO AZIENDALE SALDI ORE MD6 (AREA RESPONSABILE) -->
+    <div id="modal-company-regulation"
+        class="fixed inset-0 bg-slate-950/80 z-[90] backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-6 no-print overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 my-auto flex flex-col max-h-[92vh]">
+            <!-- Header Modal -->
+            <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-3 shrink-0 border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-lg text-amber-400 shadow-sm shrink-0">
+                        <i class="fa-solid fa-scroll"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-base font-extrabold font-heading text-white">Direttiva & Regolamento Saldi Ore (MD6 & CCNL)</h4>
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30">Circolare Ufficiale N. 04/2026</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300">Riservato all'Area Responsabile • Documento Ufficiale SGQ Vi.Cla S.r.l.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 self-end sm:self-center">
+                    <button onclick="copyCompanyRegulationText()"
+                        class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 cursor-pointer"
+                        title="Copia l'intero testo della circolare">
+                        <i class="fa-solid fa-copy text-amber-300 text-xs"></i>
+                        <span>Copia Testo</span>
+                    </button>
+                    <button onclick="printCompanyRegulation()"
+                        class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+                        title="Stampa su carta intestata o salva in PDF">
+                        <i class="fa-solid fa-print text-xs"></i>
+                        <span>Stampa / PDF</span>
+                    </button>
+                    <button onclick="closeCompanyRegulationModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Body Documento Ufficiale -->
+            <div class="p-6 overflow-y-auto bg-slate-100/70 dark:bg-slate-950/80">
+                <div id="company-regulation-document" class="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-slate-800 dark:text-slate-200 space-y-6 text-xs sm:text-sm leading-relaxed max-w-3xl mx-auto font-sans">
+                    
+                    <!-- Intestazione Carta Intestata -->
+                    <div class="border-b-2 border-slate-900 dark:border-slate-700 pb-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                            <div class="text-xl font-black text-slate-950 dark:text-white tracking-tight font-heading flex items-center gap-2">
+                                <i class="fa-solid fa-building text-blue-900 dark:text-blue-400"></i>
+                                <span>VI.CLA S.R.L.</span>
+                            </div>
+                            <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Direzione Generale & Risorse Umane</div>
+                            <div class="text-[11px] text-slate-400 font-medium">Bacheca Digitale Certificata • Sistema Qualità Mod. SGQ MD6</div>
+                        </div>
+                        <div class="text-left sm:text-right text-xs">
+                            <span class="inline-block px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 font-extrabold text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700">CIRCOLARE N. 04/2026</span>
+                            <div class="text-slate-500 text-[11px] mt-1 font-semibold">Data di Emissione: 17/09/2026</div>
+                        </div>
+                    </div>
+
+                    <!-- Oggetto e Destinatari -->
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1 text-xs">
+                        <div><strong>Destinatari:</strong> Tutto il Personale Dipendente e Operativo, Direzione Tecnica di Cantiere (DTC), Responsabile Amministrativo (RAM), Amministratore Unico (A.U.).</div>
+                        <div><strong>Oggetto:</strong> Regolamento aziendale per la richiesta e fruizione di Ferie e Permessi (Mod. MD6), gestione dei saldi negativi e disciplina contrattuale della maturazione mensile dei ratei orari (CCNL).</div>
+                    </div>
+
+                    <!-- Articolo 1 -->
+                    <div class="space-y-2">
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-sm uppercase font-heading flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-blue-900 text-white flex items-center justify-center text-xs">1</span>
+                            Finalità e Canale Unico di Richiesta (Modello MD6)
+                        </h4>
+                        <p class="text-slate-600 dark:text-slate-300">
+                            La presente direttiva disciplina la corretta pianificazione delle assenze e dei congedi dal lavoro. Tutte le richieste di assenza (Ferie a giorni interi, Permessi orari o Altre motivazioni) devono essere inoltrate <strong>esclusivamente tramite il modulo telematico SGQ MD6</strong> sul Portale Aziendale Vi.Cla. Non sono ammesse comunicazioni verbali, telefoniche o informali.
+                        </p>
+                        <ul class="list-disc list-inside text-slate-600 dark:text-slate-300 space-y-1 pl-2 text-xs">
+                            <li><strong>Permessi orari giornalieri:</strong> invio con almeno <strong>48 ore di anticipo</strong> rispetto alla fruizione prevista.</li>
+                            <li><strong>Ferie programmate (singole o continuative):</strong> invio con almeno <strong>15 giorni di anticipo</strong>, per consentire la riprogrammazione dei cantieri e dei turni operativi.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Articolo 2 -->
+                    <div class="space-y-2">
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-sm uppercase font-heading flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-blue-900 text-white flex items-center justify-center text-xs">2</span>
+                            Scalo Automatico Immediato e Gestione del Saldo Negativo
+                        </h4>
+                        <p class="text-slate-600 dark:text-slate-300">
+                            A garanzia di trasparenza contabile, <strong>il monte ore richiesto viene detratto immediatamente</strong> dal saldo visibile al lavoratore al momento dell'invio.
+                        </p>
+                        <div class="p-3 bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 rounded-r-xl text-xs space-y-1 text-amber-900 dark:text-amber-200">
+                            <div class="font-black flex items-center gap-1.5">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Regime di Sforamento / Saldo Negativo:
+                            </div>
+                            <p>
+                                Il sistema non blocca le richieste qualora le ore richieste eccedano la disponibilità residua del lavoratore, ma registra il saldo in <strong>negativo</strong> (es. a debito di -32 ore). Tutte le richieste che comportano saldo negativo sono contrassegnate a registro con apposito alert di allerta e <strong>richiedono inderogabilmente la revisione e l'autorizzazione straordinaria dell'Amministratore Unico</strong>, previo visto del DTC e del RAM. In caso di mancata approvazione, le ore scalate vengono riaccreditate immediatamente per intero al lavoratore.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Articolo 3 -->
+                    <div class="space-y-2">
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-sm uppercase font-heading flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-blue-900 text-white flex items-center justify-center text-xs">3</span>
+                            Maturazione dei Ratei Mensili (Casistica CCNL)
+                        </h4>
+                        <p class="text-slate-600 dark:text-slate-300">
+                            In conformità al diritto del lavoro italiano e ai Contratti Collettivi Nazionali (CCNL), le ferie e i permessi <strong>non vengono erogati in un'unica soluzione a inizio anno</strong>, bensì maturano progressivamente mese per mese attraverso quote orarie frazionate (ratei mensili), maturate purché nel mese siano stati prestati almeno 15 giorni lavorativi di calendario.
+                        </p>
+                        <p class="text-slate-600 dark:text-slate-300">
+                            La piattaforma aziendale prevede e gestisce tre specifici profili di maturazione:
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                            <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+                                <div class="font-extrabold text-blue-900 dark:text-blue-300 flex items-center gap-1">
+                                    <i class="fa-solid fa-shield-halved"></i> Profilo Standard
+                                </div>
+                                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Personale consolidato</div>
+                                <div class="mt-2 space-y-1 font-semibold text-slate-700 dark:text-slate-300">
+                                    <div>• Ferie: <strong>+13.33 h/mese</strong> (160h/anno)</div>
+                                    <div>• Permessi: <strong>+8.67 h/mese</strong> (voce unica)</div>
+                                    <div>• Altre: <strong>0 h/mese</strong></div>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+                                <div class="font-extrabold text-orange-800 dark:text-orange-300 flex items-center gap-1">
+                                    <i class="fa-solid fa-user-clock"></i> Nuovi Assunti
+                                </div>
+                                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Regime frazionato CCNL</div>
+                                <div class="mt-2 space-y-1 font-semibold text-slate-700 dark:text-slate-300">
+                                    <div>• Ferie: <strong>+13.33 h/mese</strong> (pieno diritto)</div>
+                                    <div>• Permessi ROL: <strong>+6.00 h/mese</strong></div>
+                                    <div>• Altre (Ex-festività): <strong>+2.67 h/mese</strong></div>
+                                    <div class="text-[10px] text-slate-400 pt-1 italic">(Totale permessi: 8.67 h/mese)</div>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+                                <div class="font-extrabold text-purple-900 dark:text-purple-300 flex items-center gap-1">
+                                    <i class="fa-solid fa-sliders"></i> Personalizzato
+                                </div>
+                                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Part-Time / Accordi Speciali</div>
+                                <div class="mt-2 space-y-1 font-semibold text-slate-700 dark:text-slate-300">
+                                    <div>• Ratei proporzionati all'orario contrattuale effettivo (es. Part-time 50%: +6.67h ferie, +4.33h permessi).</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Articolo 4 -->
+                    <div class="space-y-2">
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-sm uppercase font-heading flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-blue-900 text-white flex items-center justify-center text-xs">4</span>
+                            Abbattimento e Rientro Fisiologico del Debito Orario
+                        </h4>
+                        <p class="text-slate-600 dark:text-slate-300">
+                            La combinazione del rateo mensile con il saldo negativo garantisce la sostenibilità e la regolarità delle presenze: se un lavoratore usufruisce di un anticipo di congedo portandosi a saldo negativo (es. -32 ore), il 1° giorno del mese successivo il rateo mensile maturato di +13.33 ore abbatte automaticamente il debito portandolo a -18.67 ore, ripristinando progressivamente il saldo positivo con la normale prosecuzione del rapporto di lavoro.
+                        </p>
+                    </div>
+
+                    <!-- Articolo 5 -->
+                    <div class="space-y-2">
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-sm uppercase font-heading flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-blue-900 text-white flex items-center justify-center text-xs">5</span>
+                            Flusso di Approvazione a Quattro Firme (MD6)
+                        </h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs pt-1">
+                            <div class="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <div class="font-black text-slate-900 dark:text-white">1. Dipendente</div>
+                                <div class="text-[10px] text-slate-500">Firma Digitale Richiesta</div>
+                            </div>
+                            <div class="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <div class="font-black text-slate-900 dark:text-white">2. DTC Tecnico</div>
+                                <div class="text-[10px] text-slate-500">Visto Tecnico Cantiere</div>
+                            </div>
+                            <div class="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <div class="font-black text-slate-900 dark:text-white">3. RAM Admin</div>
+                                <div class="text-[10px] text-slate-500">Verifica Saldi e Congruità</div>
+                            </div>
+                            <div class="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <div class="font-black text-slate-900 dark:text-white">4. Amm. Unico</div>
+                                <div class="text-[10px] text-slate-500">Autorizzazione Finale A.U.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sottoscrizione Finale -->
+                    <div class="border-t-2 border-slate-200 dark:border-slate-800 pt-6 flex flex-col sm:flex-row justify-between items-end gap-6 text-xs">
+                        <div>
+                            <p class="text-slate-500 text-[11px]">Direttiva Ufficiale ad uso dell'Amministrazione e del Personale Operativo.</p>
+                            <p class="text-slate-500 text-[11px]">Documento conforme al D.Lgs. 81/2008 e L. 300/1970 (Statuto dei Lavoratori).</p>
+                        </div>
+                        <div class="text-center sm:text-right space-y-1">
+                            <div class="font-extrabold text-slate-900 dark:text-white font-heading">Vi.Cla S.r.l.</div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">La Direzione Generale & Amministrazione</div>
+                            <div class="text-xs font-serif italic text-blue-900 dark:text-blue-400 pt-1">Firmato digitalmente dall'Amministratore Unico</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center shrink-0">
+                <span class="text-xs text-slate-500 dark:text-slate-400">
+                    <i class="fa-solid fa-lock text-amber-500 mr-1"></i> Documento riservato all'Area Responsabile
+                </span>
+                <button onclick="closeCompanyRegulationModal()"
+                    class="px-5 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer">
+                    Chiudi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🛡️ MODALE CENTRO SICUREZZA & BACKUP DATI AZIENDALI (EXPORT / IMPORT JSON) -->
+    <!-- ========================================================================= -->
+    <div id="modal-backup-management"
+        class="fixed inset-0 bg-slate-950/80 z-[90] backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 no-print overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 my-auto flex flex-col max-h-[92vh]">
+            
+            <!-- Header Modal -->
+            <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white p-5 flex justify-between items-center shrink-0 border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-lg text-emerald-400 shadow-sm shrink-0">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-base font-extrabold font-heading text-white">Centro Sicurezza: Backup & Ripristino Dati</h4>
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">SGQ Sicurezza Dati</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300">Esportazione integrale in formato standard JSON e ripristino di emergenza (Disaster Recovery)</p>
+                    </div>
+                </div>
+                <button onclick="closeBackupModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Body Modal -->
+            <div class="p-6 overflow-y-auto space-y-6 bg-slate-50/70 dark:bg-slate-950/70">
+                
+                <!-- 1. Riepilogo Live Database Aziendale -->
+                <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-database text-blue-500"></i> Stato Attuale Database Locale & Cloud
+                        </span>
+                        <span class="text-[11px] font-bold text-slate-400" id="backup-db-status-date">Aggiornato in tempo reale</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+                            <div class="font-extrabold text-blue-900 dark:text-blue-300 text-sm" id="bk-stat-workers">0</div>
+                            <div class="text-[10px] text-slate-500 dark:text-slate-400">Personale</div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+                            <div class="font-extrabold text-emerald-700 dark:text-emerald-400 text-sm" id="bk-stat-requests">0</div>
+                            <div class="text-[10px] text-slate-500 dark:text-slate-400">Richieste MD6</div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+                            <div class="font-extrabold text-amber-700 dark:text-amber-400 text-sm" id="bk-stat-notices">0</div>
+                            <div class="text-[10px] text-slate-500 dark:text-slate-400">Comunicazioni</div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+                            <div class="font-extrabold text-purple-700 dark:text-purple-400 text-sm" id="bk-stat-payslips">0</div>
+                            <div class="text-[10px] text-slate-500 dark:text-slate-400">Cedolini / Docs</div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 col-span-2 sm:col-span-1">
+                            <div class="font-extrabold text-orange-700 dark:text-orange-400 text-sm" id="bk-stat-vehicles">0</div>
+                            <div class="text-[10px] text-slate-500 dark:text-slate-400">Parco Mezzi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Card Esportazione Backup -->
+                <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800/60 shadow-xs space-y-3">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 font-extrabold text-slate-900 dark:text-white text-sm">
+                                <span class="p-1.5 rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300"><i class="fa-solid fa-cloud-arrow-down"></i></span>
+                                <span>1. Esporta Backup Completo (Download File .JSON)</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                Scarica istantaneamente sul tuo computer un unico file contenente l'intero archivio aziendale: anagrafica lavoratori, saldi ore (ferie e permessi), richieste firmate, circolari, documenti e dati aziendali.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                        <div class="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-check"></i> Pronto per il download • Formato Universale JSON
+                        </div>
+                        <button onclick="exportFullSystemBackup()"
+                            class="px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all cursor-pointer">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Scarica Backup (.JSON)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Card Ripristino / Importazione Backup -->
+                <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-800/60 shadow-xs space-y-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 font-extrabold text-slate-900 dark:text-white text-sm">
+                            <span class="p-1.5 rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-950/80 dark:text-blue-300"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                            <span>2. Ripristina / Importa Backup da File</span>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Hai cambiato computer o desideri recuperare un salvataggio precedente? Seleziona il file <code class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-blue-600 font-mono text-[11px]">.json</code> esportato in precedenza per ripristinare tutti i dati.
+                        </p>
+                    </div>
+
+                    <!-- Area Caricamento File -->
+                    <input type="file" id="backup-file-input" accept=".json,application/json" onchange="handleBackupFileSelect(event)" class="hidden">
+                    <div onclick="document.getElementById('backup-file-input').click()"
+                        class="border-2 border-dashed border-blue-300 dark:border-blue-700 hover:border-blue-500 dark:hover:border-blue-400 p-5 rounded-2xl text-center cursor-pointer hover:bg-blue-50/40 dark:hover:bg-slate-800/40 transition-all flex flex-col items-center gap-2 select-none group">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-file-arrow-up"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">Clicca qui per selezionare il file di backup (.json)</span>
+                            <span class="text-[11px] text-slate-400 block mt-0.5">Trascina o cerca tra i file del computer</span>
+                        </div>
+                    </div>
+
+                    <!-- Box Anteprima & Validazione File Selezionato -->
+                    <div id="backup-preview-box" class="hidden p-4 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2 text-xs font-bold text-blue-950 dark:text-blue-200">
+                                <i class="fa-solid fa-file-code text-blue-600"></i>
+                                <span id="backup-file-name">file.json</span>
+                            </div>
+                            <span id="backup-file-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">File Valido</span>
+                        </div>
+                        <div class="text-xs text-slate-600 dark:text-slate-300 space-y-1" id="backup-file-details">
+                            <!-- Popolato dinamicamente da JS -->
+                        </div>
+                        <div class="pt-2 flex justify-end gap-2">
+                            <button type="button" onclick="cancelBackupPreview()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition cursor-pointer">
+                                Annulla
+                            </button>
+                            <button type="button" onclick="executeBackupRestore()" class="px-4 py-2 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition hover:scale-105 active:scale-95 cursor-pointer">
+                                <i class="fa-solid fa-rotate-left"></i>
+                                <span>Conferma e Ripristina Dati</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Box Rollback di Sicurezza (se presente un backup precedente) -->
+                <div id="backup-rollback-card" class="hidden p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-amber-200 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 flex items-center justify-center text-sm shrink-0">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-amber-950 dark:text-amber-200">Punto di Ripristino Automatico Disponibile</div>
+                            <div class="text-[11px] text-amber-800 dark:text-amber-300" id="backup-rollback-timestamp">Creato prima dell'ultimo import</div>
+                        </div>
+                    </div>
+                    <button onclick="executeRollbackRestore()"
+                        class="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl transition shadow-xs flex items-center gap-1.5 shrink-0 cursor-pointer">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        <span>Annulla Ultimo Ripristino</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="p-4 bg-slate-50 dark:bg-slate-950/80 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center shrink-0">
+                <span class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-lock text-emerald-500"></i> Crittografia & Salvataggio protetto in locale
+                </span>
+                <button onclick="closeBackupModal()"
+                    class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer">
+                    Chiudi
+                </button>
+            </div>
+
+        </div>
+    </div>
+
     <!-- Footer Copyright Ufficiale GC CodeLab -->
         <!-- ========================================================================= -->
     <!-- 🏷️ GC-FOOTER: FOOTER COPYRIGHT UFFICIALE GC CODELAB & TRIGGER SEGRETO       -->
@@ -4115,6 +4589,11 @@
                 } else {
                     w.category = w.role || "Operaio";
                 }
+            }
+
+            // Garanzia assoluta: Giuseppe Bianchi è sempre e solo Operaio
+            if (w.id === 'W02' || ((w.surname || '').toLowerCase().includes('bianchi') && (w.name || '').toLowerCase().includes('giuseppe'))) {
+                w.category = 'Operaio';
             }
 
             if (!w.livello || w.livello === 'undefined') {
@@ -4400,7 +4879,7 @@
             checkRemainingBalanceCap();
         }
 
-        // CONTROLLO DI CAPIENZA SALDO IN TEMPO REALE (NOVITÀ v2.2.1)
+        // CONTROLLO DI CAPIENZA SALDO IN TEMPO REALE CON ANTEPRIMA SALDO NEGATIVO (NOVITÀ v2.2.1)
         function checkRemainingBalanceCap() {
             const currentWorker = workers.find(w => w.id === selectedWorkerId);
             if (!currentWorker) return;
@@ -4409,19 +4888,65 @@
             const hoursRequested = parseFloat(document.getElementById('leave-hours-num').value) || 0;
             const warningBox = document.getElementById('leave-capacity-warning');
 
+            const fBase = currentWorker.ferieResidue !== undefined ? parseFloat(currentWorker.ferieResidue) : 80;
+            const pBase = currentWorker.permessiResidui !== undefined ? parseFloat(currentWorker.permessiResidui) : 32;
+            const aBase = currentWorker.altreResidue !== undefined ? parseFloat(currentWorker.altreResidue) : 16;
+
+            const lblFerie = document.getElementById('lbl-ferie-residue');
+            const lblPermessi = document.getElementById('lbl-permessi-residui');
+            const lblAltre = document.getElementById('lbl-altre-residue');
+
             let currentBalance = 0;
             if (leaveType === 'Ferie') {
-                currentBalance = currentWorker.ferieResidue || 0;
+                currentBalance = fBase;
             } else if (leaveType === 'Permesso') {
-                currentBalance = currentWorker.permessiResidui || 0;
+                currentBalance = pBase;
             } else {
-                currentBalance = currentWorker.altreResidue || 0;
+                currentBalance = aBase;
             }
 
+            const projectedBalance = currentBalance - hoursRequested;
+
             if (hoursRequested > currentBalance) {
-                warningBox.classList.remove('hidden');
+                if (warningBox) {
+                    warningBox.classList.remove('hidden');
+                    const p = warningBox.querySelector('p');
+                    if (p) {
+                        p.innerHTML = `Le ore richieste (${hoursRequested} h) superano il tuo saldo residuo corrente (${currentBalance} h). La richiesta porterà il tuo saldo a <strong class="text-rose-600 dark:text-rose-400 font-black">${projectedBalance} h</strong> e richiederà una revisione straordinaria dell'Amministratore Unico.`;
+                    }
+                }
             } else {
-                warningBox.classList.add('hidden');
+                if (warningBox) {
+                    warningBox.classList.add('hidden');
+                }
+            }
+
+            // Aggiorna in tempo reale i cartellini del monte ore con anteprima del saldo risultante
+            if (lblFerie) {
+                if (leaveType === 'Ferie' && hoursRequested > 0) {
+                    lblFerie.innerHTML = `${projectedBalance < 0 ? '<span class="text-rose-600 dark:text-rose-400 font-black animate-pulse">' + projectedBalance + ' h</span>' : '<span class="text-teal-700 dark:text-teal-400 font-black">' + projectedBalance + ' h</span>'}<span class="text-[8px] text-slate-400 font-semibold block">(Previsto)</span>`;
+                } else {
+                    lblFerie.innerText = `${fBase} h`;
+                    lblFerie.className = fBase < 0 ? "text-xs font-black text-rose-600 dark:text-rose-400 animate-pulse" : "text-xs font-black text-teal-700 dark:text-teal-400";
+                }
+            }
+
+            if (lblPermessi) {
+                if (leaveType === 'Permesso' && hoursRequested > 0) {
+                    lblPermessi.innerHTML = `${projectedBalance < 0 ? '<span class="text-rose-600 dark:text-rose-400 font-black animate-pulse">' + projectedBalance + ' h</span>' : '<span class="text-amber-700 dark:text-amber-400 font-black">' + projectedBalance + ' h</span>'}<span class="text-[8px] text-slate-400 font-semibold block">(Previsto)</span>`;
+                } else {
+                    lblPermessi.innerText = `${pBase} h`;
+                    lblPermessi.className = pBase < 0 ? "text-xs font-black text-rose-600 dark:text-rose-400 animate-pulse" : "text-xs font-black text-amber-700 dark:text-amber-400";
+                }
+            }
+
+            if (lblAltre) {
+                if (leaveType === 'Altro' && hoursRequested > 0) {
+                    lblAltre.innerHTML = `${projectedBalance < 0 ? '<span class="text-rose-600 dark:text-rose-400 font-black animate-pulse">' + projectedBalance + ' h</span>' : '<span class="text-slate-700 dark:text-slate-300 font-black">' + projectedBalance + ' h</span>'}<span class="text-[8px] text-slate-400 font-semibold block">(Previsto)</span>`;
+                } else {
+                    lblAltre.innerText = `${aBase} h`;
+                    lblAltre.className = aBase < 0 ? "text-xs font-black text-rose-600 dark:text-rose-400 animate-pulse" : "text-xs font-black text-slate-700 dark:text-slate-300";
+                }
             }
         }
 
@@ -4478,9 +5003,28 @@
             const lblPermessi = document.getElementById('lbl-permessi-residui');
             const lblAltre = document.getElementById('lbl-altre-residue');
 
-            if (lblFerie) lblFerie.innerText = `${currentWorker.ferieResidue !== undefined ? currentWorker.ferieResidue : 80} h`;
-            if (lblPermessi) lblPermessi.innerText = `${currentWorker.permessiResidui !== undefined ? currentWorker.permessiResidui : 32} h`;
-            if (lblAltre) lblAltre.innerText = `${currentWorker.altreResidue !== undefined ? currentWorker.altreResidue : 16} h`;
+            const fVal = currentWorker.ferieResidue !== undefined ? parseFloat(currentWorker.ferieResidue) : 80;
+            const pVal = currentWorker.permessiResidui !== undefined ? parseFloat(currentWorker.permessiResidui) : 32;
+            const aVal = currentWorker.altreResidue !== undefined ? parseFloat(currentWorker.altreResidue) : 16;
+
+            if (lblFerie) {
+                lblFerie.innerText = `${fVal} h`;
+                lblFerie.className = fVal < 0 
+                    ? "text-xs font-black text-rose-600 dark:text-rose-400 animate-pulse" 
+                    : "text-xs font-black text-teal-700 dark:text-teal-400";
+            }
+            if (lblPermessi) {
+                lblPermessi.innerText = `${pVal} h`;
+                lblPermessi.className = pVal < 0 
+                    ? "text-xs font-black text-rose-600 dark:text-rose-400 animate-pulse" 
+                    : "text-xs font-black text-amber-700 dark:text-amber-400";
+            }
+            if (lblAltre) {
+                lblAltre.innerText = `${aVal} h`;
+                lblAltre.className = aVal < 0 
+                    ? "text-xs font-black text-rose-600 dark:text-rose-400 animate-pulse" 
+                    : "text-xs font-black text-slate-700 dark:text-slate-300";
+            }
 
             checkRemainingBalanceCap();
         }
@@ -4537,11 +5081,11 @@
                             <div class="flex justify-between items-start gap-2">
                                 <div class="min-w-0 flex-1">
                                     <span class="px-2 py-0.5 text-[9px] font-bold rounded ${priorityColor}">${escapeHtml(n.priority)}</span>
-                                    <h4 class="font-extrabold text-sm mt-1.5 truncate ${isActive ? 'text-white' : 'text-slate-800 dark:text-slate-100'}">${escapeHtml(n.title)}</h4>
-                                    <p class="text-[11px] mt-0.5 truncate ${isActive ? 'text-teal-200/90 font-medium' : 'text-slate-500 dark:text-slate-400'}">Destinatari: ${escapeHtml(n.department)} | ${new Date(n.date).toLocaleDateString('it-IT')}</p>
+                                    <h4 class="font-extrabold text-sm mt-1.5 truncate ${isActive ? 'text-slate-900 dark:text-white' : 'text-slate-800 dark:text-slate-100'}">${escapeHtml(n.title)}</h4>
+                                    <p class="text-[11px] mt-0.5 truncate ${isActive ? 'text-teal-800 dark:text-teal-200/90 font-medium' : 'text-slate-500 dark:text-slate-400'}">Destinatari: ${escapeHtml(n.department)} | ${new Date(n.date).toLocaleDateString('it-IT')}</p>
                                 </div>
                                 <div class="text-right shrink-0">
-                                    <span class="text-xs font-black ${isActive ? 'text-teal-300' : 'text-slate-700 dark:text-slate-300'}">${readsCount}/${targets.length} Firme</span>
+                                    <span class="text-xs font-black ${isActive ? 'text-teal-700 dark:text-teal-300' : 'text-slate-700 dark:text-slate-300'}">${readsCount}/${targets.length} Firme</span>
                                     <div class="w-20 bg-slate-200 dark:bg-slate-700/70 h-1.5 rounded-full mt-1.5 overflow-hidden">
                                         <div class="bg-gradient-to-r from-teal-400 to-emerald-400 h-full rounded-full transition-all" style="width: ${pct}%"></div>
                                     </div>
@@ -4566,6 +5110,150 @@
         function selectAdminNotice(noticeId) {
             currentSelectedNoticeId = noticeId;
             renderAdminDashboard();
+        }
+
+        // Calcolo dello scorrimento fluido con offset per non coprire mai i titoli sotto l'header sticky
+        function smoothScrollToElement(element, customOffset) {
+            if (!element) return;
+            try {
+                const header = document.querySelector('header.sticky') || document.querySelector('header');
+                const headerHeight = header ? header.getBoundingClientRect().height : 80;
+                // Calcola l'offset necessario: altezza dell'header sticky + margine di respiro (30px)
+                const offset = customOffset !== undefined ? customOffset : (headerHeight + 30);
+
+                const elementRect = element.getBoundingClientRect();
+                const absoluteElementTop = elementRect.top + window.pageYOffset;
+                const targetY = Math.max(0, absoluteElementTop - offset);
+
+                window.scrollTo({
+                    top: targetY,
+                    behavior: 'smooth'
+                });
+            } catch (err) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Evidenziazione visiva elegante (Glow Pulse) per elementi target
+        function highlightElementGlow(element, color = 'blue') {
+            if (!element) return;
+            const colorMap = {
+                blue: 'rgba(37, 99, 235, 0.45)',
+                orange: 'rgba(234, 88, 12, 0.45)',
+                green: 'rgba(5, 150, 105, 0.45)',
+                rose: 'rgba(225, 29, 72, 0.45)'
+            };
+            const glow = colorMap[color] || colorMap.blue;
+            const prevTransition = element.style.transition;
+            const prevBoxShadow = element.style.boxShadow;
+            const prevTransform = element.style.transform;
+
+            element.style.transition = 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+            element.style.boxShadow = `0 0 0 4px ${glow}, 0 20px 30px -10px rgba(0, 0, 0, 0.15)`;
+            element.style.transform = 'scale(1.008)';
+
+            setTimeout(() => {
+                element.style.boxShadow = prevBoxShadow;
+                element.style.transform = prevTransform;
+                setTimeout(() => {
+                    element.style.transition = prevTransition;
+                }, 350);
+            }, 2400);
+        }
+
+        // Gestione clic interattivo sulle 4 Card KPI con posizionamento perfetto del titolo & evidenziazione
+        function handleKpiCardClick(type) {
+            if (type === 'notices') {
+                // 1. Avvisi Attivi: mostra e centra perfettamente la sezione Monitoraggio Firme
+                if (typeof switchAdminTab === 'function') switchAdminTab('notices');
+                const target = document.getElementById('admin-notice-monitor-section') || document.getElementById('admin-notice-list');
+                if (target) {
+                    setTimeout(() => {
+                        smoothScrollToElement(target);
+                        highlightElementGlow(target, 'blue');
+                    }, 60);
+                }
+                const count = document.getElementById('stat-total-notices')?.innerText || '0';
+                showToast(`Visualizzazione comunicati: ${count} avvisi attivi in bacheca`, 'info');
+            } else if (type === 'workers') {
+                // 2. Totale Personale: passa all'anagrafica, resetta i filtri e mostra chiaramente il titolo
+                if (typeof switchAdminTab === 'function') switchAdminTab('requests');
+                
+                // Reset completo dei filtri di ricerca con 'All' per mostrare tutti i dipendenti
+                const searchInput = document.getElementById('search-worker-input');
+                const filterDept = document.getElementById('filter-dept-select');
+                const filterClass = document.getElementById('filter-class-select');
+                if (searchInput) searchInput.value = '';
+                if (filterDept) filterDept.value = 'All';
+                if (filterClass) filterClass.value = 'All';
+                if (typeof renderWorkersTable === 'function') renderWorkersTable();
+
+                const target = document.getElementById('anagrafica-personale-card');
+                if (target) {
+                    setTimeout(() => {
+                        smoothScrollToElement(target);
+                        highlightElementGlow(target, 'orange');
+                    }, 120);
+                }
+                const count = document.getElementById('stat-total-workers')?.innerText || (workers ? workers.length : '0');
+                showToast(`Anagrafica Personale: ${count} dipendenti registrati`, 'info');
+            } else if (type === 'rate') {
+                // 3. Media Firme: posiziona sulla bacheca comunicati evidenziando l'avanzamento
+                if (typeof switchAdminTab === 'function') switchAdminTab('notices');
+                if (!currentSelectedNoticeId && notices && notices.length > 0) {
+                    selectAdminNotice(notices[0].id);
+                }
+                const target = document.getElementById('admin-notice-monitor-section') || document.getElementById('admin-notice-list');
+                if (target) {
+                    setTimeout(() => {
+                        smoothScrollToElement(target);
+                        highlightElementGlow(target, 'green');
+                    }, 60);
+                }
+                const rate = document.getElementById('stat-read-rate')?.innerText || '0%';
+                showToast(`Stato avanzamento globale firme: ${rate}`, 'info');
+            } else if (type === 'pending') {
+                // 4. Firme Mancanti: apre il comunicato con firme mancanti ed evidenzia chi manca
+                if (typeof switchAdminTab === 'function') switchAdminTab('notices');
+
+                let targetNotice = null;
+                if (notices && notices.length > 0) {
+                    targetNotice = notices.find(n => {
+                        const targets = workers.filter(w => n.department === 'Tutti' || w.department === n.department);
+                        const readsCount = Object.keys(n.reads || {}).filter(wId => workers.some(worker => worker.id === wId)).length;
+                        return readsCount < targets.length;
+                    }) || notices[0];
+                }
+
+                if (targetNotice) {
+                    selectAdminNotice(targetNotice.id);
+                }
+
+                const detailCard = document.getElementById('tracking-detail-card');
+                if (detailCard) {
+                    detailCard.classList.remove('hidden');
+                    setTimeout(() => {
+                        smoothScrollToElement(detailCard);
+                        highlightElementGlow(detailCard, 'rose');
+
+                        // Evidenzia visivamente i lavoratori con badge "Manca"
+                        const grid = document.getElementById('detail-workers-grid');
+                        if (grid) {
+                            const items = grid.children;
+                            for (let item of items) {
+                                if (item.textContent && item.textContent.includes('Manca')) {
+                                    item.classList.add('ring-2', 'ring-rose-500', 'bg-rose-50/90', 'dark:bg-rose-950/60');
+                                    setTimeout(() => {
+                                        item.classList.remove('ring-2', 'ring-rose-500', 'bg-rose-50/90', 'dark:bg-rose-950/60');
+                                    }, 4000);
+                                }
+                            }
+                        }
+                    }, 140);
+                }
+                const pendingCount = document.getElementById('stat-pending-signatures')?.innerText || '0';
+                showToast(`Firme mancanti (${pendingCount}): personale in sospeso evidenziato`, 'warning');
+            }
         }
 
         function renderNoticeTrackingDetails(noticeId) {
@@ -4655,8 +5343,8 @@
             const filtered = workers.filter(w => {
                 const fullName = getWorkerDisplayName(w).toLowerCase();
                 const matchesSearch = fullName.includes(searchValue) || (w.matricola || '').toLowerCase().includes(searchValue) || (w.id || '').toLowerCase().includes(searchValue);
-                const matchesDept = filterDept === 'All' || formatWorkerDept(w) === filterDept;
-                const matchesClass = filterClass === 'All' || formatWorkerCategory(w) === filterClass;
+                const matchesDept = !filterDept || filterDept === 'All' || filterDept.toLowerCase() === 'all' || formatWorkerDept(w) === filterDept;
+                const matchesClass = !filterClass || filterClass === 'All' || filterClass.toLowerCase() === 'all' || formatWorkerCategory(w) === filterClass;
                 return matchesSearch && matchesDept && matchesClass;
             });
 
@@ -4709,10 +5397,25 @@
                 const aHours = parseFloat(w.altreResidue !== undefined ? w.altreResidue : 16) || 0;
                 const totalWorkerHours = fHours + pHours + aHours;
 
+                const rates = getWorkerAccrualRates(w);
+                let profileBadge = '';
+                if (w.accrualProfile === 'new_hire') {
+                    profileBadge = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-orange-100 dark:bg-orange-950/70 text-orange-800 dark:text-orange-300 border border-orange-300 dark:border-orange-700/60 cursor-pointer hover:scale-105 transition" onclick="openAccrualManagementModal()" title="Profilo Nuovo Assunto (+13.33 Ferie / +6.00 Permessi / +2.67 Altre). Clicca per gestire."><i class="fa-solid fa-user-clock text-[8px]"></i>N. Assunto</span>`;
+                } else if (w.accrualProfile === 'custom') {
+                    profileBadge = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-100 dark:bg-purple-950/70 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-700/60 cursor-pointer hover:scale-105 transition" onclick="openAccrualManagementModal()" title="Profilo Personalizzato / Part-time (+${rates.ferie} Ferie / +${rates.permessi} Perm. / +${rates.altre} Altre). Clicca per gestire."><i class="fa-solid fa-sliders text-[8px]"></i>Speciale</span>`;
+                } else {
+                    profileBadge = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 cursor-pointer hover:scale-105 transition" onclick="openAccrualManagementModal()" title="Profilo Standard (+13.33 Ferie / +8.67 Permessi). Clicca per gestire."><i class="fa-solid fa-shield-halved text-[8px]"></i>Standard</span>`;
+                }
+
                 const row = `
                     <tr class="bg-white dark:bg-slate-900 even:bg-slate-50/90 dark:even:bg-slate-950/70 hover:!bg-blue-50 dark:hover:!bg-slate-800 transition-colors border-b border-slate-200 dark:border-slate-800 text-xs">
                         <td class="px-2.5 py-2.5 whitespace-nowrap"><span class="font-mono font-black text-slate-900 dark:text-slate-100 text-[11px] bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-300 dark:border-slate-700 inline-block shadow-xs">${escapeHtml(w.matricola || w.id)}</span></td>
-                        <td class="px-2.5 py-2.5 font-black text-slate-950 dark:text-white text-xs whitespace-nowrap">${escapeHtml(displayName)}</td>
+                        <td class="px-2.5 py-2.5 font-black text-slate-950 dark:text-white text-xs whitespace-nowrap">
+                            <div class="flex items-center gap-1.5">
+                                <span>${escapeHtml(displayName)}</span>
+                                ${profileBadge}
+                            </div>
+                        </td>
                         <td class="px-2 py-2.5 whitespace-nowrap">${categoryBadge}</td>
                         <td class="px-2 py-2.5 whitespace-nowrap">
                             <input type="text" onchange="updateWorkerLevelInline('${escapeHtml(w.id)}', this.value)" value="${escapeHtml(w.livello || '5° Livello')}" 
@@ -5232,7 +5935,7 @@
                     if (v === view) {
                         btn.className = "flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 bg-blue-600 text-white shadow-sm";
                     } else {
-                        btn.className = "flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
+                        btn.className = "flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60";
                     }
                 }
             });
@@ -5315,9 +6018,9 @@
                 const btn = document.getElementById('btnLeaveQuick' + p.charAt(0).toUpperCase() + p.slice(1));
                 if (!btn) return;
                 if (p === activePeriod) {
-                    btn.className = "px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-600 text-white shadow-xs transition cursor-pointer";
+                    btn.className = "px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-blue-600 text-white shadow-xs transition cursor-pointer";
                 } else {
-                    btn.className = "px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition cursor-pointer";
+                    btn.className = "px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white dark:bg-slate-800/90 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700 transition cursor-pointer shadow-2xs";
                 }
             });
         }
@@ -5372,13 +6075,21 @@
             filters.forEach(f => {
                 const btn = document.getElementById(`btn-req-filter-${f}`);
                 if (btn) {
-                    btn.className = "px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white bg-slate-950/80 hover:bg-slate-800 cursor-pointer";
+                    btn.className = "px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-950/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 cursor-pointer shadow-2xs";
                 }
             });
 
             const activeBtn = document.getElementById(`btn-req-filter-${statusMap[status]}`);
             if (activeBtn) {
-                activeBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold transition-all bg-blue-900 text-white shadow-xs cursor-pointer";
+                if (status === 'In attesa') {
+                    activeBtn.className = "px-2.5 py-1 rounded-lg text-xs font-extrabold transition-all bg-amber-500 text-white shadow-xs flex items-center gap-1.5 cursor-pointer";
+                } else if (status === 'Approvata') {
+                    activeBtn.className = "px-2.5 py-1 rounded-lg text-xs font-extrabold transition-all bg-emerald-600 text-white shadow-xs flex items-center gap-1.5 cursor-pointer";
+                } else if (status === 'Rifiutata') {
+                    activeBtn.className = "px-2.5 py-1 rounded-lg text-xs font-extrabold transition-all bg-rose-600 text-white shadow-xs flex items-center gap-1.5 cursor-pointer";
+                } else {
+                    activeBtn.className = "px-2.5 py-1 rounded-lg text-xs font-extrabold transition-all bg-blue-600 text-white shadow-xs flex items-center gap-1.5 cursor-pointer";
+                }
             }
 
             renderAdminRequestsTab();
@@ -5497,10 +6208,10 @@
                 let searchPill = '';
                 if (leaveSearchQuery) {
                     searchPill = `
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold shadow-xs">
-                            <i class="fa-solid fa-filter text-[10px] text-amber-400"></i>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30 text-xs font-bold shadow-xs">
+                            <i class="fa-solid fa-filter text-[10px] text-amber-600 dark:text-amber-400"></i>
                             <span>"<strong>${escapeHtml(leaveSearchQuery)}</strong>"</span>
-                            <button type="button" onclick="clearLeaveSearch()" class="px-1 py-0.5 ml-0.5 bg-amber-500/30 hover:bg-amber-500 text-white rounded text-[10px] cursor-pointer transition">
+                            <button type="button" onclick="clearLeaveSearch()" class="px-1 py-0.5 ml-0.5 bg-amber-200 dark:bg-amber-500/30 hover:bg-amber-300 dark:hover:bg-amber-500 text-amber-900 dark:text-white rounded text-[10px] cursor-pointer transition">
                                 <i class="fa-solid fa-xmark text-[9px]"></i>
                             </button>
                         </span>
@@ -5509,11 +6220,11 @@
 
                 summaryEl.innerHTML = `
                     ${searchPill}
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-950/80 border border-blue-800/70 text-blue-300 font-extrabold text-xs shadow-xs">
-                        <i class="fa-regular fa-calendar-days text-blue-400 text-xs"></i>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200/80 dark:border-blue-800/70 text-blue-800 dark:text-blue-300 font-extrabold text-xs shadow-xs">
+                        <i class="fa-regular fa-calendar-days text-blue-600 dark:text-blue-400 text-xs"></i>
                         <span>${periodTotalDays} gg</span>
-                        <span class="text-blue-500/60 font-normal">•</span>
-                        <span class="text-blue-200 font-mono">${periodTotalHours} ore</span>
+                        <span class="text-blue-400/60 font-normal">•</span>
+                        <span class="text-blue-900 dark:text-blue-200 font-mono font-black">${periodTotalHours} ore</span>
                     </span>
                 `;
             }
@@ -5522,10 +6233,12 @@
             if (filteredRequests.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="px-4 py-12 text-center text-slate-400">
-                            <i class="fa-solid fa-box-open text-3xl mb-2 block text-slate-500"></i>
-                            <span class="font-bold text-sm block">Nessuna richiesta trovata per i filtri selezionati</span>
-                            <span class="text-xs text-slate-500 mt-1 block">Prova a selezionare "Tutti gli anni", "Tutti i mesi" o a cancellare il testo cercato.</span>
+                        <td colspan="7" class="px-6 py-14 text-center">
+                            <div class="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-slate-800/80 text-blue-500 dark:text-blue-400 flex items-center justify-center mx-auto mb-3 shadow-xs border border-blue-100 dark:border-slate-700">
+                                <i class="fa-solid fa-box-open text-2xl"></i>
+                            </div>
+                            <span class="font-bold text-sm text-slate-800 dark:text-slate-200 block">Nessuna richiesta trovata per i filtri selezionati</span>
+                            <span class="text-xs text-slate-500 dark:text-slate-400 mt-1 block">Prova a selezionare "Tutti gli anni", "Tutti i mesi" o a cancellare il testo cercato.</span>
                         </td>
                     </tr>
                 `;
@@ -5559,6 +6272,11 @@
                     ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 ml-1"><i class="fa-solid fa-box-archive text-[8px]"></i>Archiviata</span>`
                     : '';
 
+                const isNegative = req.isNegativeBalance || (req.resultingBalance !== undefined && parseFloat(req.resultingBalance) < 0);
+                const negativeBadge = isNegative
+                    ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300 dark:border-rose-800/80 shadow-xs ml-1" title="Attenzione: Saldo insufficiente, portato a negativo (${req.resultingBalance} h). Richiede revisione straordinaria dell'Amministratore Unico."><i class="fa-solid fa-triangle-exclamation text-rose-600 animate-pulse"></i>Saldo Neg. (${req.resultingBalance} h)</span>`
+                    : '';
+
                 const datePermessoFormatted = new Date(req.datePermesso).toLocaleDateString('it-IT');
 
                 const row = document.createElement('tr');
@@ -5568,6 +6286,7 @@
                         <div class="font-extrabold text-slate-900 dark:text-white text-sm flex items-center gap-1.5 flex-wrap">
                             <span>${escapeHtml(workerName)}</span>
                             ${archivedBadge}
+                            ${negativeBadge}
                         </div>
                         <div class="flex items-center gap-1.5 mt-1">${classBadge} <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">${escapeHtml(workerDept)}</span></div>
                     </td>
@@ -5843,6 +6562,719 @@
                 }
             );
         }
+
+        /* ========================================================================= */
+        /* ⏱️ GESTIONE MATURAZIONE RATEI MENSILI ORE (SISTEMA IBRIDO COMPLETO)         */
+        /* ========================================================================= */
+
+        function getWorkerAccrualRates(worker) {
+            if (!worker) return { profile: 'standard', label: 'Standard', ferie: 13.33, permessi: 8.67, altre: 0 };
+            const profile = worker.accrualProfile || 'standard';
+
+            if (profile === 'new_hire') {
+                return {
+                    profile: 'new_hire',
+                    label: 'Nuovo Assunto',
+                    ferie: 13.33,
+                    permessi: 6.00,
+                    altre: 2.67
+                };
+            } else if (profile === 'custom') {
+                return {
+                    profile: 'custom',
+                    label: 'Personalizzato',
+                    ferie: worker.customRateoFerie !== undefined ? (parseFloat(worker.customRateoFerie) || 0) : 13.33,
+                    permessi: worker.customRateoPermessi !== undefined ? (parseFloat(worker.customRateoPermessi) || 0) : 8.67,
+                    altre: worker.customRateoAltre !== undefined ? (parseFloat(worker.customRateoAltre) || 0) : 0
+                };
+            } else {
+                return {
+                    profile: 'standard',
+                    label: 'Standard',
+                    ferie: 13.33,
+                    permessi: 8.67,
+                    altre: 0
+                };
+            }
+        }
+
+        function formatAccrualMonthLabel(monthKey) {
+            if (!monthKey) return "Mese Corrente";
+            const parts = monthKey.split('-');
+            if (parts.length < 2) return monthKey;
+            const year = parts[0];
+            const month = parts[1];
+            const months = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+            const mIdx = parseInt(month, 10) - 1;
+            return `${months[mIdx] || month} ${year}`;
+        }
+
+        function applyMonthlyAccrual(targetMonth, isManual = false) {
+            if (!workers || workers.length === 0) return;
+            const now = new Date();
+            const monthKey = targetMonth || `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+            let totalWorkersCount = 0;
+            let totalFerieAdded = 0;
+            let totalPermessiAdded = 0;
+            let totalAltreAdded = 0;
+
+            workers.forEach(w => {
+                const rates = getWorkerAccrualRates(w);
+                const fBefore = parseFloat(w.ferieResidue !== undefined ? w.ferieResidue : 80) || 0;
+                const pBefore = parseFloat(w.permessiResidui !== undefined ? w.permessiResidui : 32) || 0;
+                const aBefore = parseFloat(w.altreResidue !== undefined ? w.altreResidue : 16) || 0;
+
+                // Aggiunta ratei con arrotondamento a 2 decimali
+                w.ferieResidue = Math.round((fBefore + rates.ferie) * 100) / 100;
+                w.permessiResidui = Math.round((pBefore + rates.permessi) * 100) / 100;
+                w.altreResidue = Math.round((aBefore + rates.altre) * 100) / 100;
+
+                totalWorkersCount++;
+                totalFerieAdded += rates.ferie;
+                totalPermessiAdded += rates.permessi;
+                totalAltreAdded += rates.altre;
+            });
+
+            localStorage.setItem('vicla_workers', JSON.stringify(workers));
+            localStorage.setItem('vicla_last_accrual_month', monthKey);
+
+            // Salva nello storico conguagli
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('vicla_accrual_history')) || [];
+            } catch (e) {
+                history = [];
+            }
+            history.unshift({
+                id: 'ACC-' + Date.now(),
+                month: monthKey,
+                date: new Date().toISOString(),
+                isManual: isManual,
+                workersCount: totalWorkersCount,
+                ferieTotal: Math.round(totalFerieAdded * 100) / 100,
+                permessiTotal: Math.round(totalPermessiAdded * 100) / 100,
+                altreTotal: Math.round(totalAltreAdded * 100) / 100
+            });
+            localStorage.setItem('vicla_accrual_history', JSON.stringify(history.slice(0, 50)));
+
+            if (typeof renderWorkersTable === 'function') renderWorkersTable();
+            if (typeof updateWorkerDashboardResidueValues === 'function') updateWorkerDashboardResidueValues();
+            if (typeof renderAdminDashboard === 'function') renderAdminDashboard();
+
+            const monthLabel = formatAccrualMonthLabel(monthKey);
+            const sourceLabel = isManual ? "Manuale (HR)" : "Automatico (1° del Mese)";
+            showToast(`Accredito ratei ${monthLabel} completato (${sourceLabel}) per ${totalWorkersCount} collaboratori!`, "success");
+
+            if (window.addNotification) {
+                window.addNotification({
+                    workerId: "ADMIN",
+                    title: `Accredito Ratei ${monthLabel} (${sourceLabel})`,
+                    message: `Maturazione ratei ore completata per ${totalWorkersCount} collaboratori (Ferie, Permessi, Altre motivazioni).`,
+                    type: "general",
+                    targetTab: "requests"
+                });
+            }
+
+            renderAccrualModalContent();
+        }
+
+        function checkAndAutoApplyMonthlyAccrual() {
+            try {
+                const now = new Date();
+                const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+                const lastAccruedMonth = localStorage.getItem('vicla_last_accrual_month');
+
+                if (!lastAccruedMonth) {
+                    // Baseline iniziale: imposta il mese corrente senza sfasare le ore demo preimpostate
+                    localStorage.setItem('vicla_last_accrual_month', currentMonthKey);
+                } else if (lastAccruedMonth !== currentMonthKey) {
+                    // Mese nuovo rilevato: accredito automatico
+                    console.log(`[Ratei Mensili] Nuovo mese rilevato (${currentMonthKey} vs ${lastAccruedMonth}). Applicazione automatica ratei...`);
+                    applyMonthlyAccrual(currentMonthKey, false);
+                }
+            } catch (e) {
+                console.error("Errore controllo automatico ratei mensili:", e);
+            }
+        }
+
+        function openAccrualManagementModal() {
+            const modal = document.getElementById('modal-accrual-management');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            renderAccrualModalContent();
+        }
+
+        function closeAccrualManagementModal() {
+            const modal = document.getElementById('modal-accrual-management');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderAccrualModalContent() {
+            const now = new Date();
+            const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            const lastAccrual = localStorage.getItem('vicla_last_accrual_month') || currentMonthKey;
+            const isCurrentAccrued = lastAccrual === currentMonthKey;
+
+            const statusEl = document.getElementById('accrual-status-badge');
+            if (statusEl) {
+                statusEl.innerHTML = isCurrentAccrued
+                    ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 shadow-2xs"><i class="fa-solid fa-circle-check text-emerald-600"></i> ${formatAccrualMonthLabel(currentMonthKey)}: Accreditato ✅</span>`
+                    : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-700 shadow-2xs"><i class="fa-solid fa-clock text-amber-600"></i> ${formatAccrualMonthLabel(currentMonthKey)}: In attesa di accredito ⏳</span>`;
+            }
+
+            const listContainer = document.getElementById('accrual-workers-list');
+            if (!listContainer) return;
+            listContainer.innerHTML = '';
+
+            workers.forEach(w => {
+                const rates = getWorkerAccrualRates(w);
+                const p = w.accrualProfile || 'standard';
+
+                const item = document.createElement('div');
+                item.className = "p-3.5 bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-2xl space-y-2.5 transition-all shadow-xs";
+                item.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <span class="font-extrabold text-sm text-slate-900 dark:text-white">${escapeHtml(getWorkerDisplayName(w))}</span>
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-mono ml-1.5">(${escapeHtml(w.matricola || w.id)})</span>
+                            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 ml-1.5">• ${escapeHtml(w.category || 'Operaio')} (${escapeHtml(w.department || 'Produzione')})</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <label class="text-[11px] font-bold text-slate-500 uppercase">Profilo:</label>
+                            <select onchange="changeWorkerAccrualProfile('${escapeHtml(w.id)}', this.value)"
+                                class="px-2.5 py-1 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-2xs">
+                                <option value="standard" ${p === 'standard' ? 'selected' : ''}>🔵 Standard (+13.33 / +8.67)</option>
+                                <option value="new_hire" ${p === 'new_hire' ? 'selected' : ''}>🟠 Nuovo Assunto (+13.33 / +6.00 / +2.67)</option>
+                                <option value="custom" ${p === 'custom' ? 'selected' : ''}>⚙️ Personalizzato / Part-time</option>
+                            </select>
+                        </div>
+                    </div>
+                    ${p === 'custom' ? `
+                        <div class="grid grid-cols-3 gap-2 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-inner">
+                            <div>
+                                <label class="block text-[9px] font-bold text-teal-700 dark:text-teal-400 uppercase">Ferie/Mese (h)</label>
+                                <input type="number" step="0.01" value="${rates.ferie}" onchange="updateWorkerCustomRateo('${escapeHtml(w.id)}', 'ferie', this.value)"
+                                    class="w-full px-2 py-1 text-xs font-mono font-bold border rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-900 dark:text-teal-200 border-teal-300 dark:border-teal-700">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-bold text-amber-700 dark:text-amber-400 uppercase">Permessi/Mese (h)</label>
+                                <input type="number" step="0.01" value="${rates.permessi}" onchange="updateWorkerCustomRateo('${escapeHtml(w.id)}', 'permessi', this.value)"
+                                    class="w-full px-2 py-1 text-xs font-mono font-bold border rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase">Altre/Mese (h)</label>
+                                <input type="number" step="0.01" value="${rates.altre}" onchange="updateWorkerCustomRateo('${escapeHtml(w.id)}', 'altre', this.value)"
+                                    class="w-full px-2 py-1 text-xs font-mono font-bold border rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 border-slate-300 dark:border-slate-600">
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="text-[11px] text-slate-600 dark:text-slate-300 flex items-center gap-3">
+                            <span>Rateo Ferie: <strong class="text-teal-700 dark:text-teal-400">+${rates.ferie} h</strong></span>
+                            <span>• Rateo Permessi: <strong class="text-amber-700 dark:text-amber-400">+${rates.permessi} h</strong></span>
+                            ${rates.altre > 0 ? `<span>• Altre: <strong class="text-blue-700 dark:text-blue-400">+${rates.altre} h</strong></span>` : ''}
+                        </div>
+                    `}
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        function changeWorkerAccrualProfile(workerId, newProfile) {
+            const worker = workers.find(w => w.id === workerId);
+            if (!worker) return;
+            worker.accrualProfile = newProfile;
+            if (newProfile === 'custom') {
+                if (worker.customRateoFerie === undefined) worker.customRateoFerie = 6.67;
+                if (worker.customRateoPermessi === undefined) worker.customRateoPermessi = 4.33;
+                if (worker.customRateoAltre === undefined) worker.customRateoAltre = 0.00;
+            }
+            localStorage.setItem('vicla_workers', JSON.stringify(workers));
+            renderAccrualModalContent();
+            if (typeof renderWorkersTable === 'function') renderWorkersTable();
+            showToast(`Profilo rateo per ${getWorkerDisplayName(worker)} impostato su ${newProfile === 'new_hire' ? 'Nuovo Assunto' : (newProfile === 'custom' ? 'Personalizzato' : 'Standard')}!`, "info");
+        }
+
+        function updateWorkerCustomRateo(workerId, type, val) {
+            const worker = workers.find(w => w.id === workerId);
+            if (!worker) return;
+            const num = parseFloat(val) || 0;
+            if (type === 'ferie') worker.customRateoFerie = num;
+            if (type === 'permessi') worker.customRateoPermessi = num;
+            if (type === 'altre') worker.customRateoAltre = num;
+            localStorage.setItem('vicla_workers', JSON.stringify(workers));
+            if (typeof renderWorkersTable === 'function') renderWorkersTable();
+            showToast(`Valore rateo ${type} aggiornato a ${num} h per ${getWorkerDisplayName(worker)}`, "info");
+        }
+
+        function triggerManualAccrualFromModal() {
+            const now = new Date();
+            const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            const monthLabel = formatAccrualMonthLabel(currentMonthKey);
+
+            showConfirmDialog(
+                "Conferma Accredito Ratei Mensili",
+                `Sei sicuro di voler accreditare i ratei ore di ${monthLabel} a tutti i dipendenti in base ai rispettivi profili (Standard, Nuovo Assunto, Personalizzato)? I saldi negativi verranno abbattuti.`,
+                function() {
+                    applyMonthlyAccrual(currentMonthKey, true);
+                }
+            );
+        }
+
+        /* ========================================================================= */
+        /* 📜 REGOLAMENTO & CIRCOLARE AZIENDALE SALDI ORE MD6 & CCNL                 */
+        /* ========================================================================= */
+
+        function openCompanyRegulationModal() {
+            const modal = document.getElementById('modal-company-regulation');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCompanyRegulationModal() {
+            const modal = document.getElementById('modal-company-regulation');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function copyCompanyRegulationText() {
+            const el = document.getElementById('company-regulation-document');
+            if (!el) return;
+            const text = el.innerText;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("Testo della circolare aziendale copiato negli appunti!", "success");
+                }).catch(() => {
+                    showToast("Seleziona e copia manualmente il testo", "info");
+                });
+            } else {
+                showToast("Copia non supportata dal browser in uso", "warning");
+            }
+        }
+
+        function printCompanyRegulation() {
+            const docEl = document.getElementById('company-regulation-document');
+            if (!docEl) return;
+            const content = docEl.innerHTML;
+            const printWin = window.open('', '_blank', 'width=900,height=850');
+            if (!printWin) {
+                window.print();
+                return;
+            }
+            printWin.document.write(`
+                <!DOCTYPE html>
+                <html lang="it">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Circolare N. 04-2026 - Regolamento Saldi Ore e Maturazione CCNL - Vi.Cla S.r.l.</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #1e293b; line-height: 1.6; max-width: 850px; margin: 0 auto; }
+                        h1, h2, h3, h4 { color: #0f172a; margin-top: 20px; }
+                        .border-b-2 { border-bottom: 2px solid #0f172a; padding-bottom: 15px; margin-bottom: 20px; }
+                        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+                        th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
+                        @media print {
+                            body { padding: 20px; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${content}
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+            printWin.focus();
+            setTimeout(() => {
+                printWin.print();
+                printWin.close();
+            }, 500);
+        }
+
+        window.openAccrualManagementModal = openAccrualManagementModal;
+        window.closeAccrualManagementModal = closeAccrualManagementModal;
+        window.openCompanyRegulationModal = openCompanyRegulationModal;
+        window.closeCompanyRegulationModal = closeCompanyRegulationModal;
+        window.renderAccrualModalContent = renderAccrualModalContent;
+        window.changeWorkerAccrualProfile = changeWorkerAccrualProfile;
+        window.updateWorkerCustomRateo = updateWorkerCustomRateo;
+        window.triggerManualAccrualFromModal = triggerManualAccrualFromModal;
+        window.applyMonthlyAccrual = applyMonthlyAccrual;
+        window.copyCompanyRegulationText = copyCompanyRegulationText;
+        window.printCompanyRegulation = printCompanyRegulation;
+
+        /* ========================================================================= */
+        /* 🛡️ CENTRO SICUREZZA: BACKUP COMPLETO & RIPRISTINO DATI (EXPORT / IMPORT)  */
+        /* ========================================================================= */
+
+        let stagedBackupData = null;
+
+        function openBackupModal() {
+            const modal = document.getElementById('modal-backup-management');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            const wCount = Array.isArray(workers) ? workers.length : 0;
+            const rCount = Array.isArray(leaveRequests) ? leaveRequests.length : 0;
+            const nCount = Array.isArray(notices) ? notices.length : 0;
+            const pCount = Array.isArray(payslips) ? payslips.length : 0;
+            const vehicles = JSON.parse(localStorage.getItem('vicla_vehicles') || '[]');
+            const vCount = Array.isArray(vehicles) ? vehicles.length : 0;
+
+            const elW = document.getElementById('bk-stat-workers');
+            if (elW) elW.innerText = wCount;
+            const elR = document.getElementById('bk-stat-requests');
+            if (elR) elR.innerText = rCount;
+            const elN = document.getElementById('bk-stat-notices');
+            if (elN) elN.innerText = nCount;
+            const elP = document.getElementById('bk-stat-payslips');
+            if (elP) elP.innerText = pCount;
+            const elV = document.getElementById('bk-stat-vehicles');
+            if (elV) elV.innerText = vCount;
+
+            const dateEl = document.getElementById('backup-db-status-date');
+            if (dateEl) dateEl.innerText = `Aggiornato: ${new Date().toLocaleDateString('it-IT')} ${new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`;
+
+            const preBackup = localStorage.getItem('vicla_pre_restore_backup');
+            const rollbackCard = document.getElementById('backup-rollback-card');
+            if (rollbackCard) {
+                if (preBackup) {
+                    try {
+                        const parsed = JSON.parse(preBackup);
+                        const rbDate = parsed.timestamp ? new Date(parsed.timestamp).toLocaleString('it-IT') : 'Recente';
+                        const tsEl = document.getElementById('backup-rollback-timestamp');
+                        if (tsEl) tsEl.innerText = `Salvataggio automatico del ${rbDate}`;
+                        rollbackCard.classList.remove('hidden');
+                    } catch (e) {
+                        rollbackCard.classList.add('hidden');
+                    }
+                } else {
+                    rollbackCard.classList.add('hidden');
+                }
+            }
+
+            cancelBackupPreview();
+        }
+
+        function closeBackupModal() {
+            const modal = document.getElementById('modal-backup-management');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            cancelBackupPreview();
+        }
+
+        function cancelBackupPreview() {
+            stagedBackupData = null;
+            const previewBox = document.getElementById('backup-preview-box');
+            if (previewBox) previewBox.classList.add('hidden');
+            const fileInput = document.getElementById('backup-file-input');
+            if (fileInput) fileInput.value = '';
+        }
+
+        function exportFullSystemBackup() {
+            try {
+                const now = new Date();
+                const pad = (n) => String(n).padStart(2, '0');
+                const dateTag = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+
+                const vehicles = JSON.parse(localStorage.getItem('vicla_vehicles') || '[]');
+                const vehicleFaults = JSON.parse(localStorage.getItem('vicla_vehicle_faults') || '[]');
+                const accrualHistory = JSON.parse(localStorage.getItem('vicla_accrual_history') || '[]');
+                const companyProfile = JSON.parse(localStorage.getItem('bacheca_company_profile') || 'null');
+                const lastAccrualMonth = localStorage.getItem('vicla_last_accrual_month') || '';
+
+                const backupPayload = {
+                    metadata: {
+                        system: "Bacheca Digitale Vi.Cla SGQ",
+                        version: "2.6.0 PWA",
+                        exportedAt: now.toISOString(),
+                        dateFormatted: now.toLocaleString('it-IT'),
+                        exportedBy: "Responsabile HR / Amministrazione",
+                        description: "Backup completo integrale di anagrafica, saldi ore, richieste MD6, comunicazioni, cedolini, parco mezzi e impostazioni."
+                    },
+                    stats: {
+                        workersCount: Array.isArray(workers) ? workers.length : 0,
+                        leaveRequestsCount: Array.isArray(leaveRequests) ? leaveRequests.length : 0,
+                        noticesCount: Array.isArray(notices) ? notices.length : 0,
+                        payslipsCount: Array.isArray(payslips) ? payslips.length : 0,
+                        vehiclesCount: Array.isArray(vehicles) ? vehicles.length : 0,
+                        vehicleFaultsCount: Array.isArray(vehicleFaults) ? vehicleFaults.length : 0
+                    },
+                    data: {
+                        workers: workers || [],
+                        notices: notices || [],
+                        payslips: payslips || [],
+                        leaveRequests: leaveRequests || [],
+                        notifications: notifications || [],
+                        vehicles: vehicles,
+                        vehicleFaults: vehicleFaults,
+                        lastAccrualMonth: lastAccrualMonth,
+                        accrualHistory: accrualHistory,
+                        companyProfile: companyProfile
+                    }
+                };
+
+                const jsonStr = JSON.stringify(backupPayload, null, 2);
+                const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Backup_BachecaDigitale_ViCla_${dateTag}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showToast(`Backup esportato con successo: Backup_BachecaDigitale_ViCla_${dateTag}.json`, "success");
+            } catch (err) {
+                console.error("Errore esportazione backup:", err);
+                showToast("Errore creazione backup: " + err.message, "error");
+            }
+        }
+
+        function handleBackupFileSelect(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (!parsed || typeof parsed !== 'object' || !parsed.data) {
+                        throw new Error("Formato non valido. Struttura 'data' assente.");
+                    }
+                    if (!Array.isArray(parsed.data.workers)) {
+                        throw new Error("Il file non contiene un'anagrafica lavoratori valida.");
+                    }
+
+                    stagedBackupData = parsed;
+
+                    const previewBox = document.getElementById('backup-preview-box');
+                    const fileNameEl = document.getElementById('backup-file-name');
+                    const detailsEl = document.getElementById('backup-file-details');
+
+                    if (fileNameEl) fileNameEl.innerText = file.name;
+
+                    const dateStr = parsed.metadata?.dateFormatted || (parsed.metadata?.exportedAt ? new Date(parsed.metadata.exportedAt).toLocaleString('it-IT') : 'Data sconosciuta');
+                    const wCount = parsed.data.workers ? parsed.data.workers.length : 0;
+                    const rCount = parsed.data.leaveRequests ? parsed.data.leaveRequests.length : 0;
+                    const nCount = parsed.data.notices ? parsed.data.notices.length : 0;
+                    const pCount = parsed.data.payslips ? parsed.data.payslips.length : 0;
+                    const vCount = parsed.data.vehicles ? parsed.data.vehicles.length : 0;
+
+                    if (detailsEl) {
+                        detailsEl.innerHTML = `
+                            <div><strong>📅 Data Backup:</strong> ${escapeHtml(dateStr)}</div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-semibold text-[11px]">
+                                <span>👥 ${wCount} Personale</span>
+                                <span>📋 ${rCount} Richieste MD6</span>
+                                <span>📢 ${nCount} Comunicazioni</span>
+                                <span>📄 ${pCount} Cedolini/Docs</span>
+                            </div>
+                        `;
+                    }
+
+                    if (previewBox) previewBox.classList.remove('hidden');
+                    showToast("File di backup analizzato! Verifica i dati prima di confermare.", "info");
+                } catch (err) {
+                    console.error("Errore lettura file di backup:", err);
+                    cancelBackupPreview();
+                    showToast("File non valido: " + err.message, "error");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function executeBackupRestore() {
+            if (!stagedBackupData || !stagedBackupData.data) {
+                showToast("Nessun dato di backup selezionato!", "warning");
+                return;
+            }
+
+            const confirmMsg = "ATTENZIONE: Stai per sovrascrivere l'attuale database con i dati del file di backup.\n\nVerrà salvato automaticamente un punto di ripristino per sicurezza.\n\nVuoi procedere?";
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            try {
+                // 1. Snapshot di sicurezza pre-restore per eventuale rollback
+                const currentVehicles = JSON.parse(localStorage.getItem('vicla_vehicles') || '[]');
+                const currentFaults = JSON.parse(localStorage.getItem('vicla_vehicle_faults') || '[]');
+                const currentAccrualHistory = JSON.parse(localStorage.getItem('vicla_accrual_history') || '[]');
+                const currentCompanyProfile = JSON.parse(localStorage.getItem('bacheca_company_profile') || 'null');
+
+                const rollbackSnapshot = {
+                    timestamp: new Date().toISOString(),
+                    data: {
+                        workers: workers || [],
+                        notices: notices || [],
+                        payslips: payslips || [],
+                        leaveRequests: leaveRequests || [],
+                        notifications: notifications || [],
+                        vehicles: currentVehicles,
+                        vehicleFaults: currentFaults,
+                        lastAccrualMonth: localStorage.getItem('vicla_last_accrual_month') || '',
+                        accrualHistory: currentAccrualHistory,
+                        companyProfile: currentCompanyProfile
+                    }
+                };
+                localStorage.setItem('vicla_pre_restore_backup', JSON.stringify(rollbackSnapshot));
+
+                // 2. Applica i dati importati
+                const d = stagedBackupData.data;
+
+                if (Array.isArray(d.workers)) {
+                    workers = sortWorkersAlphabetically(d.workers.map(normalizeWorker));
+                    localStorage.setItem('vicla_workers', JSON.stringify(workers));
+                    window.workers = workers;
+                }
+                if (Array.isArray(d.notices)) {
+                    notices = d.notices;
+                    localStorage.setItem('vicla_notices', JSON.stringify(notices));
+                    window.notices = notices;
+                }
+                if (Array.isArray(d.payslips)) {
+                    payslips = d.payslips;
+                    localStorage.setItem('vicla_payslips', JSON.stringify(payslips));
+                    window.payslips = payslips;
+                }
+                if (Array.isArray(d.leaveRequests)) {
+                    leaveRequests = d.leaveRequests;
+                    localStorage.setItem('vicla_leave_requests', JSON.stringify(leaveRequests));
+                    window.leaveRequests = leaveRequests;
+                }
+                if (Array.isArray(d.notifications)) {
+                    notifications = d.notifications;
+                    localStorage.setItem('vicla_notifications', JSON.stringify(notifications));
+                    window.notifications = notifications;
+                }
+                if (Array.isArray(d.vehicles)) {
+                    localStorage.setItem('vicla_vehicles', JSON.stringify(d.vehicles));
+                }
+                if (Array.isArray(d.vehicleFaults)) {
+                    localStorage.setItem('vicla_vehicle_faults', JSON.stringify(d.vehicleFaults));
+                }
+                if (d.lastAccrualMonth) {
+                    localStorage.setItem('vicla_last_accrual_month', d.lastAccrualMonth);
+                }
+                if (Array.isArray(d.accrualHistory)) {
+                    localStorage.setItem('vicla_accrual_history', JSON.stringify(d.accrualHistory));
+                }
+                if (d.companyProfile && typeof d.companyProfile === 'object') {
+                    localStorage.setItem('bacheca_company_profile', JSON.stringify(d.companyProfile));
+                    if (typeof applyCompanyProfileToFooter === 'function') applyCompanyProfileToFooter(d.companyProfile);
+                }
+
+                // Sincronizza su Firestore se la connessione è attiva
+                if (typeof window.syncWorkersToFirestore === 'function') window.syncWorkersToFirestore(workers);
+                if (typeof window.syncNoticesToFirestore === 'function') window.syncNoticesToFirestore(notices);
+                if (typeof window.syncLeaveRequestsToFirestore === 'function') window.syncLeaveRequestsToFirestore(leaveRequests);
+
+                // Aggiorna viste UI
+                if (typeof renderAdminDashboard === 'function') renderAdminDashboard();
+                if (typeof renderWorkersTable === 'function') renderWorkersTable();
+                if (typeof renderLeaveRequestsTable === 'function') renderLeaveRequestsTable();
+                if (typeof renderVehiclesList === 'function') renderVehiclesList();
+                if (typeof renderNotificationsDrawer === 'function') renderNotificationsDrawer();
+
+                closeBackupModal();
+                showToast("Database aziendale ripristinato con successo dal file di backup!", "success");
+
+                setTimeout(() => {
+                    if (typeof window !== 'undefined' && window.location && typeof window.location.reload === 'function') {
+                        window.location.reload();
+                    }
+                }, 900);
+            } catch (err) {
+                console.error("Errore durante il ripristino:", err);
+                showToast("Errore durante il ripristino dei dati: " + err.message, "error");
+            }
+        }
+
+        function executeRollbackRestore() {
+            const preBackupRaw = localStorage.getItem('vicla_pre_restore_backup');
+            if (!preBackupRaw) {
+                showToast("Nessun punto di ripristino precedente trovato!", "warning");
+                return;
+            }
+
+            if (!confirm("Vuoi annullare l'ultimo ripristino e tornare allo stato precedente?")) {
+                return;
+            }
+
+            try {
+                const snapshot = JSON.parse(preBackupRaw);
+                const d = snapshot.data;
+
+                if (Array.isArray(d.workers)) {
+                    workers = sortWorkersAlphabetically(d.workers.map(normalizeWorker));
+                    localStorage.setItem('vicla_workers', JSON.stringify(workers));
+                    window.workers = workers;
+                }
+                if (Array.isArray(d.notices)) {
+                    notices = d.notices;
+                    localStorage.setItem('vicla_notices', JSON.stringify(notices));
+                    window.notices = notices;
+                }
+                if (Array.isArray(d.payslips)) {
+                    payslips = d.payslips;
+                    localStorage.setItem('vicla_payslips', JSON.stringify(payslips));
+                    window.payslips = payslips;
+                }
+                if (Array.isArray(d.leaveRequests)) {
+                    leaveRequests = d.leaveRequests;
+                    localStorage.setItem('vicla_leave_requests', JSON.stringify(leaveRequests));
+                    window.leaveRequests = leaveRequests;
+                }
+                if (Array.isArray(d.notifications)) {
+                    notifications = d.notifications;
+                    localStorage.setItem('vicla_notifications', JSON.stringify(notifications));
+                    window.notifications = notifications;
+                }
+                if (Array.isArray(d.vehicles)) {
+                    localStorage.setItem('vicla_vehicles', JSON.stringify(d.vehicles));
+                }
+                if (Array.isArray(d.vehicleFaults)) {
+                    localStorage.setItem('vicla_vehicle_faults', JSON.stringify(d.vehicleFaults));
+                }
+                if (d.lastAccrualMonth) {
+                    localStorage.setItem('vicla_last_accrual_month', d.lastAccrualMonth);
+                }
+                if (Array.isArray(d.accrualHistory)) {
+                    localStorage.setItem('vicla_accrual_history', JSON.stringify(d.accrualHistory));
+                }
+                if (d.companyProfile) {
+                    localStorage.setItem('bacheca_company_profile', JSON.stringify(d.companyProfile));
+                }
+
+                localStorage.removeItem('vicla_pre_restore_backup');
+                closeBackupModal();
+                showToast("Rollback eseguito con successo!", "success");
+                setTimeout(() => {
+                    if (typeof window !== 'undefined' && window.location && typeof window.location.reload === 'function') {
+                        window.location.reload();
+                    }
+                }, 800);
+            } catch (err) {
+                console.error("Errore durante il rollback:", err);
+                showToast("Errore durante il rollback: " + err.message, "error");
+            }
+        }
+
+        window.openBackupModal = openBackupModal;
+        window.closeBackupModal = closeBackupModal;
+        window.cancelBackupPreview = cancelBackupPreview;
+        window.exportFullSystemBackup = exportFullSystemBackup;
+        window.handleBackupFileSelect = handleBackupFileSelect;
+        window.executeBackupRestore = executeBackupRestore;
+        window.executeRollbackRestore = executeRollbackRestore;
     </script>
 
     <script>
@@ -6050,7 +7482,23 @@
             const adminFirmaRAMVal = document.getElementById('elb-admin-ram').value.trim();
             const adminFirmaAUVal = document.getElementById('elb-admin-au').value.trim();
 
-            if (newStatus === 'Approvata') {
+            if (newStatus === 'Rifiutata') {
+                const workerIndex = workers.findIndex(w => w.id === req.workerId);
+                if (workerIndex !== -1 && req.hoursDeducted && !req.hoursRefunded) {
+                    const oreRichieste = parseFloat(req.hoursNum) || 0;
+                    const tipoAssenza = req.leaveType || "Permesso";
+                    if (tipoAssenza === 'Ferie') {
+                        workers[workerIndex].ferieResidue = (parseFloat(workers[workerIndex].ferieResidue) || 0) + oreRichieste;
+                    } else if (tipoAssenza === 'Permesso') {
+                        workers[workerIndex].permessiResidui = (parseFloat(workers[workerIndex].permessiResidui) || 0) + oreRichieste;
+                    } else {
+                        workers[workerIndex].altreResidue = (parseFloat(workers[workerIndex].altreResidue) || 0) + oreRichieste;
+                    }
+                    req.hoursRefunded = true;
+                    localStorage.setItem('vicla_workers', JSON.stringify(workers));
+                    showToast(`Richiesta rifiutata: riaccreditate ${oreRichieste} ore al saldo del dipendente`, "info");
+                }
+            } else if (newStatus === 'Approvata') {
                 if (!techFirmaVal) {
                     showToast("Impossibile approvare: manca la firma del DTC (Ufficio Tecnico)!", "error");
                     return;
@@ -6073,16 +7521,19 @@
                     const oreRichieste = parseFloat(req.hoursNum) || 0;
                     const tipoAssenza = req.leaveType || "Permesso";
 
-                    if (tipoAssenza === 'Ferie') {
-                        workers[workerIndex].ferieResidue = Math.max(0, (workers[workerIndex].ferieResidue || 0) - oreRichieste);
-                    } else if (tipoAssenza === 'Permesso') {
-                        workers[workerIndex].permessiResidui = Math.max(0, (workers[workerIndex].permessiResidui || 0) - oreRichieste);
-                    } else {
-                        workers[workerIndex].altreResidue = Math.max(0, (workers[workerIndex].altreResidue || 0) - oreRichieste);
+                    // Se per richieste pregresse non erano state scalate alla creazione
+                    if (!req.hoursDeducted) {
+                        if (tipoAssenza === 'Ferie') {
+                            workers[workerIndex].ferieResidue = (parseFloat(workers[workerIndex].ferieResidue) || 0) - oreRichieste;
+                        } else if (tipoAssenza === 'Permesso') {
+                            workers[workerIndex].permessiResidui = (parseFloat(workers[workerIndex].permessiResidui) || 0) - oreRichieste;
+                        } else {
+                            workers[workerIndex].altreResidue = (parseFloat(workers[workerIndex].altreResidue) || 0) - oreRichieste;
+                        }
+                        req.hoursDeducted = true;
+                        localStorage.setItem('vicla_workers', JSON.stringify(workers));
                     }
-
-                    localStorage.setItem('vicla_workers', JSON.stringify(workers));
-                    showToast(`Sottratte ${oreRichieste} ore di ${tipoAssenza} dal saldo!`, "info");
+                    showToast(`Richiesta approvata con successo da DTC, RAM e Amministratore Unico!`, "success");
                 }
             }
 
@@ -6112,6 +7563,8 @@
 
             renderAdminRequestsTab();
             renderAdminDashboard();
+            renderWorkersTable();
+            updateWorkerDashboardResidueValues();
         }
     </script>
 
@@ -6801,14 +8254,24 @@
                     btnSubmitLeave.className = "w-full py-2.5 bg-gradient-to-r from-teal-600 to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5";
                 }
 
-                // Se la sessione è autenticata o salvata in localStorage, ripristina la dashboard
-                if (isWorkerAuthenticated || (savedAuth && savedWorkerId)) {
+                // Se la sessione è autenticata o salvata in localStorage, ripristina la dashboard verificando la corrispondenza con il ruolo
+                const expectedCategory = role === 'operaio' ? 'Operaio' : 'Dipendente';
+                const roleSavedWorkerId = localStorage.getItem('vicla_active_worker_id_' + role);
+                const candidateId = roleSavedWorkerId || (selectedWorkerId && formatWorkerCategory(workers.find(w => w.id === selectedWorkerId)) === expectedCategory ? selectedWorkerId : (savedAuth && formatWorkerCategory(workers.find(w => w.id === savedWorkerId)) === expectedCategory ? savedWorkerId : null));
+                const currentWorkerCandidate = candidateId ? workers.find(w => w.id === candidateId) : null;
+
+                if (currentWorkerCandidate && formatWorkerCategory(currentWorkerCandidate) === expectedCategory && (isWorkerAuthenticated || savedAuth)) {
                     isWorkerAuthenticated = true;
-                    selectedWorkerId = savedWorkerId || selectedWorkerId;
+                    selectedWorkerId = currentWorkerCandidate.id;
                     window.isWorkerAuthenticated = true;
                     window.selectedWorkerId = selectedWorkerId;
+                    localStorage.setItem('vicla_active_worker_id', selectedWorkerId);
+                    localStorage.setItem('vicla_active_worker_id_' + role, selectedWorkerId);
                     applyWorkerLoggedInUI(selectedWorkerId);
                 } else {
+                    // Se il lavoratore precedente apparteneva a un'altra categoria (es. Giuseppe Bianchi è Operaio e non deve apparire come Dipendente)
+                    isWorkerAuthenticated = false;
+                    window.isWorkerAuthenticated = false;
                     document.getElementById('worker-login-card').classList.remove('hidden');
                     document.getElementById('worker-dashboard').classList.add('hidden');
                     document.getElementById('worker-login-pin').value = '';
@@ -6860,11 +8323,10 @@
         function populateWorkerSelect() {
             const select = document.getElementById('worker-select-login');
             if (!select) return;
-            const currentVal = select.value || selectedWorkerId;
             select.innerHTML = '';
 
             const classFilter = currentRole === 'operaio' ? 'Operaio' : 'Dipendente';
-            const filteredWorkers = workers.filter(w => w.category === classFilter);
+            const filteredWorkers = workers.filter(w => formatWorkerCategory(w) === classFilter);
             const sortedWorkers = sortWorkersAlphabetically(filteredWorkers);
 
             sortedWorkers.forEach(w => {
@@ -6874,9 +8336,10 @@
                 select.appendChild(opt);
             });
 
-            if (currentVal && sortedWorkers.some(w => w.id === currentVal)) {
-                select.value = currentVal;
-                selectedWorkerId = currentVal;
+            const savedRoleWorkerId = localStorage.getItem('vicla_active_worker_id_' + currentRole);
+            if (savedRoleWorkerId && sortedWorkers.some(w => w.id === savedRoleWorkerId)) {
+                select.value = savedRoleWorkerId;
+                selectedWorkerId = savedRoleWorkerId;
             } else if (sortedWorkers.length > 0) {
                 select.value = sortedWorkers[0].id;
                 selectedWorkerId = sortedWorkers[0].id;
@@ -6896,6 +8359,18 @@
         function applyWorkerLoggedInUI(workerId) {
             const currentWorker = Array.isArray(workers) ? workers.find(w => w.id === workerId) : null;
             if (!currentWorker) {
+                document.getElementById('worker-login-card').classList.remove('hidden');
+                document.getElementById('worker-dashboard').classList.add('hidden');
+                populateWorkerSelect();
+                resetLoginPinField();
+                updateAuroraVisibility();
+                return;
+            }
+
+            // CONTROLLO RIGOROSO DI RUOLO: Un Operaio non può mai apparire come Dipendente Connesso, e viceversa!
+            const expectedCategory = currentRole === 'operaio' ? 'Operaio' : 'Dipendente';
+            if (formatWorkerCategory(currentWorker) !== expectedCategory) {
+                console.warn(`[Controllo Categoria] ${getWorkerDisplayName(currentWorker)} è ${formatWorkerCategory(currentWorker)} e non può apparire nella scheda ${currentRole}!`);
                 document.getElementById('worker-login-card').classList.remove('hidden');
                 document.getElementById('worker-dashboard').classList.add('hidden');
                 populateWorkerSelect();
@@ -6939,6 +8414,13 @@
             const currentWorker = workers.find(w => w.id === workerId);
             const realPin = currentWorker?.pin || "1234";
 
+            // Verifica che il lavoratore selezionato appartenga alla categoria del ruolo attivo
+            const expectedCategory = currentRole === 'operaio' ? 'Operaio' : 'Dipendente';
+            if (currentWorker && formatWorkerCategory(currentWorker) !== expectedCategory) {
+                showToast(`Questo collaboratore è un ${formatWorkerCategory(currentWorker)}, passa alla scheda corrispondente!`, "error");
+                return;
+            }
+
             if (pinVal === realPin) {
                 isWorkerAuthenticated = true;
                 selectedWorkerId = workerId;
@@ -6946,9 +8428,10 @@
                 window.selectedWorkerId = workerId;
                 window.currentRole = currentRole;
 
-                // Salva sessione persistente nel dispositivo: l'operaio rimane loggato anche chiudendo l'app!
+                // Salva sessione persistente nel dispositivo (generale e specifica per ruolo)
                 localStorage.setItem('vicla_worker_authenticated', 'true');
                 localStorage.setItem('vicla_active_worker_id', workerId);
+                localStorage.setItem('vicla_active_worker_id_' + currentRole, workerId);
                 localStorage.setItem('vicla_active_role', currentRole);
 
                 if (typeof window.syncDevicePushSubscription === 'function') {
@@ -6964,7 +8447,10 @@
         }
 
         function logoutWorker() {
-            // Rimuovi sessione persistente da localStorage
+            // Rimuovi sessione persistente da localStorage per il ruolo corrente
+            if (currentRole === 'operaio' || currentRole === 'dipendente') {
+                localStorage.removeItem('vicla_active_worker_id_' + currentRole);
+            }
             localStorage.removeItem('vicla_worker_authenticated');
             localStorage.removeItem('vicla_active_worker_id');
             localStorage.removeItem('vicla_active_role');
@@ -6976,6 +8462,8 @@
             document.getElementById('worker-login-pin').value = '';
             document.getElementById('worker-login-card').classList.remove('hidden');
             document.getElementById('worker-dashboard').classList.add('hidden');
+            populateWorkerSelect();
+            resetLoginPinField();
             updateAuroraVisibility();
             renderNotificationsDrawer();
             updateNotificationBadge();
@@ -7269,6 +8757,24 @@
                 finalSignature = `${currentWorker.surname} ${currentWorker.name} (Firma Grafica)`;
             }
 
+            const oreRichieste = parseFloat(hoursNum) || 0;
+            let currentBalance = 0;
+            if (leaveType === 'Ferie') {
+                currentBalance = parseFloat(currentWorker.ferieResidue) || 0;
+                currentWorker.ferieResidue = currentBalance - oreRichieste;
+            } else if (leaveType === 'Permesso') {
+                currentBalance = parseFloat(currentWorker.permessiResidui) || 0;
+                currentWorker.permessiResidui = currentBalance - oreRichieste;
+            } else {
+                currentBalance = parseFloat(currentWorker.altreResidue) || 0;
+                currentWorker.altreResidue = currentBalance - oreRichieste;
+            }
+
+            const resultingBalance = currentBalance - oreRichieste;
+            const isNegative = resultingBalance < 0;
+
+            localStorage.setItem('vicla_workers', JSON.stringify(workers));
+
             const reqId = "REQ" + String(leaveRequests.length + 1).padStart(3, '0');
 
             const newRequest = {
@@ -7285,6 +8791,9 @@
                 reason: reason,
                 status: "In attesa",
                 workerSignature: finalSignature,
+                hoursDeducted: true,
+                isNegativeBalance: isNegative,
+                resultingBalance: resultingBalance,
 
                 techEsigenza: "",
                 techFirma: "",
@@ -7299,8 +8808,8 @@
             localStorage.setItem('vicla_leave_requests', JSON.stringify(leaveRequests));
 
             // Trigger notifica PWA / Centro Notifiche per Amministrazione e Ufficio Tecnico
-            const notifTitle = `Nuova Richiesta ${leaveType} - ${currentWorker.surname} ${currentWorker.name}`;
-            const notifMsg = `${currentWorker.surname} ${currentWorker.name} (${currentWorker.department || 'Produzione'}) ha inviato una richiesta di ${leaveType.toLowerCase()} per il ${datePermesso}${dateEnd && dateEnd !== datePermesso ? ' al ' + dateEnd : ''} (${hoursNum} ore). Clicca per elaborare.`;
+            const notifTitle = `Nuova Richiesta ${leaveType} - ${currentWorker.surname} ${currentWorker.name}${isNegative ? ' ⚠️ SALDO NEGATIVO' : ''}`;
+            const notifMsg = `${currentWorker.surname} ${currentWorker.name} (${currentWorker.department || 'Produzione'}) ha inviato una richiesta di ${leaveType.toLowerCase()} per il ${datePermesso}${dateEnd && dateEnd !== datePermesso ? ' al ' + dateEnd : ''} (${hoursNum} ore). ${isNegative ? 'ATTENZIONE: Saldo insufficiente portato a ' + resultingBalance + ' h. Richiede revisione straordinaria dell\'Amministratore Unico.' : 'Ore scalate in automatico dal saldo.'}`;
             (window.addNotification || addNotification)({
                 workerId: "ADMIN",
                 title: notifTitle,
@@ -7309,12 +8818,18 @@
                 targetTab: "requests"
             });
 
-            showToast("Richiesta inviata con successo!", "success");
+            if (isNegative) {
+                showToast(`Richiesta inviata! Attenzione: saldo ${leaveType.toLowerCase()} insufficiente, portato a ${resultingBalance} h. Richiede revisione straordinaria dell'Amministratore Unico.`, "warning");
+            } else {
+                showToast(`Richiesta inviata con successo! Scalate ${oreRichieste} ore (saldo residuo: ${resultingBalance} h).`, "success");
+            }
 
             document.getElementById('form-worker-leave').reset();
             toggleLeaveTypeFields('Permesso');
             clearSignatureCanvas();
 
+            updateWorkerDashboardResidueValues();
+            renderWorkersTable();
             renderWorkerRequestsArea();
             renderAdminRequestsTab();
             renderAdminDashboard();
@@ -7365,6 +8880,12 @@
                             <div>Sede/Cantiere: <span class="font-medium text-slate-700">${escapeHtml(req.cantiere || "Non specificato")}</span></div>
                             <div>Motivo: <span class="font-bold italic">${escapeHtml(req.reason)}</span></div>
                         </div>
+                        ${req.isNegativeBalance || (req.resultingBalance !== undefined && parseFloat(req.resultingBalance) < 0) ? `
+                            <div class="pt-2 border-t border-amber-200 dark:border-amber-800/60 text-[10px] text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1.5 bg-amber-50/80 dark:bg-amber-950/40 p-2 rounded-lg">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-400"></i>
+                                <span>Saldo portato a <strong>${req.resultingBalance} h</strong> (richiede revisione straordinaria dell'Amministratore Unico).</span>
+                            </div>
+                        ` : ''}
                         ${req.status === 'Approvata' ? `
                             <div class="pt-2 border-t border-slate-100 text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
                                 <i class="fa-solid fa-check"></i> Autorizzato ed ore detratte in automatico dal saldo.
@@ -8811,14 +10332,20 @@
         }
 
         window.onload = function () {
+            // Controllo ed esecuzione automatica ratei mensili (Maturazione 1° del mese)
+            if (typeof checkAndAutoApplyMonthlyAccrual === 'function') {
+                checkAndAutoApplyMonthlyAccrual();
+            }
+
             const savedAuth = localStorage.getItem('vicla_worker_authenticated') === 'true';
-            const savedWorkerId = localStorage.getItem('vicla_active_worker_id');
             const savedRole = localStorage.getItem('vicla_active_role');
+            const savedWorkerId = (savedRole && localStorage.getItem('vicla_active_worker_id_' + savedRole)) || localStorage.getItem('vicla_active_worker_id');
 
             if (savedAuth && savedWorkerId) {
-                const workerExists = workers.some(w => w.id === savedWorkerId);
-                if (workerExists) {
-                    currentRole = savedRole || 'operaio';
+                const worker = workers.find(w => w.id === savedWorkerId);
+                if (worker) {
+                    const workerRole = formatWorkerCategory(worker) === 'Dipendente' ? 'dipendente' : 'operaio';
+                    currentRole = (savedRole === workerRole) ? savedRole : workerRole;
                     selectedWorkerId = savedWorkerId;
                     isWorkerAuthenticated = true;
                     window.currentRole = currentRole;
@@ -8830,7 +10357,7 @@
                     renderNotificationsDrawer();
                     updateNotificationBadge();
                     updatePushBtnState();
-                    console.log("📱 [Sessione Persistente] Ripristinata sessione per lavoratore:", savedWorkerId);
+                    console.log("📱 [Sessione Persistente] Ripristinata sessione per lavoratore:", savedWorkerId, "Ruolo:", currentRole);
                     return;
                 }
             }

@@ -5,3 +5,5 @@ node_modules/
 .agents/
 .firebase/
 scratch/
+*_backup*
+*.bak*
