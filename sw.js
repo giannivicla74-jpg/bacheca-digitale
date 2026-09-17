@@ -1,8 +1,8 @@
 // Service Worker per Vi.Cla. Portale PWA
-// Versione: 2.6.0 (Azzeramento demo e transizione ad azienda privata pulita)
+// Versione: 2.6.1 (Azzeramento demo, guard Firestore e sync automatico privato)
 
-const CACHE_NAME_STATIC = 'vicla-static-v2.6.0';
-const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.6.0';
+const CACHE_NAME_STATIC = 'vicla-static-v2.6.1';
+const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.6.1';
 
 const STATIC_ASSETS = [
   './',

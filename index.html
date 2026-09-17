@@ -19,6 +19,31 @@
     <!-- Tailwind CSS con dark mode manuale (disaccoppiato dal tema OS per preservare la visione Giorno e Notte) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // MIGRATION & PURGE DATI DEMO: Azzeramento cache locale se versione non allineata
+        (function() {
+            var CURRENT_CLEAN_VERSION = 'v2.6.1_private_company';
+            if (localStorage.getItem('vicla_db_version') !== CURRENT_CLEAN_VERSION) {
+                console.log('🧹 [PWA Early Purge] Pulizia totale cache locale e rimozione dati demo...');
+                localStorage.removeItem('vicla_workers');
+                localStorage.removeItem('vicla_notices');
+                localStorage.removeItem('vicla_payslips');
+                localStorage.removeItem('vicla_leave_requests');
+                localStorage.removeItem('vicla_notifications');
+                localStorage.removeItem('vicla_vehicles');
+                localStorage.removeItem('vicla_vehicle_faults');
+                localStorage.removeItem('vicla_active_worker_id_operaio');
+                localStorage.removeItem('vicla_active_worker_id_impiegato');
+                localStorage.setItem('vicla_db_version', CURRENT_CLEAN_VERSION);
+            }
+            try {
+                var rawW = localStorage.getItem('vicla_workers');
+                if (rawW && (rawW.indexOf('Bianchi') !== -1 || rawW.indexOf('W01') !== -1 || rawW.indexOf('W02') !== -1)) {
+                    localStorage.removeItem('vicla_workers');
+                    localStorage.removeItem('vicla_active_worker_id_operaio');
+                }
+            } catch(e) {}
+        })();
+
         tailwind.config = {
             darkMode: 'class'
         };
@@ -1490,7 +1515,7 @@
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-900 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/40">
-                            v2.5.0 PWA
+                            v2.6.1 PWA
                         </span>
                     </div>
                     <div class="flex items-center gap-2 mt-0.5">
@@ -3136,8 +3161,8 @@
                             onkeyup="if(event.key==='Enter') loginToWorkerDashboard()"
                             class="w-full text-center tracking-[0.6em] px-4 py-3.5 bg-slate-50/80 dark:bg-slate-900/80 border-2 border-slate-200/80 dark:border-slate-700 rounded-2xl text-2xl font-black focus:outline-none focus:border-orange-500 transition-all shadow-inner">
                         <div class="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 mt-2">
-                            <span><i class="fa-solid fa-lock text-emerald-500 mr-1"></i>Accesso Protetto</span>
-                            <span>PIN iniziale: <strong class="text-slate-700 dark:text-slate-300 font-mono font-bold">1234</strong></span>
+                            <span><i class="fa-solid fa-shield-halved text-emerald-500 mr-1"></i>Accesso Protetto</span>
+                            <span class="text-[10px] text-slate-400 dark:text-slate-500">PIN personale a 4 cifre</span>
                         </div>
                     </div>
 
@@ -3312,7 +3337,7 @@
                         <h4 class="text-base font-extrabold text-slate-800 dark:text-white mb-1.5 flex items-center gap-2 font-heading">
                             <i class="fa-solid fa-pen-clip text-blue-900 dark:text-orange-400" id="form-leave-icon"></i> Nuova Richiesta Permesso / Ferie
                         </h4>
-                        <p class="text-xs text-slate-600 dark:text-slate-300 font-bold">Portale Aziendale & Bacheca Digitale Certificata | PWA v2.5.0</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 font-bold">Portale Aziendale & Bacheca Digitale Certificata | PWA v2.6.1</p>
                         <p class="text-xs text-slate-400 dark:text-slate-400 mb-4">Compila la richiesta digitale conforme al Modello SGQ MD6.</p>
 
                         <!-- DISPLAY ORE RESIDUE CORRENTI -->
@@ -4592,7 +4617,7 @@
                             &copy; 2026 <strong class="text-indigo-600 dark:text-indigo-400 font-bold">GC CodeLab</strong> &bull; Sviluppato da <strong class="text-slate-800 dark:text-white font-bold">Giovanni Cavallo</strong> &bull; Tutti i diritti riservati.
                         </span>
                         <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-extrabold text-[10px] border border-indigo-500/30 shadow-xs">
-                            v2.6.0 PWA
+                            v2.6.1 PWA
                         </span>
                     </div>
                     <div class="flex items-center gap-2.5 text-[10px] text-slate-400 dark:text-slate-500">
@@ -4608,16 +4633,28 @@
 
     <!-- SCRIPT LOGICO & PWA INTEGRATION -->
     <script>
-        // Registrazione Service Worker PWA & Gestione Offline
+        // Registrazione Service Worker PWA & Gestione Offline con Aggiornamento Automatico
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
                     .then((reg) => {
                         console.log('[PWA] Service Worker attivo. Scope:', reg.scope);
+                        // Forza il controllo immediato degli aggiornamenti
+                        reg.update();
                     })
                     .catch((err) => {
                         console.warn('[PWA] Registrazione Service Worker non riuscita:', err);
                     });
+            });
+
+            // Ricaricamento automatico quando la nuova versione del Service Worker prende il controllo
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    refreshing = true;
+                    console.log('[PWA] Nuovo Service Worker attivato, ricaricamento app...');
+                    window.location.reload();
+                }
             });
         }
 
@@ -4683,8 +4720,8 @@
         const DEFAULT_LEAVE_REQUESTS = [];
         const DEFAULT_NOTIFICATIONS = [];
 
-        // AZZERAMENTO COMPLETO DATI DEMO & PASSAGGIO DEFINITIVO AD APP AZIENDALE PRIVATA (Versione 2.6.0)
-        if (localStorage.getItem('vicla_db_version') !== 'v2.6.0_private_company') {
+        // AZZERAMENTO COMPLETO DATI DEMO & PASSAGGIO DEFINITIVO AD APP AZIENDALE PRIVATA (Versione 2.6.1)
+        if (localStorage.getItem('vicla_db_version') !== 'v2.6.1_private_company') {
             localStorage.removeItem('vicla_workers');
             localStorage.removeItem('vicla_notices');
             localStorage.removeItem('vicla_payslips');
@@ -4698,9 +4735,7 @@
             localStorage.removeItem('vicla_active_worker_id_impiegato');
             localStorage.removeItem('vicla_worker_pin_session_operaio');
             localStorage.removeItem('vicla_worker_pin_session_impiegato');
-            localStorage.removeItem('bacheca_company_profile');
-            localStorage.removeItem('bacheca_company_configured');
-            localStorage.setItem('vicla_db_version', 'v2.6.0_private_company');
+            localStorage.setItem('vicla_db_version', 'v2.6.1_private_company');
         }
 
         if (!localStorage.getItem('vicla_workers')) localStorage.setItem('vicla_workers', JSON.stringify([]));

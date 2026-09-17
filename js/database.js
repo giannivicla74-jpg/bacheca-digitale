@@ -16,6 +16,24 @@ import {
 // ==========================================
 // 1. UTENTI / LAVORATORI (users)
 // ==========================================
+export const DEMO_BLOCKED_IDS = new Set([
+    'W01', 'W02', 'W03', 'W04', 'W05', 'W06',
+    'N01', 'N02', 'N03', 'N04', 'N05',
+    'P01', 'P02', 'P03', 'P04', 'P05',
+    'REQ01', 'REQ02', 'REQ03', 'REQ04',
+    'NOTIF_01', 'NOTIF_02', 'NOTIF_03',
+    'VEH_001', 'VEH_002', 'VEH_003', 'VEH_004', 'VEH_005'
+]);
+
+export function isDemoBlocked(item) {
+    if (!item) return false;
+    if (item.id && DEMO_BLOCKED_IDS.has(item.id)) return true;
+    if (item.surname && item.surname.toLowerCase().includes('bianchi') && item.name && item.name.toLowerCase().includes('giuseppe')) return true;
+    if (item.surname && item.surname.toLowerCase().includes('rossi') && item.name && item.name.toLowerCase().includes('mario')) return true;
+    if (item.title && item.title.includes('Benvenuto nel Portale Digitale')) return true;
+    return false;
+}
+
 export async function getWorkers() {
     const workersCol = collection(db, 'users');
     const snapshot = await getDocs(workersCol);
@@ -34,6 +52,10 @@ export function subscribeWorkers(callback, onError) {
 }
 
 export async function addWorker(workerData) {
+    if (isDemoBlocked(workerData)) {
+        console.warn("🚫 [Guard Firestore] Rifiutato salvataggio lavoratore demo:", workerData.id);
+        return workerData.id;
+    }
     if (workerData.id) {
         const workerRef = doc(db, 'users', workerData.id);
         await setDoc(workerRef, workerData, { merge: true });
@@ -75,6 +97,10 @@ export function subscribeNotices(callback, onError) {
 }
 
 export async function addNotice(noticeData) {
+    if (isDemoBlocked(noticeData)) {
+        console.warn("🚫 [Guard Firestore] Rifiutata comunicazione demo:", noticeData.id);
+        return noticeData.id;
+    }
     if (noticeData.id) {
         const noticeRef = doc(db, 'notices', noticeData.id);
         await setDoc(noticeRef, noticeData, { merge: true });
@@ -116,6 +142,10 @@ export function subscribeLeaveRequests(callback, onError) {
 }
 
 export async function addLeaveRequest(requestData) {
+    if (isDemoBlocked(requestData)) {
+        console.warn("🚫 [Guard Firestore] Rifiutata richiesta permessi demo:", requestData.id);
+        return requestData.id;
+    }
     if (requestData.id) {
         const reqRef = doc(db, 'leaveRequests', requestData.id);
         await setDoc(reqRef, requestData, { merge: true });
@@ -157,6 +187,10 @@ export function subscribePayslips(callback, onError) {
 }
 
 export async function addPayslip(payslipData) {
+    if (isDemoBlocked(payslipData)) {
+        console.warn("🚫 [Guard Firestore] Rifiutata busta paga demo:", payslipData.id);
+        return payslipData.id;
+    }
     if (payslipData.id) {
         const payslipRef = doc(db, 'payslips', payslipData.id);
         await setDoc(payslipRef, payslipData, { merge: true });
@@ -198,6 +232,10 @@ export function subscribeNotifications(callback, onError) {
 }
 
 export async function addNotification(notifData) {
+    if (isDemoBlocked(notifData)) {
+        console.warn("🚫 [Guard Firestore] Rifiutata notifica demo:", notifData.id);
+        return notifData.id;
+    }
     const notifId = notifData.id || ("NOTIF_" + Date.now() + "_" + Math.floor(Math.random() * 1000));
     const notifRef = doc(db, 'notifications', notifId);
     const payload = { ...notifData, id: notifId };
@@ -347,6 +385,10 @@ export function subscribeVehicles(callback) {
 }
 
 export async function addVehicle(vehicleData) {
+    if (isDemoBlocked(vehicleData)) {
+        console.warn("🚫 [Guard Firestore] Rifiutato mezzo demo:", vehicleData.id);
+        return vehicleData.id;
+    }
     const docId = vehicleData.id || ("VEH_" + Date.now().toString(36).toUpperCase());
     const docRef = doc(db, 'vehicles', docId);
     const payload = { ...vehicleData, id: docId, updatedAt: new Date().toISOString() };

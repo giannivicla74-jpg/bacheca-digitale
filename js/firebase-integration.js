@@ -1,5 +1,6 @@
 import { auth } from './firebase-config.js';
 import { 
+    isDemoBlocked,
     getWorkers, 
     addWorker, 
     updateWorker, 
@@ -100,101 +101,102 @@ async function loadDataFromCloud() {
             getVehicleFaults().catch(e => { console.warn("Errore getVehicleFaults:", e); return []; })
         ]);
 
-        // 1. LAVORATORI
-        if (cloudWorkers.length > 0) {
-            const normalized = cloudWorkers.map(w => {
-                if (typeof window.normalizeWorker === 'function') {
-                    return window.normalizeWorker(w);
-                }
-                if (!w.surname && w.name) {
-                    const parts = w.name.trim().split(/\s+/);
-                    if (parts.length > 1) {
-                        w.surname = parts[0];
-                        w.name = parts.slice(1).join(' ');
-                    } else {
-                        w.surname = w.name.trim();
-                        w.name = '';
-                    }
-                }
-                if (!w.department) w.department = 'Produzione';
-                if (!w.category) w.category = w.role || 'Operaio';
-                return w;
-            });
-            window.workers = syncArrayInPlace(window.workers, normalized);
-            localStorage.setItem('vicla_workers', JSON.stringify(window.workers));
-        } else if (Array.isArray(window.workers) && window.workers.length > 0) {
-            console.log("☁️ [Firebase] Inizializzazione Cloud: popolamento lavoratori iniziali...");
-            for (const w of window.workers) await addWorker(w);
+        // 1. LAVORATORI: elimina qualsiasi lavoratore demo residuo dal cloud ed aggiorna cache locale
+        for (const w of cloudWorkers) {
+            if (isDemoBlocked(w)) {
+                console.warn("🧹 [Cloud Purge] Rimozione lavoratore demo dal cloud Firestore:", w.id);
+                await deleteWorker(w.id).catch(() => {});
+            }
         }
+        const cleanWorkers = cloudWorkers.filter(w => !isDemoBlocked(w)).map(w => {
+            if (typeof window.normalizeWorker === 'function') {
+                return window.normalizeWorker(w);
+            }
+            if (!w.surname && w.name) {
+                const parts = w.name.trim().split(/\s+/);
+                if (parts.length > 1) {
+                    w.surname = parts[0];
+                    w.name = parts.slice(1).join(' ');
+                } else {
+                    w.surname = w.name.trim();
+                    w.name = '';
+                }
+            }
+            if (!w.department) w.department = 'Produzione';
+            if (!w.category) w.category = w.role || 'Operaio';
+            return w;
+        });
+        window.workers = syncArrayInPlace(window.workers, cleanWorkers);
+        localStorage.setItem('vicla_workers', JSON.stringify(window.workers));
 
-        // 2. COMUNICAZIONI
-        if (cloudNotices.length > 0) {
-            window.notices = syncArrayInPlace(window.notices, cloudNotices);
-            localStorage.setItem('vicla_notices', JSON.stringify(window.notices));
-        } else if (Array.isArray(window.notices) && window.notices.length > 0) {
-            for (const n of window.notices) await addNotice(n);
+        // 2. COMUNICAZIONI: elimina comunicazioni demo dal cloud ed aggiorna cache locale
+        for (const n of cloudNotices) {
+            if (isDemoBlocked(n)) {
+                console.warn("🧹 [Cloud Purge] Rimozione comunicazione demo dal cloud Firestore:", n.id);
+                await deleteNotice(n.id).catch(() => {});
+            }
         }
+        const cleanNotices = cloudNotices.filter(n => !isDemoBlocked(n));
+        window.notices = syncArrayInPlace(window.notices, cleanNotices);
+        localStorage.setItem('vicla_notices', JSON.stringify(window.notices));
 
         // 3. BUSTE PAGA
-        if (cloudPayslips.length > 0) {
-            window.payslips = syncArrayInPlace(window.payslips, cloudPayslips);
-            localStorage.setItem('vicla_payslips', JSON.stringify(window.payslips));
-        } else if (Array.isArray(window.payslips) && window.payslips.length > 0) {
-            for (const p of window.payslips) await addPayslip(p);
+        for (const p of cloudPayslips) {
+            if (isDemoBlocked(p)) {
+                console.warn("🧹 [Cloud Purge] Rimozione busta paga demo dal cloud Firestore:", p.id);
+                await deletePayslip(p.id).catch(() => {});
+            }
         }
+        const cleanPayslips = cloudPayslips.filter(p => !isDemoBlocked(p));
+        window.payslips = syncArrayInPlace(window.payslips, cleanPayslips);
+        localStorage.setItem('vicla_payslips', JSON.stringify(window.payslips));
 
         // 4. RICHIESTE PERMESSI & FERIE
-        if (cloudLeaves.length > 0) {
-            previousLeaveRequests = JSON.parse(JSON.stringify(cloudLeaves));
-            // Preserva lo stato archived locale se non ancora presente sul cloud
-        cloudLeaves.forEach(cl => {
+        for (const r of cloudLeaves) {
+            if (isDemoBlocked(r)) {
+                console.warn("🧹 [Cloud Purge] Rimozione richiesta permessi demo dal cloud Firestore:", r.id);
+                await deleteLeaveRequest(r.id).catch(() => {});
+            }
+        }
+        const cleanLeaves = cloudLeaves.filter(r => !isDemoBlocked(r));
+        cleanLeaves.forEach(cl => {
             const local = (window.leaveRequests || []).find(lr => lr.id === cl.id);
             if (local && local.archived !== undefined && cl.archived === undefined) {
                 cl.archived = local.archived;
             }
         });
-        window.leaveRequests = syncArrayInPlace(window.leaveRequests, cloudLeaves);
-            localStorage.setItem('vicla_leave_requests', JSON.stringify(window.leaveRequests));
-        } else if (Array.isArray(window.leaveRequests) && window.leaveRequests.length > 0) {
-            previousLeaveRequests = JSON.parse(JSON.stringify(window.leaveRequests));
-            for (const r of window.leaveRequests) await addLeaveRequest(r);
-        }
+        previousLeaveRequests = JSON.parse(JSON.stringify(cleanLeaves));
+        window.leaveRequests = syncArrayInPlace(window.leaveRequests, cleanLeaves);
+        localStorage.setItem('vicla_leave_requests', JSON.stringify(window.leaveRequests));
 
         // 5. NOTIFICHE PUSH & DRAWER
-        if (cloudNotifs.length > 0) {
-            const sortedNotifs = cloudNotifs.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-            previousNotifications = JSON.parse(JSON.stringify(sortedNotifs));
-            window.notifications = syncArrayInPlace(window.notifications, sortedNotifs);
-            localStorage.setItem('vicla_notifications', JSON.stringify(window.notifications));
-        } else if (Array.isArray(window.notifications) && window.notifications.length > 0) {
-            previousNotifications = JSON.parse(JSON.stringify(window.notifications));
-            for (const notif of window.notifications) await addNotificationCloud(notif);
+        for (const notif of cloudNotifs) {
+            if (isDemoBlocked(notif)) {
+                console.warn("🧹 [Cloud Purge] Rimozione notifica demo dal cloud Firestore:", notif.id);
+                await deleteNotificationCloud(notif.id).catch(() => {});
+            }
         }
+        const cleanNotifs = cloudNotifs.filter(n => !isDemoBlocked(n)).sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        previousNotifications = JSON.parse(JSON.stringify(cleanNotifs));
+        window.notifications = syncArrayInPlace(window.notifications, cleanNotifs);
+        localStorage.setItem('vicla_notifications', JSON.stringify(window.notifications));
 
         // 6. PARCO MEZZI & ATTREZZATURE
-        if (cloudVehicles.length > 0) {
-            window.vehicles = syncArrayInPlace(window.vehicles, cloudVehicles);
-            localStorage.setItem('vicla_vehicles', JSON.stringify(window.vehicles));
-        } else {
-            const initialVehicles = (Array.isArray(window.vehicles) && window.vehicles.length > 0) ? window.vehicles : DEFAULT_VEHICLES;
-            window.vehicles = syncArrayInPlace(window.vehicles, initialVehicles);
-            localStorage.setItem('vicla_vehicles', JSON.stringify(window.vehicles));
-            for (const v of initialVehicles) await addVehicle(v).catch(() => {});
+        for (const v of cloudVehicles) {
+            if (isDemoBlocked(v)) {
+                console.warn("🧹 [Cloud Purge] Rimozione mezzo demo dal cloud Firestore:", v.id);
+                await deleteVehicle(v.id).catch(() => {});
+            }
         }
+        const cleanVehicles = cloudVehicles.filter(v => !isDemoBlocked(v));
+        window.vehicles = syncArrayInPlace(window.vehicles, cleanVehicles);
+        localStorage.setItem('vicla_vehicles', JSON.stringify(window.vehicles));
 
         // 7. SEGNALAZIONI GUASTI MEZZI
-        if (cloudFaults.length > 0) {
-            const sortedFaults = cloudFaults.sort((a, b) => new Date(b.dateReported + ' ' + (b.timeReported || '00:00')) - new Date(a.dateReported + ' ' + (a.timeReported || '00:00')));
-            previousVehicleFaults = JSON.parse(JSON.stringify(sortedFaults));
-            window.vehicleFaults = syncArrayInPlace(window.vehicleFaults, sortedFaults);
-            localStorage.setItem('vicla_vehicle_faults', JSON.stringify(window.vehicleFaults));
-        } else if (Array.isArray(window.vehicleFaults) && window.vehicleFaults.length > 0) {
-            previousVehicleFaults = JSON.parse(JSON.stringify(window.vehicleFaults));
-            for (const f of window.vehicleFaults) await addVehicleFault(f).catch(() => {});
-        } else {
-            window.vehicleFaults = window.vehicleFaults || [];
-            localStorage.setItem('vicla_vehicle_faults', JSON.stringify(window.vehicleFaults));
-        }
+        const sortedFaults = (cloudFaults || []).sort((a, b) => new Date(b.dateReported + ' ' + (b.timeReported || '00:00')) - new Date(a.dateReported + ' ' + (a.timeReported || '00:00')));
+        previousVehicleFaults = JSON.parse(JSON.stringify(sortedFaults));
+        window.vehicleFaults = syncArrayInPlace(window.vehicleFaults, sortedFaults);
+        localStorage.setItem('vicla_vehicle_faults', JSON.stringify(window.vehicleFaults));
 
         // Aggiorna tutti i componenti dell'interfaccia
         refreshAllInterfaceComponents();
@@ -243,12 +245,12 @@ function setupRealtimeCloudSubscriptions() {
 
     // 1. LAVORATORI IN TEMPO REALE
     const unsubWorkers = subscribeWorkers((cloudWorkers) => {
-        if (!Array.isArray(cloudWorkers) || cloudWorkers.length === 0) return;
-        const normalized = cloudWorkers.map(w => {
+        if (!Array.isArray(cloudWorkers)) return;
+        const cleanWorkers = cloudWorkers.filter(w => !isDemoBlocked(w)).map(w => {
             if (typeof window.normalizeWorker === 'function') return window.normalizeWorker(w);
             return w;
         });
-        window.workers = syncArrayInPlace(window.workers, normalized);
+        window.workers = syncArrayInPlace(window.workers, cleanWorkers);
         localStorage.setItem('vicla_workers', JSON.stringify(window.workers));
         
         if (typeof window.renderWorkersTable === 'function') window.renderWorkersTable();
@@ -263,8 +265,9 @@ function setupRealtimeCloudSubscriptions() {
 
     // 2. COMUNICAZIONI AZIENDALI IN TEMPO REALE
     const unsubNotices = subscribeNotices((cloudNotices) => {
-        if (!Array.isArray(cloudNotices) || cloudNotices.length === 0) return;
-        window.notices = syncArrayInPlace(window.notices, cloudNotices);
+        if (!Array.isArray(cloudNotices)) return;
+        const cleanNotices = cloudNotices.filter(n => !isDemoBlocked(n));
+        window.notices = syncArrayInPlace(window.notices, cleanNotices);
         localStorage.setItem('vicla_notices', JSON.stringify(window.notices));
 
         if (typeof window.renderAdminDashboard === 'function') window.renderAdminDashboard();
@@ -275,8 +278,9 @@ function setupRealtimeCloudSubscriptions() {
 
     // 3. BUSTE PAGA IN TEMPO REALE (Firme degli operai e pubblicazioni Admin)
     const unsubPayslips = subscribePayslips((cloudPayslips) => {
-        if (!Array.isArray(cloudPayslips) || cloudPayslips.length === 0) return;
-        window.payslips = syncArrayInPlace(window.payslips, cloudPayslips);
+        if (!Array.isArray(cloudPayslips)) return;
+        const cleanPayslips = cloudPayslips.filter(p => !isDemoBlocked(p));
+        window.payslips = syncArrayInPlace(window.payslips, cleanPayslips);
         localStorage.setItem('vicla_payslips', JSON.stringify(window.payslips));
 
         if (typeof window.renderAdminPayslipsTab === 'function') window.renderAdminPayslipsTab();
@@ -287,14 +291,15 @@ function setupRealtimeCloudSubscriptions() {
 
     // 4. RICHIESTE PERMESSI & FERIE IN TEMPO REALE (Notifica e conferma immediata all'operaio e avviso Admin)
     const unsubLeaves = subscribeLeaveRequests((cloudLeaves) => {
-        if (!Array.isArray(cloudLeaves) || cloudLeaves.length === 0) return;
+        if (!Array.isArray(cloudLeaves)) return;
+        const cleanLeaves = cloudLeaves.filter(r => !isDemoBlocked(r));
         
         // A) Verifica transizione di stato per l'operaio attualmente connesso (Approvazione / Rifiuto)
         // CRITICO: Eseguito SOLO se è attiva una sessione operaio/dipendente e NON l'Admin!
         const isWorkerSession = (window.currentRole === 'operaio' || window.currentRole === 'dipendente') && !window.isAdminAuthenticated;
         const currentWorkerId = isWorkerSession ? window.selectedWorkerId : null;
         if (currentWorkerId && previousLeaveRequests.length > 0) {
-            cloudLeaves.forEach(newReq => {
+            cleanLeaves.forEach(newReq => {
                 if (newReq.workerId === currentWorkerId) {
                     const oldReq = previousLeaveRequests.find(r => r.id === newReq.id);
                     if (oldReq && oldReq.status !== newReq.status && (newReq.status === 'Approvata' || newReq.status === 'Rifiutata')) {
@@ -311,7 +316,7 @@ function setupRealtimeCloudSubscriptions() {
         // B) Notifica visiva immediata per l'Amministratore quando un lavoratore invia una nuova richiesta
         const isAdmin = (window.currentRole === 'admin' || window.isAdminAuthenticated);
         if (isAdmin && previousLeaveRequests.length > 0) {
-            cloudLeaves.forEach(newReq => {
+            cleanLeaves.forEach(newReq => {
                 const alreadyPresent = previousLeaveRequests.some(r => r.id === newReq.id);
                 if (!alreadyPresent && newReq.status === 'In attesa') {
                     const reqWorker = (window.workers || []).find(w => w.id === newReq.workerId);
@@ -323,9 +328,9 @@ function setupRealtimeCloudSubscriptions() {
             });
         }
 
-        previousLeaveRequests = JSON.parse(JSON.stringify(cloudLeaves));
+        previousLeaveRequests = JSON.parse(JSON.stringify(cleanLeaves));
 
-        window.leaveRequests = syncArrayInPlace(window.leaveRequests, cloudLeaves);
+        window.leaveRequests = syncArrayInPlace(window.leaveRequests, cleanLeaves);
         localStorage.setItem('vicla_leave_requests', JSON.stringify(window.leaveRequests));
 
         if (typeof window.renderAdminRequestsTab === 'function') window.renderAdminRequestsTab();
@@ -339,8 +344,9 @@ function setupRealtimeCloudSubscriptions() {
 
     // 5. NOTIFICHE PUSH & DRAWER IN TEMPO REALE
     const unsubNotifs = subscribeNotifications((cloudNotifs) => {
-        if (!Array.isArray(cloudNotifs) || cloudNotifs.length === 0) return;
-        const sortedNotifs = cloudNotifs.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        if (!Array.isArray(cloudNotifs)) return;
+        const cleanNotifs = cloudNotifs.filter(n => !isDemoBlocked(n));
+        const sortedNotifs = cleanNotifs.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 
         // Alert immediato all'utente connesso (Admin o Operaio) se riceve una nuova notifica dal cloud
         if (previousNotifications.length > 0) {
@@ -376,7 +382,8 @@ function setupRealtimeCloudSubscriptions() {
     // 6. PARCO MEZZI IN TEMPO REALE
     const unsubVehicles = subscribeVehicles((cloudVehicles) => {
         if (!Array.isArray(cloudVehicles)) return;
-        window.vehicles = syncArrayInPlace(window.vehicles, cloudVehicles);
+        const cleanVehicles = cloudVehicles.filter(v => !isDemoBlocked(v));
+        window.vehicles = syncArrayInPlace(window.vehicles, cleanVehicles);
         localStorage.setItem('vicla_vehicles', JSON.stringify(window.vehicles));
         if (typeof window.renderVehicleFleetTab === 'function') window.renderVehicleFleetTab();
         if (typeof window.populateVehicleSelect === 'function') window.populateVehicleSelect();
