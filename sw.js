@@ -1,8 +1,8 @@
 // Service Worker per Vi.Cla. Portale PWA
-// Versione: 2.5.6 (Supporto Animazione 3D Card Flip & Dissolve Accesso Bacheca)
+// Versione: 2.5.7 (Effetto Zoom Forward 3D & Deep Shadow Accesso Responsabile HR)
 
-const CACHE_NAME_STATIC = 'vicla-static-v2.5.6';
-const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.5.6';
+const CACHE_NAME_STATIC = 'vicla-static-v2.5.7';
+const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.5.7';
 
 const STATIC_ASSETS = [
   './',
