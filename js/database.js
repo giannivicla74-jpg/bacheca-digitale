@@ -317,13 +317,7 @@ export async function getAllDeviceTokens() {
 // ==========================================
 // 9. PARCO MEZZI & ATTREZZATURE (vehicles)
 // ==========================================
-export const DEFAULT_VEHICLES = [
-    { id: "VEH_001", name: "Iveco Daily 35C15", plate: "GA 842 XY", type: "Furgone", assignedCantiere: "Cantiere Milano San Siro", status: "Operativo", lastRevisionDate: "2026-03-10" },
-    { id: "VEH_002", name: "Mercedes-Benz Sprinter 314", plate: "FW 319 KL", type: "Furgone", assignedCantiere: "Sede / Produzione", status: "Operativo", lastRevisionDate: "2026-04-15" },
-    { id: "VEH_003", name: "Fiat Ducato Maxi 2.3", plate: "EZ 954 MM", type: "Furgone", assignedCantiere: "Cantiere Monza Centro", status: "Operativo", lastRevisionDate: "2026-02-20" },
-    { id: "VEH_004", name: "Escavatore Yanmar ViO38", plate: "MATR-YNM-382", type: "Macchina Movimento Terra", assignedCantiere: "Cantiere Milano San Siro", status: "Operativo", lastRevisionDate: "2026-05-02" },
-    { id: "VEH_005", name: "Piattaforma Aerea CTE ZED 20", plate: "GE 771 PT", type: "Piattaforma Aerea", assignedCantiere: "Cantiere Como Lavori", status: "Operativo", lastRevisionDate: "2026-01-18" }
-];
+export const DEFAULT_VEHICLES = [];
 
 export async function getVehicles() {
     try {

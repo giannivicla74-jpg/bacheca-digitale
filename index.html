@@ -1247,12 +1247,12 @@
         }
 
         /* ========================================================================= */
-        /* 🚀 EFFETTO ZOOM FORWARD & DEEP SHADOW (ACCESSO RESPONSABILE HR)           */
+        /* 🚀 EFFETTO SCREEN-SLAM IMPACT & MASSIVE ZOOM (ACCESSO RESPONSABILE HR)    */
         /* ========================================================================= */
 
         #panel-admin {
-            perspective: 1400px;
-            perspective-origin: 50% 35%;
+            perspective: 1200px;
+            perspective-origin: 50% 40%;
         }
 
         #admin-login-card,
@@ -1262,34 +1262,72 @@
             will-change: transform, opacity, box-shadow, filter;
         }
 
-        /* Card che viene verso lo schermo ingrandendosi con ombra profonda e sfumando */
-        @keyframes adminCardZoomForward {
+        /* Card che si ingrandisce grandemente e sbatte con impatto violento contro lo schermo */
+        @keyframes adminCardScreenSlam {
             0% {
-                transform: perspective(1400px) translate3d(0, 0, 0) scale(1);
+                transform: perspective(1200px) translate3d(0, 0, 0) scale(1);
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
                 opacity: 1;
                 filter: blur(0px);
             }
-            45% {
-                transform: perspective(1400px) translate3d(0, -10px, 80px) scale(1.09);
-                box-shadow: 0 45px 90px -10px rgba(0, 0, 0, 0.85), 0 0 50px rgba(99, 102, 241, 0.45);
-                opacity: 0.95;
+            18% {
+                /* Caricamento molla all'indietro prima del lancio */
+                transform: perspective(1200px) translate3d(0, 15px, -80px) scale(0.92);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+                opacity: 1;
+                filter: blur(0px);
+            }
+            64% {
+                /* Scatto supersonico verso lo schermo ingrandendosi grandemente */
+                transform: perspective(1200px) translate3d(0, -10px, 500px) scale(2.05);
+                box-shadow: 0 60px 140px -10px rgba(0, 0, 0, 0.95), 0 0 80px rgba(99, 102, 241, 0.7);
+                opacity: 0.98;
                 filter: blur(0.5px);
             }
+            76% {
+                /* 💥 SBATTE CONTRO LO SCHERMO (IMPATTO DIRETTO) */
+                transform: perspective(1200px) translate3d(0, 0, 760px) scale(2.55);
+                box-shadow: 0 0 180px 60px rgba(99, 102, 241, 0.95), 0 0 240px 90px rgba(59, 130, 246, 0.8), inset 0 0 90px rgba(255, 255, 255, 0.8);
+                border-color: rgba(255, 255, 255, 0.95) !important;
+                opacity: 1;
+                filter: blur(0px);
+            }
+            84% {
+                /* Rimbalzo da impatto e inizio dissolvenza ottica */
+                transform: perspective(1200px) translate3d(0, 0, 720px) scale(2.45);
+                box-shadow: 0 0 200px 70px rgba(79, 70, 229, 0.9);
+                opacity: 0.85;
+                filter: blur(2px);
+            }
             100% {
-                transform: perspective(1400px) translate3d(0, -20px, 160px) scale(1.18);
-                box-shadow: 0 70px 130px -10px rgba(0, 0, 0, 0.95), 0 0 80px rgba(79, 70, 229, 0.65);
+                /* Dissolvenza totale attraverso lo schermo */
+                transform: perspective(1200px) translate3d(0, 0, 1000px) scale(3.0);
+                box-shadow: 0 0 260px 100px rgba(99, 102, 241, 0);
                 opacity: 0;
-                filter: blur(5px);
+                filter: blur(14px);
             }
         }
 
-        /* Comparsa fluida dell'Area Responsabile con svelamento dall'ombra */
+        /* Scossa d'impatto sullo schermo quando la carta sbatte */
+        @keyframes screenSlamShockwave {
+            0%, 55% { transform: scale(1) translate3d(0, 0, 0); }
+            68% { transform: scale(0.982) translate3d(0, 8px, 0); }
+            78% { transform: scale(1.018) translate3d(0, -6px, 0); }
+            88% { transform: scale(0.994) translate3d(0, 3px, 0); }
+            100% { transform: scale(1) translate3d(0, 0, 0); }
+        }
+
+        /* Comparsa dinamica dell'Area Responsabile con svelamento dall'impatto */
         @keyframes adminAreaReveal {
             0% {
                 opacity: 0;
-                transform: scale(0.97) translateY(12px);
-                filter: blur(4px);
+                transform: scale(0.88) translateY(32px);
+                filter: blur(8px);
+            }
+            65% {
+                opacity: 0.95;
+                transform: scale(1.02) translateY(-4px);
+                filter: blur(1px);
             }
             100% {
                 opacity: 1;
@@ -1302,27 +1340,36 @@
         @keyframes adminCardReturn {
             0% {
                 opacity: 0;
-                transform: perspective(1400px) translate3d(0, -20px, 100px) scale(1.12);
-                filter: blur(4px);
+                transform: perspective(1200px) translate3d(0, 0, 600px) scale(2.0);
+                filter: blur(8px);
+            }
+            60% {
+                opacity: 0.9;
+                transform: perspective(1200px) translate3d(0, 0, 50px) scale(1.04);
+                filter: blur(0.5px);
             }
             100% {
                 opacity: 1;
-                transform: perspective(1400px) translate3d(0, 0, 0) scale(1);
+                transform: perspective(1200px) translate3d(0, 0, 0) scale(1);
                 filter: blur(0px);
             }
         }
 
         .admin-zoom-forward {
-            animation: adminCardZoomForward 0.46s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+            animation: adminCardScreenSlam 0.58s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
             pointer-events: none !important;
         }
 
+        .admin-screen-shockwave {
+            animation: screenSlamShockwave 0.58s ease-out !important;
+        }
+
         .admin-area-reveal {
-            animation: adminAreaReveal 0.40s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+            animation: adminAreaReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
         }
 
         .admin-card-return {
-            animation: adminCardReturn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+            animation: adminCardReturn 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
         }
 
         .admin-card-shake {
@@ -1333,6 +1380,9 @@
             .admin-zoom-forward {
                 animation: none !important;
                 opacity: 0 !important;
+            }
+            .admin-screen-shockwave {
+                animation: none !important;
             }
             .admin-area-reveal {
                 animation: none !important;
@@ -1345,8 +1395,16 @@
         }
 
     </style>
+    <script>
+        // Blocco immediato del ripristino automatico dello scroll da parte dei browser mobile (Chrome/Safari/PWA)
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        try { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, 0); }
+    </script>
 </head>
 
+<body class="min-h-screen flex flex-col text-slate-800 relative">
 
     <!-- ========================================================================= -->
     <!-- 🌟 GC-SPLASH: SPLASH SCREEN AURORA WIDESCREEN HD (GC CODELAB)             -->
@@ -1401,8 +1459,6 @@
         </div>
     </div>
 
-    <body class="min-h-screen flex flex-col text-slate-800 relative">
-
     <!-- Sfondo Animato Aurora Mesh (Sfere di luce fluide dinamiche con temi dedicati per ogni modulo) -->
     <div id="aurora-ambient-container" aria-hidden="true" class="aurora-theme-admin">
         <div class="aurora-orb aurora-orb-1"></div>
@@ -1423,7 +1479,7 @@
             <div class="flex items-center gap-3.5">
                 <div class="relative group cursor-pointer" onclick="openCompanyRegistrationModal()" title="Clicca per modificare dati e logo aziendale">
                     <img id="main-company-logo" src="vicla.jpg" alt="Logo Aziendale" class="h-14 md:h-16 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.02]"
-                        onerror="this.src='https://placehold.co/240x90/0f2b5c/ffffff?text=Bacheca+Aziendale'">
+                        onerror="this.src='logo_bacheca_aziendale_cropped.jpg'; this.onerror=null;">
                 </div>
                 <div class="border-l border-slate-200/80 dark:border-slate-700/80 pl-3.5 hidden sm:block">
                     <div class="flex items-center gap-2">
@@ -1633,7 +1689,7 @@
                             class="w-full text-center tracking-[0.6em] px-4 py-3.5 bg-slate-50/80 dark:bg-slate-900/80 border-2 border-slate-200/80 dark:border-slate-700 rounded-2xl text-2xl font-black focus:outline-none focus:border-blue-900 dark:focus:border-orange-500 transition-all shadow-inner">
                         <div class="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 mt-2">
                             <span><i class="fa-solid fa-shield-halved text-blue-800 dark:text-orange-400 mr-1"></i>Crittografia locale</span>
-                            <span>Default demo: <strong class="text-slate-700 dark:text-slate-300 font-mono font-bold">0000</strong></span>
+                            <span>PIN iniziale: <strong class="text-slate-700 dark:text-slate-300 font-mono font-bold">0000</strong></span>
                         </div>
                     </div>
                     <button onclick="loginToAdminDashboard()" id="btn-admin-login-submit"
@@ -1863,8 +1919,9 @@
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Seleziona un comunicato per verificare chi ha firmato per presa visione.</p>
                                 </div>
                                 <button onclick="confirmResetData()"
-                                    class="text-xs font-bold text-slate-400 hover:text-rose-500 flex items-center gap-1.5 transition-all px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 hover:bg-rose-50 dark:hover:bg-rose-950/30">
-                                    <i class="fa-solid fa-rotate-left"></i> Reset Demo
+                                    class="text-xs font-bold text-slate-400 hover:text-rose-500 flex items-center gap-1.5 transition-all px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                                    title="Azzera e svuota l'archivio dati">
+                                    <i class="fa-solid fa-trash-can"></i> Svuota Archivio Dati
                                 </button>
                             </div>
 
@@ -2778,7 +2835,7 @@
                             class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-200 dark:border-slate-800 pb-3">
                             <h3 class="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
                                 <i class="fa-solid fa-calculator text-blue-800 dark:text-blue-400"></i>
-                                MONTEORE DEL PERSONALE DELLA Vi.Cla. Future S.r.L
+                                <span id="table-monteore-company-name">MONTEORE COMPLESSIVO DEL PERSONALE</span>
                             </h3>
                             <span class="text-xs text-slate-600 dark:text-slate-300 font-bold mt-1 lg:mt-0">
                                 Aggiornato in tempo reale con i valori della tabella soprastante
@@ -3045,7 +3102,7 @@
         <!-- ==============================================
              SEZIONE B: PORTALE OPERAIO / DIPENDENTE (MOBILE-FIRST)
              ============================================== -->
-        <div id="panel-worker" class="hidden max-w-xl md:max-w-2xl mx-auto space-y-6">
+        <div id="panel-worker" class="hidden max-w-xl md:max-w-2xl mx-auto space-y-6 pt-2 sm:pt-4">
 
             <!-- Login Selettivo per Classe -->
             <div id="worker-login-card"
@@ -3079,8 +3136,8 @@
                             onkeyup="if(event.key==='Enter') loginToWorkerDashboard()"
                             class="w-full text-center tracking-[0.6em] px-4 py-3.5 bg-slate-50/80 dark:bg-slate-900/80 border-2 border-slate-200/80 dark:border-slate-700 rounded-2xl text-2xl font-black focus:outline-none focus:border-orange-500 transition-all shadow-inner">
                         <div class="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 mt-2">
-                            <span><i class="fa-solid fa-lock text-orange-500 mr-1"></i>PIN Protetto</span>
-                            <span>Default demo: <strong class="text-slate-700 dark:text-slate-300 font-mono font-bold">1234</strong></span>
+                            <span><i class="fa-solid fa-lock text-emerald-500 mr-1"></i>Accesso Protetto</span>
+                            <span>PIN iniziale: <strong class="text-slate-700 dark:text-slate-300 font-mono font-bold">1234</strong></span>
                         </div>
                     </div>
 
@@ -3093,10 +3150,10 @@
             </div>
 
             <!-- Dashboard Principale dell'Operaio/Dipendente -->
-            <div id="worker-dashboard" class="space-y-4 hidden">
+            <div id="worker-dashboard" class="space-y-4 hidden mt-3 sm:mt-5">
                 <!-- DASHBOARD CARD PREMIUM CON PROGRESS RING DI LETTURE -->
                 <div id="worker-dashboard-card"
-                    class="bg-gradient-to-r from-slate-900 via-slate-800 to-orange-950 text-white p-6 rounded-3xl shadow-xl flex justify-between items-center relative overflow-hidden border border-white/10">
+                    class="bg-gradient-to-r from-slate-900 via-slate-800 to-orange-950 text-white p-6 sm:p-7 rounded-3xl shadow-xl flex justify-between items-center relative overflow-hidden border border-white/10 scroll-mt-36">
                     <div class="z-10 space-y-2">
                         <div>
                             <p class="text-[10px] text-slate-300 uppercase tracking-widest font-bold font-heading"
@@ -3502,7 +3559,7 @@
             <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white p-4 sm:p-5 flex justify-between items-center border-b border-white/10">
                 <div class="flex items-center gap-3">
                     <img src="vicla.jpg" alt="Logo" class="h-10 object-contain brightness-0 invert"
-                        onerror="this.src='https://placehold.co/100x40/ffffff/000000?text=Azienda+Demo+S.r.l.'">
+                        onerror="this.src='logo_bacheca_aziendale_cropped.jpg'; this.onerror=null;">
                     <div>
                         <h4 class="text-sm font-bold font-heading" id="modal-title-type">Visualizzazione Documento</h4>
                         <p class="text-[10px] text-slate-400" id="modal-payslip-period">Mese/Anno</p>
@@ -3795,7 +3852,7 @@
         </div>
 
         <div class="text-[7px] text-gray-400 text-center uppercase tracking-widest pt-4">
-            Modulo generato digitalmente dal portale Azienda Demo S.r.l. - Archivio Conforme SGQ
+            Modulo generato digitalmente dal Portale Aziendale - Archivio Conforme SGQ
         </div>
     </div>
 
@@ -4508,18 +4565,18 @@
                 <div class="text-center md:text-left space-y-1">
                     <div class="flex items-center justify-center md:justify-start gap-2">
                         <span id="footer-company-name" class="font-extrabold text-slate-800 dark:text-slate-200 text-sm font-heading">
-                            Azienda Demo S.r.l.
+                            Azienda non configurata
                         </span>
-                        <span id="footer-company-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-900 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/40">
-                            Portale Ufficiale
+                        <span id="footer-company-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40">
+                            In Attesa di Configurazione
                         </span>
                     </div>
                     <p id="footer-company-address" class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
-                        Sede Legale: Indirizzo di Prova, 1 - 00100 Città (PR)
+                        Configura la tua azienda cliccando sul logo o sulla matita in alto
                     </p>
                     <p id="footer-company-contacts" class="text-[11px] text-slate-500 dark:text-slate-400">
-                        Tel: <a id="footer-company-phone" href="tel:0000000000" class="hover:text-blue-600 dark:hover:text-orange-400 font-medium transition-colors">000/0000000</a> &bull; 
-                        Email: <a id="footer-company-email" href="mailto:info@aziendademo.it" class="text-blue-600 dark:text-orange-400 hover:underline font-medium transition-colors">info@aziendademo.it</a>
+                        Tel: <a id="footer-company-phone" href="#" class="hover:text-blue-600 dark:hover:text-orange-400 font-medium transition-colors">-</a> &bull; 
+                        Email: <a id="footer-company-email" href="#" class="text-blue-600 dark:text-orange-400 hover:underline font-medium transition-colors">-</a>
                     </p>
                 </div>
 
@@ -4620,122 +4677,39 @@
         }
         window.handleGCTriggerClick = handleGCTriggerClick;
 
-        const DEFAULT_WORKERS = [
-            { id: "W01", name: "Mario", surname: "Rossi", matricola: "MAT-2026-01", department: "Produzione", cantiere: "Cantiere Carinaro A", pin: "1234", category: "Operaio", livello: "3° Livello", ferieResidue: 80, permessiResidui: 32, altreResidue: 16 },
-            { id: "W02", name: "Giuseppe", surname: "Bianchi", matricola: "MAT-2026-02", department: "Logistica", cantiere: "Cantiere Sede Operativa", pin: "1234", category: "Operaio", livello: "4° Livello", ferieResidue: 64, permessiResidui: 24, altreResidue: 8 },
-            { id: "W04", name: "Francesco", surname: "Russo", matricola: "MAT-2026-04", department: "Produzione", cantiere: "Cantiere Carinaro A", pin: "1234", category: "Operaio", livello: "2° Livello", ferieResidue: 48, permessiResidui: 16, altreResidue: 12 },
-            { id: "W05", name: "Luisa", surname: "Neri", matricola: "MAT-2026-05", department: "Amministrazione", cantiere: "Sede Amministrativa", pin: "1234", category: "Dipendente", livello: "Quadro", ferieResidue: 160, permessiResidui: 48, altreResidue: 32 },
-            { id: "W06", name: "Elena", surname: "Rizzo", matricola: "MAT-2026-06", department: "Ufficio Tecnico", cantiere: "Sede Amministrativa", pin: "1234", category: "Dipendente", livello: "1° Livello", ferieResidue: 104, permessiResidui: 36, altreResidue: 16 }
-        ];
+        const DEFAULT_WORKERS = [];
+        const DEFAULT_NOTICES = [];
+        const DEFAULT_PAYSLIPS = [];
+        const DEFAULT_LEAVE_REQUESTS = [];
+        const DEFAULT_NOTIFICATIONS = [];
 
-        const DEFAULT_NOTICES = [
-            {
-                id: "N01",
-                title: "Nuovo piano turni Luglio-Agosto",
-                category: "Decisione",
-                content: "Si comunica a tutto il personale della Produzione che a partire da lunedì prossimo i turni subiranno una variazione temporanea per fronteggiare i picchi di commesse estivi. Verificare la bacheca.",
-                priority: "Alta",
-                department: "Produzione",
-                date: "2026-07-16T10:00:00.000Z",
-                reads: { "W01": "2026-07-16T11:15:00.000Z", "W04": "2026-07-16T12:02:00.000Z" },
-                hasAttachment: false,
-                attachmentName: ""
-            },
-            {
-                id: "N02",
-                title: "Consegna obbligatoria nuovi DPI (Scarpe Antinfortunistiche)",
-                category: "Provvedimento",
-                content: "È obbligatorio per tutti gli operai di cantiere ritirare e firmare la consegna delle nuove calzature antinfortunistiche DPI in magazzino entro fine settimana.",
-                priority: "Urgente",
-                department: "Tutti",
-                date: "2026-07-15T08:30:00.000Z",
-                reads: { "W01": "2026-07-15T09:00:00.000Z", "W02": "2026-07-15T09:45:00.000Z" },
-                hasAttachment: false,
-                attachmentName: ""
-            }
-        ];
-
-        const DEFAULT_PAYSLIPS = [
-            {
-                id: "P01",
-                workerId: "W01",
-                month: "Giugno",
-                year: "2026",
-                netAmount: "1720.50",
-                uploadedAt: "2026-07-05T08:00:00.000Z",
-                status: "Firmata",
-                signedAt: "2026-07-06T17:45:00.000Z",
-                baseSalary: "1450.00",
-                overtime: "270.50",
-                deductions: "0.00",
-                hasFile: false,
-                fileName: ""
-            }
-        ];
-
-        const DEFAULT_LEAVE_REQUESTS = [
-            {
-                id: "REQ01",
-                workerId: "W01",
-                dateRequested: "2026-03-20",
-                datePermesso: "2026-03-20",
-                dateEnd: "2026-03-20",
-                fromHour: "07:00",
-                toHour: "15:00",
-                hoursNum: "8",
-                leaveType: "Permesso",
-                reason: "PERSONAL",
-                status: "In attesa",
-                workerSignature: "Mario Rossi (Firma Digitale)",
-                techEsigenza: "",
-                techFirma: "",
-                techDate: "",
-                adminResidui: "",
-                adminFirmaRAM: "",
-                adminFirmaAU: ""
-            }
-        ];
-
-        const DEFAULT_NOTIFICATIONS = [
-            {
-                id: "NOTIF_01",
-                workerId: "W01",
-                title: "Disponibile Busta Paga di Febbraio 2026",
-                message: "È disponibile il tuo cedolino di Febbraio 2026. Clicca per visualizzarlo e apporre la firma.",
-                type: "payslip",
-                targetTab: "payslips",
-                date: "2026-03-01T08:00:00.000Z",
-                read: false
-            },
-            {
-                id: "NOTIF_02",
-                workerId: "ALL",
-                title: "Nuova Comunicazione: Sicurezza Cantieri",
-                message: "È stata pubblicata una nuova comunicazione sulle linee guida di sicurezza e DPI.",
-                type: "notice",
-                targetTab: "notices",
-                date: "2026-03-02T09:30:00.000Z",
-                read: false
-            }
-        ];
-
-        // FORZATURA RESET DATI PER DEMO CLEANUP (Versione 2.5.4)
-        if (localStorage.getItem('vicla_db_version') !== 'v2.5.4') {
+        // AZZERAMENTO COMPLETO DATI DEMO & PASSAGGIO DEFINITIVO AD APP AZIENDALE PRIVATA (Versione 2.6.0)
+        if (localStorage.getItem('vicla_db_version') !== 'v2.6.0_private_company') {
             localStorage.removeItem('vicla_workers');
             localStorage.removeItem('vicla_notices');
             localStorage.removeItem('vicla_payslips');
             localStorage.removeItem('vicla_leave_requests');
             localStorage.removeItem('vicla_notifications');
-            localStorage.setItem('vicla_db_version', 'v2.5.4');
+            localStorage.removeItem('vicla_vehicles');
+            localStorage.removeItem('vicla_vehicle_faults');
+            localStorage.removeItem('vicla_accrual_history');
+            localStorage.removeItem('vicla_last_accrual_month');
+            localStorage.removeItem('vicla_active_worker_id_operaio');
+            localStorage.removeItem('vicla_active_worker_id_impiegato');
+            localStorage.removeItem('vicla_worker_pin_session_operaio');
+            localStorage.removeItem('vicla_worker_pin_session_impiegato');
+            localStorage.removeItem('bacheca_company_profile');
+            localStorage.removeItem('bacheca_company_configured');
+            localStorage.setItem('vicla_db_version', 'v2.6.0_private_company');
         }
 
-        if (!localStorage.getItem('vicla_workers')) localStorage.setItem('vicla_workers', JSON.stringify(DEFAULT_WORKERS));
-        if (!localStorage.getItem('vicla_notices')) localStorage.setItem('vicla_notices', JSON.stringify(DEFAULT_NOTICES));
-        if (!localStorage.getItem('vicla_payslips')) localStorage.setItem('vicla_payslips', JSON.stringify(DEFAULT_PAYSLIPS));
-        if (!localStorage.getItem('vicla_leave_requests')) localStorage.setItem('vicla_leave_requests', JSON.stringify(DEFAULT_LEAVE_REQUESTS));
-        if (!localStorage.getItem('vicla_notifications')) localStorage.setItem('vicla_notifications', JSON.stringify(DEFAULT_NOTIFICATIONS));
+        if (!localStorage.getItem('vicla_workers')) localStorage.setItem('vicla_workers', JSON.stringify([]));
+        if (!localStorage.getItem('vicla_notices')) localStorage.setItem('vicla_notices', JSON.stringify([]));
+        if (!localStorage.getItem('vicla_payslips')) localStorage.setItem('vicla_payslips', JSON.stringify([]));
+        if (!localStorage.getItem('vicla_leave_requests')) localStorage.setItem('vicla_leave_requests', JSON.stringify([]));
+        if (!localStorage.getItem('vicla_notifications')) localStorage.setItem('vicla_notifications', JSON.stringify([]));
 
-        var workers = JSON.parse(localStorage.getItem('vicla_workers'));
+        var workers = JSON.parse(localStorage.getItem('vicla_workers') || '[]');
 
         // Funzioni Universali di Normalizzazione Lavoratore e Visualizzazione Sicura (Anti-undefined)
         function normalizeWorker(w) {
@@ -7350,7 +7324,7 @@
                 }
                 if (d.companyProfile && typeof d.companyProfile === 'object') {
                     localStorage.setItem('bacheca_company_profile', JSON.stringify(d.companyProfile));
-                    if (typeof applyCompanyProfileToFooter === 'function') applyCompanyProfileToFooter(d.companyProfile);
+                    if (typeof applyCompanyProfileToHeader === 'function') applyCompanyProfileToHeader(d.companyProfile);
                 }
 
                 // Sincronizza su Firestore se la connessione è attiva
@@ -8414,7 +8388,7 @@
                     loginAvatar.className = "w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-inner";
                     loginIcon.className = "fa-solid fa-helmet-safety";
                     loginTitle.innerText = "Bacheca Digitale Operai";
-                    dashboardCard.className = "bg-gradient-to-r from-slate-800 to-orange-950 text-white p-5 rounded-3xl shadow-xl flex justify-between items-center";
+                    dashboardCard.className = "bg-gradient-to-r from-slate-900 via-slate-800 to-orange-950 text-white p-6 sm:p-7 rounded-3xl shadow-xl flex justify-between items-center relative overflow-hidden border border-white/10 theme-operaio";
                     userSubtitle.innerText = "Operaio Connesso";
                     if (btnLoginSubmit) btnLoginSubmit.className = "w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm rounded-xl transition-all shadow-md";
                     formLeaveIcon.className = "fa-solid fa-helmet-safety text-orange-500";
@@ -8426,7 +8400,7 @@
                     loginAvatar.className = "w-16 h-16 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-inner";
                     loginIcon.className = "fa-solid fa-id-card";
                     loginTitle.innerText = "Bacheca Digitale Dipendenti";
-                    dashboardCard.className = "bg-gradient-to-r from-slate-800 to-teal-950 text-white p-5 rounded-3xl shadow-xl flex justify-between items-center";
+                    dashboardCard.className = "bg-gradient-to-r from-slate-900 via-slate-800 to-teal-950 text-white p-6 sm:p-7 rounded-3xl shadow-xl flex justify-between items-center relative overflow-hidden border border-white/10 theme-dipendente";
                     userSubtitle.innerText = "Dipendente Connesso";
                     if (btnLoginSubmit) btnLoginSubmit.className = "w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm rounded-xl transition-all shadow-md";
                     formLeaveIcon.className = "fa-solid fa-briefcase text-teal-600";
@@ -8515,19 +8489,26 @@
                     return;
                 }
 
-                // FASE 1: Ingrandimento 3D verso lo schermo con ombra profonda e sfumatura
+                // FASE 1: Ingrandimento gigante 3D e impatto violento contro lo schermo
+                const panelAdmin = document.getElementById('panel-admin');
                 loginCard.classList.remove('admin-card-shake', 'admin-card-return');
                 loginCard.classList.add('admin-zoom-forward');
+                if (panelAdmin) {
+                    panelAdmin.classList.remove('admin-screen-shockwave');
+                    void panelAdmin.offsetWidth;
+                    panelAdmin.classList.add('admin-screen-shockwave');
+                }
 
                 setTimeout(() => {
-                    // FASE 2: Scambio nel DOM e comparsa morbida dell'Area Responsabile
+                    // FASE 2: Scambio nel DOM dopo lo schianto e svelamento dell'Area Responsabile
                     finalizeAdminLogin();
                     contentArea.classList.add('admin-area-reveal');
+                    if (panelAdmin) panelAdmin.classList.remove('admin-screen-shockwave');
 
                     setTimeout(() => {
                         contentArea.classList.remove('admin-area-reveal');
-                    }, 420);
-                }, 380);
+                    }, 460);
+                }, 460);
 
             } else {
                 // PIN Errato: Feedback visivo Shake e avviso
@@ -8580,8 +8561,19 @@
             select.innerHTML = '';
 
             const classFilter = currentRole === 'operaio' ? 'Operaio' : 'Dipendente';
-            const filteredWorkers = workers.filter(w => formatWorkerCategory(w) === classFilter);
+            const filteredWorkers = (workers || []).filter(w => formatWorkerCategory(w) === classFilter);
             const sortedWorkers = sortWorkersAlphabetically(filteredWorkers);
+
+            if (sortedWorkers.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.text = `Nessun ${classFilter.toLowerCase()} registrato`;
+                opt.disabled = true;
+                opt.selected = true;
+                select.appendChild(opt);
+                selectedWorkerId = null;
+                return;
+            }
 
             sortedWorkers.forEach(w => {
                 const opt = document.createElement('option');
@@ -8603,10 +8595,14 @@
         }
 
         function resetLoginPinField() {
-            document.getElementById('worker-login-pin').value = '';
-            const selectVal = document.getElementById('worker-select-login').value;
+            const pinInput = document.getElementById('worker-login-pin');
+            if (pinInput) pinInput.value = '';
+            const select = document.getElementById('worker-select-login');
+            const selectVal = select ? select.value : '';
             if (selectVal) {
                 selectedWorkerId = selectVal;
+            } else {
+                selectedWorkerId = null;
             }
         }
 
@@ -8649,12 +8645,24 @@
             const loggedDeptEl = document.getElementById('worker-logged-dept');
             if (loggedDeptEl) loggedDeptEl.innerHTML = `<i class="fa-solid fa-building-user mr-1 ${currentRole === "dipendente" ? "text-teal-400" : "text-orange-400"}"></i> ${currentWorker.department}`;
 
+            const userSubtitle = document.getElementById('user-dashboard-subtitle');
+            if (userSubtitle) {
+                userSubtitle.innerText = currentRole === 'dipendente' ? "Dipendente Connesso" : "Operaio Connesso";
+            }
+
             updateActionCardsTheme(currentRole);
 
             updateWorkerDashboardResidueValues();
             switchWorkerTab(workerActiveTab || 'notices');
             renderNotificationsDrawer();
             updateNotificationBadge();
+
+            // Garantisce che la scheda parta sempre esattamente dall'inizio visibile
+            if (typeof forceScrollToTop === 'function') {
+                forceScrollToTop();
+            } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+                window.scrollTo(0, 0);
+            }
         }
 
         function animateWorkerLoginTransition(workerId, currentWorker) {
@@ -9737,8 +9745,8 @@
 
         function confirmResetData() {
             showConfirmDialog(
-                "Ripristinare Dati?",
-                "Sei sicuro di voler resettare tutte le comunicazioni, i permessi, i cedolini e le notifiche? I file reali caricati andranno persi.",
+                "Svuotare Archivio Portale?",
+                "Sei sicuro di voler cancellare tutti i dati archiviati (dipendenti, comunicazioni, cedolini, richieste e notifiche)? L'applicazione tornerà completamente pulita per la tua azienda.",
                 function () {
                     resetDemoData();
                 }
@@ -9751,37 +9759,67 @@
             localStorage.removeItem('vicla_payslips');
             localStorage.removeItem('vicla_leave_requests');
             localStorage.removeItem('vicla_notifications');
+            localStorage.removeItem('vicla_vehicles');
+            localStorage.removeItem('vicla_vehicle_faults');
+            localStorage.removeItem('vicla_accrual_history');
+            localStorage.removeItem('vicla_last_accrual_month');
+            localStorage.removeItem('vicla_active_worker_id_operaio');
+            localStorage.removeItem('vicla_active_worker_id_impiegato');
+            localStorage.removeItem('vicla_worker_pin_session_operaio');
+            localStorage.removeItem('vicla_worker_pin_session_impiegato');
+            localStorage.removeItem('bacheca_company_profile');
+            localStorage.removeItem('bacheca_company_configured');
 
             if (db) {
-                const transaction = db.transaction(['files'], 'readwrite');
-                const store = transaction.objectStore('files');
-                store.clear();
+                try {
+                    const transaction = db.transaction(['files'], 'readwrite');
+                    const store = transaction.objectStore('files');
+                    store.clear();
+                } catch(e) {
+                    console.warn("Errore pulizia file IndexedDB:", e);
+                }
             }
 
-            workers = JSON.parse(JSON.stringify(DEFAULT_WORKERS));
-            notices = JSON.parse(JSON.stringify(DEFAULT_NOTICES));
-            payslips = JSON.parse(JSON.stringify(DEFAULT_PAYSLIPS));
-            leaveRequests = JSON.parse(JSON.stringify(DEFAULT_LEAVE_REQUESTS));
-            notifications = JSON.parse(JSON.stringify(DEFAULT_NOTIFICATIONS));
+            workers = [];
+            notices = [];
+            payslips = [];
+            leaveRequests = [];
+            notifications = [];
+            if (typeof window !== 'undefined') {
+                window.workers = [];
+                window.notices = [];
+                window.payslips = [];
+                window.leaveRequests = [];
+                window.notifications = [];
+                window.vehicles = [];
+                window.vehicleFaults = [];
+            }
 
-            localStorage.setItem('vicla_workers', JSON.stringify(workers));
-            localStorage.setItem('vicla_notices', JSON.stringify(notices));
-            localStorage.setItem('vicla_payslips', JSON.stringify(payslips));
-            localStorage.setItem('vicla_leave_requests', JSON.stringify(leaveRequests));
-            localStorage.setItem('vicla_notifications', JSON.stringify(notifications));
+            localStorage.setItem('vicla_workers', JSON.stringify([]));
+            localStorage.setItem('vicla_notices', JSON.stringify([]));
+            localStorage.setItem('vicla_payslips', JSON.stringify([]));
+            localStorage.setItem('vicla_leave_requests', JSON.stringify([]));
+            localStorage.setItem('vicla_notifications', JSON.stringify([]));
+            localStorage.setItem('vicla_vehicles', JSON.stringify([]));
+            localStorage.setItem('vicla_vehicle_faults', JSON.stringify([]));
 
             currentSelectedNoticeId = null;
             selectedRequestIdForElaboration = null;
-            document.getElementById('request-elaborate-card').classList.add('hidden');
+            const reqCard = document.getElementById('request-elaborate-card');
+            if (reqCard) reqCard.classList.add('hidden');
 
             isAdminAuthenticated = false;
-            document.getElementById('admin-login-pin').value = '';
-            document.getElementById('admin-login-card').classList.remove('hidden');
-            document.getElementById('admin-content-area').classList.add('hidden');
+            const adminPin = document.getElementById('admin-login-pin');
+            if (adminPin) adminPin.value = '';
+            const adminCard = document.getElementById('admin-login-card');
+            if (adminCard) adminCard.classList.remove('hidden');
+            const adminContent = document.getElementById('admin-content-area');
+            if (adminContent) adminContent.classList.add('hidden');
 
             switchRole('admin');
             renderNotificationsDrawer();
-            showToast("Dati ripristinati correttamente", "success");
+            showToast("Archivio dati azzerato con successo!", "success");
+            if (typeof openCompanyRegistrationModal === 'function') openCompanyRegistrationModal();
         }
 
         function filterWorkersTable() {
@@ -10687,7 +10725,27 @@
             if (readonlyBox) readonlyBox.classList.add('hidden');
         }
 
+        function forceScrollToTop() {
+            if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+                try {
+                    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                } catch (e) {
+                    window.scrollTo(0, 0);
+                }
+            }
+            if (typeof document !== 'undefined') {
+                if (document.documentElement) document.documentElement.scrollTop = 0;
+                if (document.body) document.body.scrollTop = 0;
+            }
+        }
+        window.forceScrollToTop = forceScrollToTop;
+
         window.onload = function () {
+            forceScrollToTop();
+
             // Controllo ed esecuzione automatica ratei mensili (Maturazione 1° del mese)
             if (typeof checkAndAutoApplyMonthlyAccrual === 'function') {
                 checkAndAutoApplyMonthlyAccrual();
@@ -10713,6 +10771,7 @@
                     renderNotificationsDrawer();
                     updateNotificationBadge();
                     updatePushBtnState();
+                    forceScrollToTop();
                     console.log("📱 [Sessione Persistente] Ripristinata sessione per lavoratore:", savedWorkerId, "Ruolo:", currentRole);
                     return;
                 }
@@ -10723,6 +10782,7 @@
             renderNotificationsDrawer();
             updateNotificationBadge();
             updatePushBtnState();
+            forceScrollToTop();
         };
         // --- Helper Funzioni PDF Multiplo ---
         function closeMultiPayslipModal() {
@@ -12148,14 +12208,14 @@
                 <!-- Ragione Sociale Azienda -->
                 <div>
                     <label class="block font-semibold text-slate-300 text-xs mb-1">Ragione Sociale Azienda <span class="text-rose-400">*</span></label>
-                    <input type="text" id="reg-company-name" placeholder="Es. Mario Rossi Costruzioni S.r.l." class="w-full bg-[#111c3d] border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition text-xs sm:text-sm">
+                    <input type="text" id="reg-company-name" placeholder="Es. Mia Azienda S.r.l." class="w-full bg-[#111c3d] border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition text-xs sm:text-sm">
                 </div>
 
                 <!-- Nome Breve / Marchio + Partita IVA -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-semibold text-slate-300 text-xs mb-1">Nome Breve / Marchio</label>
-                        <input type="text" id="reg-company-brand" placeholder="Es. Rossi Costruzioni" class="w-full bg-[#111c3d] border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition text-xs sm:text-sm">
+                        <input type="text" id="reg-company-brand" placeholder="Es. Marchio o Sigla Azienda" class="w-full bg-[#111c3d] border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition text-xs sm:text-sm">
                     </div>
                     <div>
                         <label class="block font-semibold text-slate-300 text-xs mb-1">Partita IVA</label>
@@ -12210,17 +12270,28 @@
 
     <script>
         // =========================================================================
-        // GESTIONE PROFILO AZIENDALE DINAMICO (PASSO 1)
+        // GESTIONE PROFILO AZIENDALE DINAMICO (CONFIGURAZIONE PRIMO AVVIO)
         // =========================================================================
         let currentUploadedCompanyLogo = '';
 
         function getSavedCompanyProfile() {
             try {
                 const raw = localStorage.getItem('bacheca_company_profile');
-                return raw ? JSON.parse(raw) : null;
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                // Validazione rigorosa: deve esistere un oggetto con una ragione sociale valida non vuota
+                if (parsed && typeof parsed === 'object' && typeof parsed.name === 'string' && parsed.name.trim().length > 0) {
+                    return parsed;
+                }
+                return null;
             } catch(e) {
+                console.warn('[CompanyProfile] Errore lettura profilo aziendale:', e);
                 return null;
             }
+        }
+
+        function isCompanyConfigured() {
+            return getSavedCompanyProfile() !== null;
         }
 
         function openCompanyRegistrationModal() {
@@ -12258,15 +12329,47 @@
             const file = event.target.files && event.target.files[0];
             if (!file) return;
 
-            if (file.size > 2 * 1024 * 1024) {
-                alert("L'immagine scelta supera i 2MB. Seleziona un file più leggero.");
+            if (!file.type.startsWith('image/')) {
+                if (typeof showToast === 'function') {
+                    showToast("Seleziona un file immagine valido (PNG, JPG, SVG, WebP).", "warning");
+                } else {
+                    alert("Seleziona un file immagine valido.");
+                }
                 return;
             }
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                currentUploadedCompanyLogo = e.target.result;
-                displayCompanyLogoPreview(currentUploadedCompanyLogo);
+                const rawData = e.target.result;
+                const img = new Image();
+                img.onload = function() {
+                    // Ottimizzazione automatica dimensione e qualità per non saturare localStorage
+                    const maxWidth = 480;
+                    const maxHeight = 240;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth || height > maxHeight) {
+                        const ratio = Math.min(maxWidth / width, maxHeight / height);
+                        width = Math.round(width * ratio);
+                        height = Math.round(height * ratio);
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const mime = (file.type === 'image/png' || file.type === 'image/webp') ? file.type : 'image/jpeg';
+                    currentUploadedCompanyLogo = canvas.toDataURL(mime, 0.90);
+                    displayCompanyLogoPreview(currentUploadedCompanyLogo);
+                };
+                img.onerror = function() {
+                    currentUploadedCompanyLogo = rawData;
+                    displayCompanyLogoPreview(currentUploadedCompanyLogo);
+                };
+                img.src = rawData;
             };
             reader.readAsDataURL(file);
         }
@@ -12303,10 +12406,16 @@
         }
 
         function saveCompanyRegistrationData() {
-            const name = (document.getElementById('reg-company-name').value || '').trim();
+            const nameInput = document.getElementById('reg-company-name');
+            const name = (nameInput && nameInput.value ? nameInput.value : '').trim();
 
             if (!name) {
-                alert("Inserisci almeno la Ragione Sociale dell'Azienda per salvare!");
+                if (typeof showToast === 'function') {
+                    showToast("Inserisci almeno la Ragione Sociale dell'Azienda per salvare!", "warning");
+                } else {
+                    alert("Inserisci almeno la Ragione Sociale dell'Azienda per salvare!");
+                }
+                if (nameInput) nameInput.focus();
                 return;
             }
 
@@ -12323,12 +12432,32 @@
                 savedAt: new Date().toISOString()
             };
 
-            localStorage.setItem('bacheca_company_profile', JSON.stringify(profile));
+            try {
+                localStorage.setItem('bacheca_company_profile', JSON.stringify(profile));
+                localStorage.setItem('bacheca_company_configured', 'true');
+            } catch (err) {
+                console.error("Errore nel salvataggio del profilo aziendale:", err);
+                if (profile.logoBase64) {
+                    try {
+                        profile.logoBase64 = '';
+                        localStorage.setItem('bacheca_company_profile', JSON.stringify(profile));
+                        localStorage.setItem('bacheca_company_configured', 'true');
+                        if (typeof showToast === 'function') {
+                            showToast("Logo troppo pesante, dati salvati senza logo.", "warning");
+                        }
+                    } catch (e2) {
+                        alert("Memoria locale esaurita: impossibile salvare i dati aziendali.");
+                        return;
+                    }
+                }
+            }
+
             applyCompanyProfileToHeader(profile);
             closeCompanyRegistrationModal();
 
+            const displayName = profile.brand || profile.name;
             if (typeof showToast === 'function') {
-                showToast("Dati aziendali salvati con successo!", "success");
+                showToast("Dati aziendali salvati con successo! Benvenuto in " + displayName, "success");
             } else {
                 alert("Dati aziendali salvati con successo!");
             }
@@ -12379,23 +12508,40 @@
                 }
             }
 
+            // Aggiorna titolo della tabella Monteore Totale Personale
+            const monteoreEl = document.getElementById('table-monteore-company-name');
+            if (monteoreEl) {
+                const displayName = profile.brand || profile.name;
+                monteoreEl.textContent = "MONTEORE DEL PERSONALE DELLA " + displayName.toUpperCase();
+            }
+
             // Aggiorna il titolo della scheda del browser
             if (profile.name) {
                 document.title = profile.name + " - Portale Aziendale";
             }
         }
 
-        // All'avvio dell'applicazione
-        window.addEventListener('DOMContentLoaded', () => {
+        // Controllo all'avvio: mostra la scheda SOLO se l'azienda non è mai stata configurata
+        function checkCompanyStartupState() {
             const profile = getSavedCompanyProfile();
             if (profile) {
-                // Già configurata: applica logo e nome
+                // Azienda già configurata: applica branding e garantisce che il modal sia nascosto
                 applyCompanyProfileToHeader(profile);
+                closeCompanyRegistrationModal();
             } else {
-                // Primo avvio in assoluto: mostra la finestra per configurare l'azienda
+                // Primo avvio in assoluto: apri il modal di registrazione aziendale
                 openCompanyRegistrationModal();
             }
-        });
+        }
+
+        window.addEventListener('DOMContentLoaded', checkCompanyStartupState);
+        window.getSavedCompanyProfile = getSavedCompanyProfile;
+        window.isCompanyConfigured = isCompanyConfigured;
+        window.openCompanyRegistrationModal = openCompanyRegistrationModal;
+        window.closeCompanyRegistrationModal = closeCompanyRegistrationModal;
+        window.saveCompanyRegistrationData = saveCompanyRegistrationData;
+        window.applyCompanyProfileToHeader = applyCompanyProfileToHeader;
+        window.applyCompanyProfileToFooter = applyCompanyProfileToFooter;
     </script>
 
 
@@ -12408,6 +12554,14 @@
             const txt = document.getElementById('gc-splash-status-text');
             const pct = document.getElementById('gc-splash-percentage');
             const splash = document.getElementById('gc-splash-screen');
+
+            // Assicura lo scroll in cima immediato all'inizio del caricamento
+            if (typeof forceScrollToTop === 'function') {
+                forceScrollToTop();
+            } else {
+                if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+                window.scrollTo(0, 0);
+            }
 
             if (!splash || !bar) return;
 
@@ -12453,11 +12607,20 @@
                 } else {
                     // Completamento al 100%: breve pausa prima della dissolvenza elegante
                     setTimeout(() => {
+                        if (typeof forceScrollToTop === 'function') forceScrollToTop();
                         if (splash) {
                             splash.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
                             splash.classList.add('opacity-0', 'pointer-events-none');
                             setTimeout(() => {
                                 splash.remove();
+                                if (typeof forceScrollToTop === 'function') forceScrollToTop();
+                                if (typeof isCompanyConfigured === 'function' && !isCompanyConfigured()) {
+                                    if (typeof openCompanyRegistrationModal === 'function') openCompanyRegistrationModal();
+                                    const inputName = document.getElementById('reg-company-name');
+                                    if (inputName) setTimeout(() => inputName.focus(), 150);
+                                } else if (typeof isCompanyConfigured === 'function' && isCompanyConfigured()) {
+                                    if (typeof closeCompanyRegistrationModal === 'function') closeCompanyRegistrationModal();
+                                }
                             }, 650);
                         }
                     }, 250);

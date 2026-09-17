@@ -1,8 +1,8 @@
 // Service Worker per Vi.Cla. Portale PWA
-// Versione: 2.5.7 (Effetto Zoom Forward 3D & Deep Shadow Accesso Responsabile HR)
+// Versione: 2.6.0 (Azzeramento demo e transizione ad azienda privata pulita)
 
-const CACHE_NAME_STATIC = 'vicla-static-v2.5.7';
-const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.5.7';
+const CACHE_NAME_STATIC = 'vicla-static-v2.6.0';
+const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.6.0';
 
 const STATIC_ASSETS = [
   './',
