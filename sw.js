@@ -1,14 +1,16 @@
 // Service Worker per Vi.Cla. Portale PWA
-// Versione: 2.6.1 (Azzeramento demo, guard Firestore e sync automatico privato)
+// Versione: 2.6.4 (Ottimizzazione PWA Resilienza, Cache-Matching e Risposte Opache)
 
-const CACHE_NAME_STATIC = 'vicla-static-v2.6.1';
-const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.6.1';
+const CACHE_NAME_STATIC = 'vicla-static-v2.6.4';
+const CACHE_NAME_RUNTIME = 'vicla-runtime-v2.6.4';
 
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
   './icons/icon.svg',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
   './js/firebase-config.js',
   './js/firebase-integration.js',
   './js/database.js',
@@ -69,11 +71,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 1. Richieste di navigazione (pagine HTML) -> Network-First con Fallback alla Cache
+  // 1. Richieste di navigazione (pagine HTML) -> Network-First con Timeout di 2.8s e Fallback Cache
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
-        .then((networkResponse) => {
+      Promise.race([
+        fetch(request).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             const responseClone = networkResponse.clone();
             caches.open(CACHE_NAME_STATIC).then((cache) => {
@@ -81,13 +83,14 @@ self.addEventListener('fetch', (event) => {
             });
           }
           return networkResponse;
-        })
-        .catch(async () => {
-          const cachedResponse = await caches.match(request);
-          if (cachedResponse) return cachedResponse;
-          const fallbackIndex = await caches.match('./index.html');
-          return fallbackIndex || Response.error();
-        })
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Network timeout')), 2800))
+      ]).catch(async () => {
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) return cachedResponse;
+        const fallbackIndex = await caches.match('./index.html') || await caches.match('/index.html') || await caches.match('./');
+        return fallbackIndex || Response.error();
+      })
     );
     return;
   }
@@ -97,9 +100,11 @@ self.addEventListener('fetch', (event) => {
     caches.match(request).then((cachedResponse) => {
       const fetchPromise = fetch(request)
         .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
+          if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
             const responseClone = networkResponse.clone();
-            const targetCache = STATIC_ASSETS.includes(url.pathname) ? CACHE_NAME_STATIC : CACHE_NAME_RUNTIME;
+            const cleanPath = url.pathname.replace(/^\//, './');
+            const isStatic = STATIC_ASSETS.includes(cleanPath) || STATIC_ASSETS.includes(url.pathname);
+            const targetCache = isStatic ? CACHE_NAME_STATIC : CACHE_NAME_RUNTIME;
             caches.open(targetCache).then((cache) => {
               cache.put(request, responseClone);
             });
@@ -107,7 +112,7 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // In caso di errore di rete, se non in cache, restituisce nulla senza crashare
+          // In caso di errore di rete, se presente in cache, restituisce la copia offline
           return cachedResponse || Response.error();
         });
 

@@ -13,37 +13,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Vi.Cla. Portale">
-    <link rel="apple-touch-icon" href="./icons/icon.svg">
+    <link rel="apple-touch-icon" sizes="192x192" href="./icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="./icons/icon-512.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
     <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
 
     <!-- Tailwind CSS con dark mode manuale (disaccoppiato dal tema OS per preservare la visione Giorno e Notte) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // MIGRATION & PURGE DATI DEMO: Azzeramento cache locale se versione non allineata
-        (function() {
-            var CURRENT_CLEAN_VERSION = 'v2.6.1_private_company';
-            if (localStorage.getItem('vicla_db_version') !== CURRENT_CLEAN_VERSION) {
-                console.log('🧹 [PWA Early Purge] Pulizia totale cache locale e rimozione dati demo...');
-                localStorage.removeItem('vicla_workers');
-                localStorage.removeItem('vicla_notices');
-                localStorage.removeItem('vicla_payslips');
-                localStorage.removeItem('vicla_leave_requests');
-                localStorage.removeItem('vicla_notifications');
-                localStorage.removeItem('vicla_vehicles');
-                localStorage.removeItem('vicla_vehicle_faults');
-                localStorage.removeItem('vicla_active_worker_id_operaio');
-                localStorage.removeItem('vicla_active_worker_id_impiegato');
-                localStorage.setItem('vicla_db_version', CURRENT_CLEAN_VERSION);
-            }
-            try {
-                var rawW = localStorage.getItem('vicla_workers');
-                if (rawW && (rawW.indexOf('Bianchi') !== -1 || rawW.indexOf('W01') !== -1 || rawW.indexOf('W02') !== -1)) {
-                    localStorage.removeItem('vicla_workers');
-                    localStorage.removeItem('vicla_active_worker_id_operaio');
-                }
-            } catch(e) {}
-        })();
-
         tailwind.config = {
             darkMode: 'class'
         };
@@ -1515,7 +1493,7 @@
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-900 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/40">
-                            v2.6.1 PWA
+                            v2.6.3 PWA
                         </span>
                     </div>
                     <div class="flex items-center gap-2 mt-0.5">
@@ -1746,6 +1724,11 @@
                             <span>Richieste Ferie & Permessi</span>
                             <span id="admin-req-count-badge"
                                 class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-extrabold rounded-full hidden shadow-sm animate-pulse">0</span>
+                        </button>
+                        <button onclick="switchAdminTab('personnel')" id="tab-btn-personnel"
+                            class="px-4 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50 flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-users-gear text-indigo-500 dark:text-indigo-400"></i>
+                            <span>Anagrafica & Qualifiche</span>
                         </button>
                         <button onclick="switchAdminTab('vehicles')" id="tab-btn-vehicles"
                             class="px-4 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50 flex items-center gap-2 whitespace-nowrap">
@@ -2913,6 +2896,43 @@
                 </div>
             </div>
 
+                <!-- TAB NUOVO: ANAGRAFICA & QUALIFICHE -->
+                <div id="admin-tab-personnel" class="hidden space-y-6">
+                    <div class="glass-card card-interactive p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-lg">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+                            <div>
+                                <h3 class="text-xl font-bold font-outfit text-slate-800 dark:text-white flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center">
+                                        <i class="fa-solid fa-users-gear text-indigo-600 dark:text-indigo-400"></i>
+                                    </div>
+                                    Anagrafica & Qualifiche
+                                </h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Gestione scadenze e certificazioni di tutto il personale</p>
+                            </div>
+                        </div>
+
+                        <!-- Riepilogo scadenze -->
+                        <div id="personnel-expirations-summary" class="mb-4 text-sm"></div>
+
+                        <!-- Tabella Personale -->
+                        <div class="overflow-x-auto pb-4">
+                            <table class="w-full text-left border-collapse whitespace-nowrap min-w-max">
+                                <thead>
+                                    <tr class="text-xs font-semibold text-slate-500 dark:text-slate-400 border-b border-slate-200/80 dark:border-slate-700/80">
+                                        <th class="py-3 px-4 font-outfit uppercase tracking-wider">Lavoratore</th>
+                                        <th class="py-3 px-4 font-outfit uppercase tracking-wider">Ruolo / Reparto</th>
+                                        <th class="py-3 px-4 font-outfit uppercase tracking-wider">Stato Qualifiche</th>
+                                        <th class="py-3 px-4 font-outfit uppercase tracking-wider text-right">Azioni</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-personnel-list" class="divide-y divide-slate-100/80 dark:divide-slate-800">
+                                    <!-- Popolato dinamicamente da JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- TAB 4: PARCO MEZZI & GESTIONE GUASTI (CON FOTO) -->
                 <div id="admin-tab-vehicles" class="hidden space-y-6">
                     <!-- Intestazione Principale e Quick Actions -->
@@ -3575,6 +3595,77 @@
         </div>
 
     </main>
+
+    <!-- MODAL FASCICOLO DIPENDENTE (ANAGRAFICA & QUALIFICHE) -->
+    <div id="employee-dossier-modal"
+        class="fixed inset-0 bg-slate-950/70 z-50 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4 transition-all duration-300">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col max-h-[92vh]">
+            <div class="bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 text-white p-4 sm:p-5 flex justify-between items-center border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <i class="fa-solid fa-user-tie text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold font-heading" id="modal-dossier-name">Nome Lavoratore</h4>
+                        <p class="text-xs text-indigo-200" id="modal-dossier-role">Ruolo - Reparto</p>
+                    </div>
+                </div>
+                <button onclick="closeEmployeeDossierModal()" class="text-slate-400 hover:text-white text-lg p-1.5 rounded-xl transition-colors cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-grow">
+                <!-- Sezione Aggiungi Certificazione -->
+                <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/60">
+                    <h5 class="text-sm font-bold text-slate-800 dark:text-white mb-3"><i class="fa-solid fa-plus-circle text-indigo-500 mr-2"></i>Aggiungi Qualifica / Certificazione</h5>
+                    <form id="add-certification-form" onsubmit="addCertification(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="hidden" id="dossier-worker-id">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Nome Certificazione/Corso</label>
+                            <input type="text" id="cert-name" required placeholder="Es. Sicurezza Rischio Alto" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-sm text-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Ente Rilasciante (Opzionale)</label>
+                            <input type="text" id="cert-issuer" placeholder="Es. Asl, Ente Paritetico" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-sm text-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Data Rilascio</label>
+                            <input type="date" id="cert-issue-date" required class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-sm text-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Data Scadenza</label>
+                            <input type="date" id="cert-expiry-date" required class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-sm text-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                        </div>
+                        <div class="sm:col-span-2 flex justify-end">
+                            <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-save"></i> Aggiungi al Fascicolo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Lista Certificazioni -->
+                <div>
+                    <h5 class="text-sm font-bold text-slate-800 dark:text-white mb-3 border-b border-slate-200 dark:border-slate-700 pb-2"><i class="fa-solid fa-list-check text-indigo-500 mr-2"></i>Elenco Qualifiche</h5>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse whitespace-nowrap min-w-max">
+                            <thead>
+                                <tr class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+                                    <th class="py-2 px-3 uppercase tracking-wider">Certificazione</th>
+                                    <th class="py-2 px-3 uppercase tracking-wider">Rilascio</th>
+                                    <th class="py-2 px-3 uppercase tracking-wider">Scadenza</th>
+                                    <th class="py-2 px-3 uppercase tracking-wider">Stato</th>
+                                    <th class="py-2 px-3 uppercase tracking-wider text-right">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dossier-certifications-list" class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                                <!-- Popolato dinamicamente da JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- POPUP VISUALIZZAZIONE E FIRMA DOCUMENTI / CEDOLINI -->
     <div id="payslip-modal"
@@ -4608,16 +4699,16 @@
                 <!-- Copyright GC CodeLab & Trigger Segreto </> -->
                 <div class="flex flex-col items-center md:items-end gap-2 text-center md:text-right">
                     <div class="flex items-center gap-2.5 flex-wrap justify-center md:justify-end">
-                        <div id="gc-secret-trigger" onclick="handleGCTriggerClick()" 
-                            class="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 select-none cursor-pointer hover:scale-110 active:scale-95 transition-all duration-200" 
-                            title="GC CodeLab • Trigger Segreto Super Admin (5 click)">
+                        <div id="gc-trigger-badge"
+                            class="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 select-none" 
+                            title="GC CodeLab">
                             <i class="fa-solid fa-code text-[11px]"></i>
                         </div>
                         <span class="text-xs font-normal">
                             &copy; 2026 <strong class="text-indigo-600 dark:text-indigo-400 font-bold">GC CodeLab</strong> &bull; Sviluppato da <strong class="text-slate-800 dark:text-white font-bold">Giovanni Cavallo</strong> &bull; Tutti i diritti riservati.
                         </span>
                         <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-extrabold text-[10px] border border-indigo-500/30 shadow-xs">
-                            v2.6.1 PWA
+                            v2.6.4 PWA
                         </span>
                     </div>
                     <div class="flex items-center gap-2.5 text-[10px] text-slate-400 dark:text-slate-500">
@@ -4633,6 +4724,22 @@
 
     <!-- SCRIPT LOGICO & PWA INTEGRATION -->
     <script>
+        // XSS sanitization helper
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/[&<>"']/g, (m) => {
+                switch (m) {
+                    case '&': return '&amp;';
+                    case '<': return '&lt;';
+                    case '>': return '&gt;';
+                    case '"': return '&quot;';
+                    case "'": return '&#39;';
+                    default: return m;
+                }
+            });
+        }
+        window.escapeHtml = escapeHtml;
+
         // Registrazione Service Worker PWA & Gestione Offline con Aggiornamento Automatico
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -4683,60 +4790,11 @@
         }
         window.escapeHtml = escapeHtml;
 
-        // GC CodeLab - Secret Easter Egg Trigger (5 click rapidi sul badge </> per Super Admin 0000)
-        let gcClickCount = 0;
-        let gcClickTimer = null;
-        function handleGCTriggerClick() {
-            gcClickCount++;
-            clearTimeout(gcClickTimer);
-            gcClickTimer = setTimeout(() => { gcClickCount = 0; }, 3000);
-            if (gcClickCount >= 5) {
-                gcClickCount = 0;
-                const pin = prompt("🔐 GC CodeLab Super Admin\nInserisci PIN di sblocco:");
-                if (pin === "0000") {
-                    if (typeof switchRole === 'function') {
-                        switchRole('admin');
-                    }
-                    if (typeof showToast === 'function') {
-                        showToast("Accesso Super Admin GC CodeLab (0000) autorizzato!", "success");
-                    } else {
-                        alert("Accesso Super Admin GC CodeLab (0000) autorizzato!");
-                    }
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else if (pin !== null) {
-                    if (typeof showToast === 'function') {
-                        showToast("PIN Super Admin errato!", "error");
-                    } else {
-                        alert("PIN Super Admin errato!");
-                    }
-                }
-            }
-        }
-        window.handleGCTriggerClick = handleGCTriggerClick;
-
         const DEFAULT_WORKERS = [];
         const DEFAULT_NOTICES = [];
         const DEFAULT_PAYSLIPS = [];
         const DEFAULT_LEAVE_REQUESTS = [];
         const DEFAULT_NOTIFICATIONS = [];
-
-        // AZZERAMENTO COMPLETO DATI DEMO & PASSAGGIO DEFINITIVO AD APP AZIENDALE PRIVATA (Versione 2.6.1)
-        if (localStorage.getItem('vicla_db_version') !== 'v2.6.1_private_company') {
-            localStorage.removeItem('vicla_workers');
-            localStorage.removeItem('vicla_notices');
-            localStorage.removeItem('vicla_payslips');
-            localStorage.removeItem('vicla_leave_requests');
-            localStorage.removeItem('vicla_notifications');
-            localStorage.removeItem('vicla_vehicles');
-            localStorage.removeItem('vicla_vehicle_faults');
-            localStorage.removeItem('vicla_accrual_history');
-            localStorage.removeItem('vicla_last_accrual_month');
-            localStorage.removeItem('vicla_active_worker_id_operaio');
-            localStorage.removeItem('vicla_active_worker_id_impiegato');
-            localStorage.removeItem('vicla_worker_pin_session_operaio');
-            localStorage.removeItem('vicla_worker_pin_session_impiegato');
-            localStorage.setItem('vicla_db_version', 'v2.6.1_private_company');
-        }
 
         if (!localStorage.getItem('vicla_workers')) localStorage.setItem('vicla_workers', JSON.stringify([]));
         if (!localStorage.getItem('vicla_notices')) localStorage.setItem('vicla_notices', JSON.stringify([]));
@@ -6615,7 +6673,8 @@
                 return;
             }
 
-            const nextId = "W" + String(workers.length + 1).padStart(2, '0');
+            // Genera ID univoco robusto
+            const nextId = "W_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
             const newWorker = {
                 id: nextId,
                 name: name,
@@ -6628,12 +6687,15 @@
                 pin: pin,
                 ferieResidue: ferie,
                 permessiResidui: permessi,
-                altreResidue: altre
+                altreResidue: altre,
+                certifications: [],
+                createdAt: new Date().toISOString()
             };
 
             workers.push(newWorker);
             workers = sortWorkersAlphabetically(workers);
             localStorage.setItem('vicla_workers', JSON.stringify(workers));
+            window.workers = workers;
 
             document.getElementById('add-worker-name').value = '';
             document.getElementById('add-worker-surname').value = '';
@@ -6648,6 +6710,16 @@
 
             showToast(`${category} ${surname} ${name} registrato!`, "success");
             renderAdminDashboard();
+
+            // Sincronizzazione immediata con Firestore
+            if (window.viclaCloudDB && typeof window.viclaCloudDB.addWorker === 'function') {
+                window.viclaCloudDB.addWorker(newWorker).then(() => {
+                    console.log("☁️ [Firebase] Lavoratore salvato in Firestore:", newWorker.id);
+                }).catch(err => {
+                    console.error("Errore salvataggio worker Firestore:", err);
+                });
+            }
+            return newWorker;
         }
 
         let currentEditingWorkerId = null;
@@ -6717,15 +6789,17 @@
                     pin: pin,
                     ferieResidue: ferie,
                     permessiResidui: permessi,
-                    altreResidue: altre
+                    altreResidue: altre,
+                    updatedAt: new Date().toISOString()
                 };
 
                 localStorage.setItem('vicla_workers', JSON.stringify(workers));
+                window.workers = workers;
                 showToast(`Anagrafica ${name} aggiornata!`, "success");
 
-                // Trigger Firebase save if monkey patch exists
-                if (window.triggerSaveEditedWorkerToCloud) {
-                    window.triggerSaveEditedWorkerToCloud(workers[index]);
+                // Sincronizzazione immediata con Firestore
+                if (window.viclaCloudDB && typeof window.viclaCloudDB.updateWorker === 'function') {
+                    window.viclaCloudDB.updateWorker(workers[index].id, workers[index]).catch(e => console.warn(e));
                 }
             }
 
@@ -6744,10 +6818,15 @@
                 function () {
                     const index = workers.findIndex(w => w.id === workerId);
                     if (index !== -1) {
+                        const removedWorkerId = workers[index].id;
                         workers.splice(index, 1);
                         localStorage.setItem('vicla_workers', JSON.stringify(workers));
+                        window.workers = workers;
                         showToast(`Collaboratore rimosso con successo.`, "warning");
                         renderAdminDashboard();
+                        if (window.viclaCloudDB && typeof window.viclaCloudDB.deleteWorker === 'function') {
+                            window.viclaCloudDB.deleteWorker(removedWorkerId).catch(e => console.warn(e));
+                        }
                     }
                 }
             );
@@ -7500,7 +7579,7 @@
                     leaveTypeBadge.innerHTML = `<i class="fa-solid fa-umbrella-beach"></i> <span id="elb-leave-type">Ferie</span>`;
                 } else {
                     leaveTypeBadge.className = "px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider bg-blue-900 dark:bg-blue-600 text-white shadow-xs flex items-center gap-1.5";
-                    leaveTypeBadge.innerHTML = `<i class="fa-solid fa-clock"></i> <span id="elb-leave-type">${leaveType}</span>`;
+                    leaveTypeBadge.innerHTML = `<i class="fa-solid fa-clock"></i> <span id="elb-leave-type">${escapeHtml(leaveType)}</span>`;
                 }
             }
 
@@ -8198,22 +8277,26 @@
             const btnNotices = document.getElementById('tab-btn-notices');
             const btnPayslips = document.getElementById('tab-btn-payslips');
             const btnRequests = document.getElementById('tab-btn-requests');
+            const btnPersonnel = document.getElementById('tab-btn-personnel');
             const btnVehicles = document.getElementById('tab-btn-vehicles');
 
             const panelNotices = document.getElementById('admin-tab-notices');
             const panelPayslips = document.getElementById('admin-tab-payslips');
             const panelRequests = document.getElementById('admin-tab-requests');
+            const panelPersonnel = document.getElementById('admin-tab-personnel');
             const panelVehicles = document.getElementById('admin-tab-vehicles');
 
             const baseBtnClass = "px-4 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50 flex items-center gap-2 whitespace-nowrap";
             if (btnNotices) btnNotices.className = baseBtnClass;
             if (btnPayslips) btnPayslips.className = baseBtnClass;
             if (btnRequests) btnRequests.className = baseBtnClass;
+            if (btnPersonnel) btnPersonnel.className = baseBtnClass;
             if (btnVehicles) btnVehicles.className = baseBtnClass;
 
             if (panelNotices) panelNotices.classList.add('hidden');
             if (panelPayslips) panelPayslips.classList.add('hidden');
             if (panelRequests) panelRequests.classList.add('hidden');
+            if (panelPersonnel) panelPersonnel.classList.add('hidden');
             if (panelVehicles) panelVehicles.classList.add('hidden');
 
             if (tab === 'notices') {
@@ -8228,6 +8311,10 @@
                 if (btnRequests) btnRequests.className = "px-4 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center gap-2 whitespace-nowrap";
                 if (panelRequests) panelRequests.classList.remove('hidden');
                 renderAdminRequestsTab();
+            } else if (tab === 'personnel') {
+                if (btnPersonnel) btnPersonnel.className = "px-4 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 flex items-center gap-2 whitespace-nowrap";
+                if (panelPersonnel) panelPersonnel.classList.remove('hidden');
+                renderAdminPersonnelTab();
             } else if (tab === 'vehicles') {
                 if (btnVehicles) btnVehicles.className = "px-4 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm bg-white dark:bg-slate-700 text-amber-600 dark:text-amber-400 flex items-center gap-2 whitespace-nowrap";
                 if (panelVehicles) panelVehicles.classList.remove('hidden');
@@ -11277,6 +11364,230 @@
         }
         window.syncVehicleStatusesWithFaults = syncVehicleStatusesWithFaults;
 
+        // ==========================================
+        // ANAGRAFICA E QUALIFICHE PERSONALE
+        // ==========================================
+
+        function getCertificationsStatus(worker) {
+            if (!worker.certifications || worker.certifications.length === 0) return { status: 'none', label: 'Nessuna Qualifica', color: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400', icon: 'fa-minus' };
+            const now = new Date();
+            const warningDays = 30; // 30 giorni prima della scadenza
+            let hasExpired = false;
+            let hasExpiring = false;
+
+            worker.certifications.forEach(cert => {
+                const expiryDate = new Date(cert.expiryDate);
+                const diffTime = expiryDate - now;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays <= 0) hasExpired = true;
+                else if (diffDays <= warningDays) hasExpiring = true;
+            });
+
+            if (hasExpired) return { status: 'expired', label: 'Scaduta', color: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400', icon: 'fa-triangle-exclamation' };
+            if (hasExpiring) return { status: 'expiring', label: 'In Scadenza', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400', icon: 'fa-clock' };
+            return { status: 'valid', label: 'Regolare', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400', icon: 'fa-check-circle' };
+        }
+
+        function renderAdminPersonnelTab() {
+            const tbody = document.getElementById('admin-personnel-list');
+            const summaryDiv = document.getElementById('personnel-expirations-summary');
+            if (!tbody || !summaryDiv) return;
+
+            let expiredCount = 0;
+            let expiringCount = 0;
+
+            const workers = Array.isArray(window.workers) ? window.workers : [];
+            tbody.innerHTML = '';
+
+            workers.forEach(worker => {
+                const statusInfo = getCertificationsStatus(worker);
+                if (statusInfo.status === 'expired') expiredCount++;
+                if (statusInfo.status === 'expiring') expiringCount++;
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-3 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold font-outfit text-sm">
+                                ${worker.name ? worker.name.charAt(0) : ''}${worker.surname ? worker.surname.charAt(0) : ''}
+                            </div>
+                            <div class="font-bold text-slate-800 dark:text-white">${worker.surname} ${worker.name}</div>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-slate-600 dark:text-slate-300">
+                        ${worker.role || 'Operaio'} <span class="text-xs text-slate-400">(${worker.department || 'Produzione'})</span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${statusInfo.color}">
+                            <i class="fa-solid ${statusInfo.icon}"></i> ${statusInfo.label}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                        <button onclick="openEmployeeDossierModal('${worker.id}')" class="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-lg text-xs font-bold transition-colors">
+                            <i class="fa-solid fa-folder-open mr-1"></i> Fascicolo
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (expiredCount > 0 || expiringCount > 0) {
+                summaryDiv.innerHTML = `
+                    <div class="flex flex-wrap gap-3">
+                        ${expiredCount > 0 ? `<div class="px-3 py-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> <b>${expiredCount}</b> scadenze superate</div>` : ''}
+                        ${expiringCount > 0 ? `<div class="px-3 py-2 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl flex items-center gap-2"><i class="fa-solid fa-clock"></i> <b>${expiringCount}</b> in scadenza a breve</div>` : ''}
+                    </div>
+                `;
+            } else {
+                summaryDiv.innerHTML = `<div class="px-3 py-2 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl flex items-center gap-2 w-max"><i class="fa-solid fa-check-circle"></i> Tutti i fascicoli sono in regola</div>`;
+            }
+        }
+        window.renderAdminPersonnelTab = renderAdminPersonnelTab;
+
+        function openEmployeeDossierModal(workerId) {
+            const worker = (window.workers || []).find(w => w.id === workerId);
+            if (!worker) return;
+
+            document.getElementById('modal-dossier-name').textContent = `${worker.surname} ${worker.name}`;
+            document.getElementById('modal-dossier-role').textContent = `${worker.role || 'Operaio'} - ${worker.department || 'Produzione'}`;
+            document.getElementById('dossier-worker-id').value = workerId;
+
+            document.getElementById('add-certification-form').reset();
+            renderDossierCertifications(worker);
+            
+            const modal = document.getElementById('employee-dossier-modal');
+            modal.classList.remove('hidden');
+        }
+        window.openEmployeeDossierModal = openEmployeeDossierModal;
+
+        function closeEmployeeDossierModal() {
+            document.getElementById('employee-dossier-modal').classList.add('hidden');
+        }
+        window.closeEmployeeDossierModal = closeEmployeeDossierModal;
+
+        function renderDossierCertifications(worker) {
+            const tbody = document.getElementById('dossier-certifications-list');
+            tbody.innerHTML = '';
+
+            const certs = worker.certifications || [];
+            if (certs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400 text-xs">Nessuna qualifica o certificazione registrata.</td></tr>`;
+                return;
+            }
+
+            const now = new Date();
+            const warningDays = 30;
+
+            certs.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+
+            certs.forEach(cert => {
+                const expiryDate = new Date(cert.expiryDate);
+                const diffTime = expiryDate - now;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                let statusInfo = { label: 'Regolare', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400' };
+                if (diffDays <= 0) statusInfo = { label: 'Scaduta', color: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400' };
+                else if (diffDays <= warningDays) statusInfo = { label: 'In Scadenza', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400' };
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-3 px-3">
+                        <div class="font-bold text-slate-800 dark:text-white">${cert.type}</div>
+                        ${cert.issuer ? `<div class="text-[10px] text-slate-500">${cert.issuer}</div>` : ''}
+                    </td>
+                    <td class="py-3 px-3 text-slate-600 dark:text-slate-300">
+                        ${new Date(cert.issueDate).toLocaleDateString('it-IT')}
+                    </td>
+                    <td class="py-3 px-3 font-semibold text-slate-800 dark:text-white">
+                        ${expiryDate.toLocaleDateString('it-IT')}
+                    </td>
+                    <td class="py-3 px-3">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold ${statusInfo.color}">
+                            ${statusInfo.label}
+                        </span>
+                    </td>
+                    <td class="py-3 px-3 text-right">
+                        <button onclick="deleteCertification('${worker.id}', '${cert.id}')" class="w-7 h-7 rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-100 transition-colors flex items-center justify-center" title="Rimuovi">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function addCertification(event) {
+            event.preventDefault();
+            const workerId = document.getElementById('dossier-worker-id').value;
+            const certName = document.getElementById('cert-name').value;
+            const certIssuer = document.getElementById('cert-issuer').value;
+            const certIssueDate = document.getElementById('cert-issue-date').value;
+            const certExpiryDate = document.getElementById('cert-expiry-date').value;
+
+            if (!workerId || !certName || !certIssueDate || !certExpiryDate) {
+                alert("Completa i campi obbligatori!");
+                return;
+            }
+
+            const workerIndex = (window.workers || []).findIndex(w => w.id === workerId);
+            if (workerIndex === -1) return;
+
+            const worker = window.workers[workerIndex];
+            if (!worker.certifications) worker.certifications = [];
+
+            const newCert = {
+                id: 'CERT_' + Date.now().toString(36).toUpperCase(),
+                type: certName,
+                issuer: certIssuer,
+                issueDate: certIssueDate,
+                expiryDate: certExpiryDate
+            };
+
+            worker.certifications.push(newCert);
+
+            try {
+                if (window.viclaCloudDB && window.viclaCloudDB.updateWorker) {
+                    await window.viclaCloudDB.updateWorker(worker.id, { certifications: worker.certifications });
+                }
+                localStorage.setItem('vicla_workers', JSON.stringify(window.workers));
+                
+                document.getElementById('add-certification-form').reset();
+                renderDossierCertifications(worker);
+                renderAdminPersonnelTab();
+            } catch (error) {
+                console.error("Errore salvataggio certificazione:", error);
+                alert("Errore durante il salvataggio.");
+            }
+        }
+        window.addCertification = addCertification;
+
+        async function deleteCertification(workerId, certId) {
+            if (!confirm("Sei sicuro di voler eliminare questa certificazione?")) return;
+            
+            const workerIndex = (window.workers || []).findIndex(w => w.id === workerId);
+            if (workerIndex === -1) return;
+
+            const worker = window.workers[workerIndex];
+            if (!worker.certifications) return;
+
+            worker.certifications = worker.certifications.filter(c => c.id !== certId);
+
+            try {
+                if (window.viclaCloudDB && window.viclaCloudDB.updateWorker) {
+                    await window.viclaCloudDB.updateWorker(worker.id, { certifications: worker.certifications });
+                }
+                localStorage.setItem('vicla_workers', JSON.stringify(window.workers));
+                
+                renderDossierCertifications(worker);
+                renderAdminPersonnelTab();
+            } catch (error) {
+                console.error("Errore eliminazione certificazione:", error);
+                alert("Errore durante l'eliminazione.");
+            }
+        }
+        window.deleteCertification = deleteCertification;
+
         function renderVehicleFleetTab() {
             syncVehicleStatusesWithFaults();
             const faults = Array.isArray(window.vehicleFaults) ? window.vehicleFaults : [];
@@ -12490,6 +12801,15 @@
             applyCompanyProfileToHeader(profile);
             closeCompanyRegistrationModal();
 
+            // Sincronizzazione multi-dispositivo in Cloud Firestore
+            if (window.viclaCloudDB && typeof window.viclaCloudDB.saveCompanyProfile === 'function') {
+                window.viclaCloudDB.saveCompanyProfile(profile).then(() => {
+                    console.log("☁️ [Firebase] Profilo aziendale sincronizzato nel Cloud per tutti i dispositivi.");
+                }).catch(err => {
+                    console.error("Errore salvataggio profilo aziendale in Cloud:", err);
+                });
+            }
+
             const displayName = profile.brand || profile.name;
             if (typeof showToast === 'function') {
                 showToast("Dati aziendali salvati con successo! Benvenuto in " + displayName, "success");
@@ -12556,16 +12876,12 @@
             }
         }
 
-        // Controllo all'avvio: mostra la scheda SOLO se l'azienda non è mai stata configurata
+        // Controllo all'avvio: applica branding locale se presente, altrimenti aspetta sincronizzazione Cloud
         function checkCompanyStartupState() {
             const profile = getSavedCompanyProfile();
             if (profile) {
-                // Azienda già configurata: applica branding e garantisce che il modal sia nascosto
                 applyCompanyProfileToHeader(profile);
                 closeCompanyRegistrationModal();
-            } else {
-                // Primo avvio in assoluto: apri il modal di registrazione aziendale
-                openCompanyRegistrationModal();
             }
         }
 
@@ -12649,12 +12965,29 @@
                             setTimeout(() => {
                                 splash.remove();
                                 if (typeof forceScrollToTop === 'function') forceScrollToTop();
-                                if (typeof isCompanyConfigured === 'function' && !isCompanyConfigured()) {
-                                    if (typeof openCompanyRegistrationModal === 'function') openCompanyRegistrationModal();
-                                    const inputName = document.getElementById('reg-company-name');
-                                    if (inputName) setTimeout(() => inputName.focus(), 150);
-                                } else if (typeof isCompanyConfigured === 'function' && isCompanyConfigured()) {
+                                
+                                // Verifica configurazione azienda: se non in local storage, controlla Cloud prima di aprire il modal
+                                const localProf = getSavedCompanyProfile();
+                                if (localProf) {
+                                    applyCompanyProfileToHeader(localProf);
                                     if (typeof closeCompanyRegistrationModal === 'function') closeCompanyRegistrationModal();
+                                } else if (window.viclaCloudDB && typeof window.viclaCloudDB.getCompanyProfile === 'function') {
+                                    window.viclaCloudDB.getCompanyProfile().then(cloudProf => {
+                                        if (cloudProf && cloudProf.name) {
+                                            localStorage.setItem('bacheca_company_profile', JSON.stringify(cloudProf));
+                                            localStorage.setItem('bacheca_company_configured', 'true');
+                                            applyCompanyProfileToHeader(cloudProf);
+                                            if (typeof closeCompanyRegistrationModal === 'function') closeCompanyRegistrationModal();
+                                        } else {
+                                            if (typeof openCompanyRegistrationModal === 'function') openCompanyRegistrationModal();
+                                            const inputName = document.getElementById('reg-company-name');
+                                            if (inputName) setTimeout(() => inputName.focus(), 150);
+                                        }
+                                    }).catch(() => {
+                                        if (typeof openCompanyRegistrationModal === 'function') openCompanyRegistrationModal();
+                                    });
+                                } else {
+                                    if (typeof openCompanyRegistrationModal === 'function') openCompanyRegistrationModal();
                                 }
                             }, 650);
                         }

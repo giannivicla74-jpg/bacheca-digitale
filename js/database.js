@@ -2,6 +2,7 @@ import { db } from './firebase-config.js';
 import { 
     collection, 
     getDocs, 
+    getDoc,
     addDoc, 
     setDoc,
     updateDoc, 
@@ -16,21 +17,10 @@ import {
 // ==========================================
 // 1. UTENTI / LAVORATORI (users)
 // ==========================================
-export const DEMO_BLOCKED_IDS = new Set([
-    'W01', 'W02', 'W03', 'W04', 'W05', 'W06',
-    'N01', 'N02', 'N03', 'N04', 'N05',
-    'P01', 'P02', 'P03', 'P04', 'P05',
-    'REQ01', 'REQ02', 'REQ03', 'REQ04',
-    'NOTIF_01', 'NOTIF_02', 'NOTIF_03',
-    'VEH_001', 'VEH_002', 'VEH_003', 'VEH_004', 'VEH_005'
-]);
+export const DEMO_BLOCKED_IDS = new Set();
 
 export function isDemoBlocked(item) {
-    if (!item) return false;
-    if (item.id && DEMO_BLOCKED_IDS.has(item.id)) return true;
-    if (item.surname && item.surname.toLowerCase().includes('bianchi') && item.name && item.name.toLowerCase().includes('giuseppe')) return true;
-    if (item.surname && item.surname.toLowerCase().includes('rossi') && item.name && item.name.toLowerCase().includes('mario')) return true;
-    if (item.title && item.title.includes('Benvenuto nel Portale Digitale')) return true;
+    // Il database di produzione è pulito: nessun dato inserito dall'utente viene bloccato
     return false;
 }
 
@@ -465,4 +455,54 @@ export async function deleteVehicleFault(id) {
     const docRef = doc(db, 'vehicleFaults', id);
     await deleteDoc(docRef);
 }
+
+// ==========================================
+// 11. PROFILO AZIENDALE (settings/company_profile)
+// ==========================================
+export async function getCompanyProfile() {
+    try {
+        const docRef = doc(db, 'settings', 'company_profile');
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+            return snap.data();
+        }
+    } catch (e) {
+        console.warn("⚠️ [Company Profile] Errore recupero profilo aziendale Firestore:", e);
+    }
+    return null;
+}
+
+export async function saveCompanyProfile(profileData) {
+    try {
+        const docRef = doc(db, 'settings', 'company_profile');
+        const payload = {
+            ...profileData,
+            updatedAt: new Date().toISOString()
+        };
+        await setDoc(docRef, payload, { merge: true });
+        console.log("✅ [Company Profile] Profilo aziendale salvato in Firestore!");
+        return true;
+    } catch (e) {
+        console.error("⚠️ [Company Profile] Errore salvataggio profilo aziendale Firestore:", e);
+        throw e;
+    }
+}
+
+export function subscribeCompanyProfile(callback, onError) {
+    try {
+        const docRef = doc(db, 'settings', 'company_profile');
+        return onSnapshot(docRef, (snap) => {
+            if (snap.exists()) {
+                callback(snap.data());
+            }
+        }, (err) => {
+            console.warn("⚠️ [Company Profile] Errore onSnapshot company_profile:", err);
+            if (onError) onError(err);
+        });
+    } catch (e) {
+        console.warn("⚠️ [Company Profile] Errore setup onSnapshot:", e);
+        return () => {};
+    }
+}
+
 

@@ -41,7 +41,10 @@ import {
     subscribeVehicleFaults,
     addVehicleFault,
     updateVehicleFault,
-    deleteVehicleFault
+    deleteVehicleFault,
+    getCompanyProfile,
+    saveCompanyProfile,
+    subscribeCompanyProfile
 } from './database.js';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { parseMultiPayslipPDF, splitAndGenerateBase64 } from './pdf-splitter.js';
@@ -73,6 +76,7 @@ window.viclaCloudDB = {
     getNotifications, addNotificationCloud, updateNotificationCloud, deleteNotificationCloud, subscribeNotifications,
     getVehicles, addVehicle, updateVehicle, deleteVehicle, subscribeVehicles,
     getVehicleFaults, addVehicleFault, updateVehicleFault, deleteVehicleFault, subscribeVehicleFaults,
+    getCompanyProfile, saveCompanyProfile, subscribeCompanyProfile,
     markNotificationsAsReadInCloud,
     setupRealtimeCloudSubscriptions,
     stopRealtimeCloudSubscriptions: () => {
@@ -91,112 +95,126 @@ console.log("🚀 [Firebase] Inizializzazione sincronizzazione completa Cloud Fi
 async function loadDataFromCloud() {
     try {
         console.log("📥 [Firebase] Scaricamento dati completi dal Cloud...");
-        const [cloudWorkers, cloudNotices, cloudPayslips, cloudLeaves, cloudNotifs, cloudVehicles, cloudFaults] = await Promise.all([
+        const [cloudWorkers, cloudNotices, cloudPayslips, cloudLeaves, cloudNotifs, cloudVehicles, cloudFaults, cloudProfile] = await Promise.all([
             getWorkers().catch(e => { console.warn("Errore getWorkers:", e); return []; }),
             getNotices().catch(e => { console.warn("Errore getNotices:", e); return []; }),
             getPayslips().catch(e => { console.warn("Errore getPayslips:", e); return []; }),
             getLeaveRequests().catch(e => { console.warn("Errore getLeaveRequests:", e); return []; }),
             getNotifications().catch(e => { console.warn("Errore getNotifications:", e); return []; }),
             getVehicles().catch(e => { console.warn("Errore getVehicles:", e); return []; }),
-            getVehicleFaults().catch(e => { console.warn("Errore getVehicleFaults:", e); return []; })
+            getVehicleFaults().catch(e => { console.warn("Errore getVehicleFaults:", e); return []; }),
+            getCompanyProfile().catch(e => { console.warn("Errore getCompanyProfile:", e); return null; })
         ]);
 
-        // 1. LAVORATORI: elimina qualsiasi lavoratore demo residuo dal cloud ed aggiorna cache locale
-        for (const w of cloudWorkers) {
-            if (isDemoBlocked(w)) {
-                console.warn("🧹 [Cloud Purge] Rimozione lavoratore demo dal cloud Firestore:", w.id);
-                await deleteWorker(w.id).catch(() => {});
-            }
-        }
-        const cleanWorkers = cloudWorkers.filter(w => !isDemoBlocked(w)).map(w => {
-            if (typeof window.normalizeWorker === 'function') {
-                return window.normalizeWorker(w);
-            }
-            if (!w.surname && w.name) {
-                const parts = w.name.trim().split(/\s+/);
-                if (parts.length > 1) {
-                    w.surname = parts[0];
-                    w.name = parts.slice(1).join(' ');
-                } else {
-                    w.surname = w.name.trim();
-                    w.name = '';
+        // 1. LAVORATORI: Se presenti nel cloud, aggiorna cache locale. Se cloud vuoto ma locale presente, fai push al cloud!
+        if (cloudWorkers && cloudWorkers.length > 0) {
+            const cleanWorkers = cloudWorkers.map(w => {
+                if (typeof window.normalizeWorker === 'function') {
+                    return window.normalizeWorker(w);
                 }
-            }
-            if (!w.department) w.department = 'Produzione';
-            if (!w.category) w.category = w.role || 'Operaio';
-            return w;
-        });
-        window.workers = syncArrayInPlace(window.workers, cleanWorkers);
-        localStorage.setItem('vicla_workers', JSON.stringify(window.workers));
-
-        // 2. COMUNICAZIONI: elimina comunicazioni demo dal cloud ed aggiorna cache locale
-        for (const n of cloudNotices) {
-            if (isDemoBlocked(n)) {
-                console.warn("🧹 [Cloud Purge] Rimozione comunicazione demo dal cloud Firestore:", n.id);
-                await deleteNotice(n.id).catch(() => {});
+                if (!w.surname && w.name) {
+                    const parts = w.name.trim().split(/\s+/);
+                    if (parts.length > 1) {
+                        w.surname = parts[0];
+                        w.name = parts.slice(1).join(' ');
+                    } else {
+                        w.surname = w.name.trim();
+                        w.name = '';
+                    }
+                }
+                if (!w.department) w.department = 'Produzione';
+                if (!w.category) w.category = w.role || 'Operaio';
+                return w;
+            });
+            window.workers = syncArrayInPlace(window.workers, cleanWorkers);
+            localStorage.setItem('vicla_workers', JSON.stringify(window.workers));
+            console.log(`✅ [Firebase] ${cleanWorkers.length} lavoratori sincronizzati dal cloud.`);
+        } else {
+            // Cloud non ha ancora lavoratori: verifica se l'utente ne ha inseriti in locale e salvali nel cloud!
+            try {
+                const localWorkers = (window.workers && window.workers.length > 0) 
+                    ? window.workers 
+                    : JSON.parse(localStorage.getItem('vicla_workers') || '[]');
+                if (localWorkers.length > 0) {
+                    console.log(`☁️ [Firebase] Caricamento di ${localWorkers.length} lavoratori locali nel Cloud...`);
+                    for (const lw of localWorkers) {
+                        if (lw && lw.name) {
+                            await addWorker(lw).catch(e => console.warn("Errore upload worker locale:", e));
+                        }
+                    }
+                }
+            } catch(e) {
+                console.warn("Errore recupero workers locali:", e);
             }
         }
-        const cleanNotices = cloudNotices.filter(n => !isDemoBlocked(n));
-        window.notices = syncArrayInPlace(window.notices, cleanNotices);
-        localStorage.setItem('vicla_notices', JSON.stringify(window.notices));
+
+        // 2. COMUNICAZIONI AZIENDALI
+        if (cloudNotices && cloudNotices.length > 0) {
+            window.notices = syncArrayInPlace(window.notices, cloudNotices);
+            localStorage.setItem('vicla_notices', JSON.stringify(window.notices));
+        }
 
         // 3. BUSTE PAGA
-        for (const p of cloudPayslips) {
-            if (isDemoBlocked(p)) {
-                console.warn("🧹 [Cloud Purge] Rimozione busta paga demo dal cloud Firestore:", p.id);
-                await deletePayslip(p.id).catch(() => {});
-            }
+        if (cloudPayslips && cloudPayslips.length > 0) {
+            window.payslips = syncArrayInPlace(window.payslips, cloudPayslips);
+            localStorage.setItem('vicla_payslips', JSON.stringify(window.payslips));
         }
-        const cleanPayslips = cloudPayslips.filter(p => !isDemoBlocked(p));
-        window.payslips = syncArrayInPlace(window.payslips, cleanPayslips);
-        localStorage.setItem('vicla_payslips', JSON.stringify(window.payslips));
 
         // 4. RICHIESTE PERMESSI & FERIE
-        for (const r of cloudLeaves) {
-            if (isDemoBlocked(r)) {
-                console.warn("🧹 [Cloud Purge] Rimozione richiesta permessi demo dal cloud Firestore:", r.id);
-                await deleteLeaveRequest(r.id).catch(() => {});
-            }
+        if (cloudLeaves && cloudLeaves.length > 0) {
+            cloudLeaves.forEach(cl => {
+                const local = (window.leaveRequests || []).find(lr => lr.id === cl.id);
+                if (local && local.archived !== undefined && cl.archived === undefined) {
+                    cl.archived = local.archived;
+                }
+            });
+            previousLeaveRequests = JSON.parse(JSON.stringify(cloudLeaves));
+            window.leaveRequests = syncArrayInPlace(window.leaveRequests, cloudLeaves);
+            localStorage.setItem('vicla_leave_requests', JSON.stringify(window.leaveRequests));
         }
-        const cleanLeaves = cloudLeaves.filter(r => !isDemoBlocked(r));
-        cleanLeaves.forEach(cl => {
-            const local = (window.leaveRequests || []).find(lr => lr.id === cl.id);
-            if (local && local.archived !== undefined && cl.archived === undefined) {
-                cl.archived = local.archived;
-            }
-        });
-        previousLeaveRequests = JSON.parse(JSON.stringify(cleanLeaves));
-        window.leaveRequests = syncArrayInPlace(window.leaveRequests, cleanLeaves);
-        localStorage.setItem('vicla_leave_requests', JSON.stringify(window.leaveRequests));
 
         // 5. NOTIFICHE PUSH & DRAWER
-        for (const notif of cloudNotifs) {
-            if (isDemoBlocked(notif)) {
-                console.warn("🧹 [Cloud Purge] Rimozione notifica demo dal cloud Firestore:", notif.id);
-                await deleteNotificationCloud(notif.id).catch(() => {});
-            }
+        if (cloudNotifs && cloudNotifs.length > 0) {
+            const cleanNotifs = cloudNotifs.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+            previousNotifications = JSON.parse(JSON.stringify(cleanNotifs));
+            window.notifications = syncArrayInPlace(window.notifications, cleanNotifs);
+            localStorage.setItem('vicla_notifications', JSON.stringify(window.notifications));
         }
-        const cleanNotifs = cloudNotifs.filter(n => !isDemoBlocked(n)).sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-        previousNotifications = JSON.parse(JSON.stringify(cleanNotifs));
-        window.notifications = syncArrayInPlace(window.notifications, cleanNotifs);
-        localStorage.setItem('vicla_notifications', JSON.stringify(window.notifications));
 
         // 6. PARCO MEZZI & ATTREZZATURE
-        for (const v of cloudVehicles) {
-            if (isDemoBlocked(v)) {
-                console.warn("🧹 [Cloud Purge] Rimozione mezzo demo dal cloud Firestore:", v.id);
-                await deleteVehicle(v.id).catch(() => {});
-            }
+        if (cloudVehicles && cloudVehicles.length > 0) {
+            window.vehicles = syncArrayInPlace(window.vehicles, cloudVehicles);
+            localStorage.setItem('vicla_vehicles', JSON.stringify(window.vehicles));
         }
-        const cleanVehicles = cloudVehicles.filter(v => !isDemoBlocked(v));
-        window.vehicles = syncArrayInPlace(window.vehicles, cleanVehicles);
-        localStorage.setItem('vicla_vehicles', JSON.stringify(window.vehicles));
 
         // 7. SEGNALAZIONI GUASTI MEZZI
-        const sortedFaults = (cloudFaults || []).sort((a, b) => new Date(b.dateReported + ' ' + (b.timeReported || '00:00')) - new Date(a.dateReported + ' ' + (a.timeReported || '00:00')));
-        previousVehicleFaults = JSON.parse(JSON.stringify(sortedFaults));
-        window.vehicleFaults = syncArrayInPlace(window.vehicleFaults, sortedFaults);
-        localStorage.setItem('vicla_vehicle_faults', JSON.stringify(window.vehicleFaults));
+        if (cloudFaults && cloudFaults.length > 0) {
+            const sortedFaults = cloudFaults.sort((a, b) => new Date(b.dateReported + ' ' + (b.timeReported || '00:00')) - new Date(a.dateReported + ' ' + (a.timeReported || '00:00')));
+            previousVehicleFaults = JSON.parse(JSON.stringify(sortedFaults));
+            window.vehicleFaults = syncArrayInPlace(window.vehicleFaults, sortedFaults);
+            localStorage.setItem('vicla_vehicle_faults', JSON.stringify(window.vehicleFaults));
+        }
+
+        // 8. PROFILO AZIENDALE DINAMICO (Sincronizzazione Multi-Device PC <-> Mobile)
+        if (cloudProfile && cloudProfile.name) {
+            console.log("🏢 [Firebase] Profilo aziendale caricato dal cloud:", cloudProfile.name);
+            localStorage.setItem('bacheca_company_profile', JSON.stringify(cloudProfile));
+            localStorage.setItem('bacheca_company_configured', 'true');
+            if (typeof window.applyCompanyProfileToHeader === 'function') {
+                window.applyCompanyProfileToHeader(cloudProfile);
+            }
+            if (typeof window.closeCompanyRegistrationModal === 'function') {
+                window.closeCompanyRegistrationModal();
+            }
+        } else {
+            try {
+                const localProfile = JSON.parse(localStorage.getItem('bacheca_company_profile') || 'null');
+                if (localProfile && localProfile.name) {
+                    console.log("☁️ [Firebase] Caricamento profilo aziendale locale nel cloud...");
+                    await saveCompanyProfile(localProfile).catch(() => {});
+                }
+            } catch(e) {}
+        }
 
         // Aggiorna tutti i componenti dell'interfaccia
         refreshAllInterfaceComponents();
@@ -427,8 +445,23 @@ function setupRealtimeCloudSubscriptions() {
     });
     realtimeUnsubscribers.push(unsubFaults);
 
+    // 8. PROFILO AZIENDALE IN TEMPO REALE
+    const unsubProfile = subscribeCompanyProfile((profile) => {
+        if (!profile || !profile.name) return;
+        console.log("🏢 [Firebase Realtime] Profilo aziendale aggiornato dal cloud:", profile.name);
+        localStorage.setItem('bacheca_company_profile', JSON.stringify(profile));
+        localStorage.setItem('bacheca_company_configured', 'true');
+        if (typeof window.applyCompanyProfileToHeader === 'function') {
+            window.applyCompanyProfileToHeader(profile);
+        }
+        if (typeof window.closeCompanyRegistrationModal === 'function') {
+            window.closeCompanyRegistrationModal();
+        }
+    });
+    realtimeUnsubscribers.push(unsubProfile);
+
     window.isCloudRealtimeActive = true;
-    console.log("⚡ [Firebase Realtime] Tutti i 7 listener onSnapshot attivi e sincronizzati!");
+    console.log("⚡ [Firebase Realtime] Tutti i listener onSnapshot attivi e sincronizzati!");
 }
 
 // ==========================================
@@ -438,10 +471,12 @@ function setupRealtimeCloudSubscriptions() {
 // 1. PATCH ANAGRAFICA LAVORATORI
 const originalSaveNewWorker = window.saveNewWorker;
 window.saveNewWorker = async function() {
-    if (typeof originalSaveNewWorker === 'function') originalSaveNewWorker();
-    
-    const newWorker = window.workers[window.workers.length - 1];
-    if (newWorker) {
+    let created = null;
+    if (typeof originalSaveNewWorker === 'function') {
+        created = originalSaveNewWorker();
+    }
+    const newWorker = created || (window.workers && window.workers.length > 0 ? window.workers[window.workers.length - 1] : null);
+    if (newWorker && newWorker.id) {
         try {
             await addWorker(newWorker);
             console.log("Nuovo lavoratore salvato in cloud:", newWorker.id);
@@ -454,6 +489,7 @@ window.saveNewWorker = async function() {
             console.error("Errore salvataggio nuovo lavoratore in cloud:", e);
         }
     }
+    return newWorker;
 };
 
 window.triggerSaveEditedWorkerToCloud = async function(updatedWorker) {
