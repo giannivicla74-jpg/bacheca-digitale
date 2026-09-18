@@ -1637,7 +1637,7 @@
 
     <!-- Modal di conferma generico -->
     <div id="confirm-modal"
-        class="fixed inset-0 bg-slate-950/70 z-[100] backdrop-blur-md hidden flex items-center justify-center p-4 no-print transition-all duration-300">
+        class="fixed inset-0 bg-slate-950/70 z-[99990] backdrop-blur-md hidden flex items-center justify-center p-4 no-print transition-all duration-300">
         <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl p-6 sm:p-7 shadow-2xl space-y-4 border border-slate-200/80 dark:border-slate-800 relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-500 to-rose-500"></div>
             <div class="w-12 h-12 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/40 rounded-2xl flex items-center justify-center text-xl shadow-sm">
@@ -1658,7 +1658,7 @@
 
     <!-- Alert di Notifica Toast animato -->
     <div id="toast"
-        class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+        class="fixed bottom-5 right-5 z-[99999] transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-auto">
         <i class="fa-solid fa-circle-check text-xl"></i>
         <span id="toast-message" class="font-medium">Operazione completata con successo!</span>
     </div>
@@ -4708,7 +4708,7 @@
                             &copy; 2026 <strong class="text-indigo-600 dark:text-indigo-400 font-bold">GC CodeLab</strong> &bull; Sviluppato da <strong class="text-slate-800 dark:text-white font-bold">Giovanni Cavallo</strong> &bull; Tutti i diritti riservati.
                         </span>
                         <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-extrabold text-[10px] border border-indigo-500/30 shadow-xs">
-                            v2.6.4 PWA
+                            v2.6.5 PWA
                         </span>
                     </div>
                     <div class="flex items-center gap-2.5 text-[10px] text-slate-400 dark:text-slate-500">
@@ -5015,13 +5015,13 @@
             toastMsg.innerText = message;
 
             if (type === "error") {
-                toast.className = "fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-rose-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3";
+                toast.className = "fixed bottom-5 right-5 z-[99999] transform translate-y-20 opacity-0 transition-all duration-300 bg-rose-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-auto";
             } else if (type === "warning") {
-                toast.className = "fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-amber-500 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3";
+                toast.className = "fixed bottom-5 right-5 z-[99999] transform translate-y-20 opacity-0 transition-all duration-300 bg-amber-500 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-auto";
             } else if (type === "info") {
-                toast.className = "fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-blue-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3";
+                toast.className = "fixed bottom-5 right-5 z-[99999] transform translate-y-20 opacity-0 transition-all duration-300 bg-blue-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-auto";
             } else {
-                toast.className = "fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3";
+                toast.className = "fixed bottom-5 right-5 z-[99999] transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-auto";
             }
 
             toast.classList.remove('translate-y-20', 'opacity-0');
@@ -5210,6 +5210,11 @@
             };
             document.getElementById('confirm-btn-cancel').onclick = function () {
                 modal.classList.add('hidden');
+            };
+            modal.onclick = function (e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
             };
         }
 
